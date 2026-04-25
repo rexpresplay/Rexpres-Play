@@ -7,57 +7,60 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .step-hidden { display: none; }
-        body { background-color: #0f172a; color: white; }
+        body { background-color: #000000; color: white; font-family: ui-sans-serif, system-ui; }
+        /* Colores oficiales de tu logo */
+        .bg-azul-rex { background-color: #001e85; }
+        .bg-naranja-rex { background-color: #f7941d; }
+        .card-rex { background-color: #0a0a0a; border: 1px solid #1a1a1a; }
     </style>
 </head>
 <body>
 
-    <header class="p-4 flex justify-between items-center bg-slate-900 shadow-xl border-b border-slate-700">
-        <h1 class="text-xl font-bold tracking-tighter">REXPRES <span class="text-blue-500">PLAY</span></h1>
-        <div class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-[10px]">LOGO</div>
+    <header class="p-4 flex justify-between items-center bg-black border-b border-zinc-800 shadow-2xl">
+        <img src="logo.png" alt="Rexpres Play" class="h-10 w-auto">
     </header>
 
-    <main class="max-w-md mx-auto p-5 text-center">
+    <main class="max-w-md mx-auto p-5">
         
         <section id="step-1">
-            <div class="rounded-2xl bg-gradient-to-br from-blue-600 to-purple-700 p-8 mb-8 shadow-2xl">
+            <div class="rounded-2xl bg-gradient-to-br from-[#001e85] to-[#000a2e] p-8 text-center mb-8 shadow-2xl border border-blue-900/30">
                 <h2 class="text-2xl font-black mb-2 italic uppercase">Tu carga al instante</h2>
-                <p class="text-blue-100 text-sm">Selecciona el servicio que deseas</p>
+                <p class="text-blue-200 text-[10px] tracking-widest uppercase">Servicios Digitales Profesionales</p>
             </div>
             
-            <div class="grid gap-4">
-                <button onclick="showStep(2, 'recargas')" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl flex items-center gap-4 hover:bg-slate-700 transition">
+            <div class="grid gap-5">
+                <button onclick="showStep(2, 'recargas')" class="bg-azul-rex p-6 rounded-2xl flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-lg">
                     <span class="text-3xl">📱</span>
                     <div class="text-left">
-                        <p class="font-bold text-lg">Recargas Móviles</p>
-                        <p class="text-xs text-gray-400">Claro, Movistar, CNT, Tuenti</p>
+                        <p class="font-bold text-lg leading-tight text-white uppercase">Recargas Móviles</p>
+                        <p class="text-[10px] text-blue-200 uppercase tracking-tighter">Saldo y Paquetes</p>
                     </div>
                 </button>
 
-                <button onclick="showStep(2, 'juegos')" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl flex items-center gap-4 hover:bg-slate-700 transition">
+                <button onclick="showStep(2, 'juegos')" class="bg-naranja-rex p-6 rounded-2xl flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-lg">
                     <span class="text-3xl">🎮</span>
                     <div class="text-left">
-                        <p class="font-bold text-lg">Videojuegos</p>
-                        <p class="text-xs text-gray-400">Free Fire, Roblox, COD</p>
+                        <p class="font-bold text-lg leading-tight text-white uppercase">Videojuegos</p>
+                        <p class="text-[10px] text-orange-100 uppercase tracking-tighter">Diamantes y Monedas</p>
                     </div>
                 </button>
             </div>
         </section>
 
         <section id="step-2" class="step-hidden">
-            <button onclick="goBack(1)" class="text-blue-400 mb-6 flex items-center">← Volver</button>
-            <h2 id="title-step-2" class="text-xl font-bold mb-6">Selecciona una opción</h2>
+            <button onclick="goBack(1)" class="text-zinc-500 mb-6 flex items-center text-sm font-bold uppercase tracking-widest">← Volver</button>
+            <h2 id="title-step-2" class="text-xl font-bold mb-6 text-center italic uppercase"></h2>
             <div id="grid-options" class="grid grid-cols-2 gap-4"></div>
         </section>
 
-        <section id="step-3" class="step-hidden bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-2xl">
-            <button onclick="goBack(2)" class="text-blue-400 mb-4 inline-block">← Volver</button>
-            <h2 id="brand-selected" class="text-2xl font-black mb-6 text-blue-400 uppercase"></h2>
+        <section id="step-3" class="step-hidden card-rex p-6 rounded-3xl shadow-2xl border-t-4 border-zinc-700">
+            <button onclick="goBack(2)" class="text-zinc-500 mb-4 inline-block text-xs font-bold uppercase tracking-widest">← Volver</button>
+            <h2 id="brand-selected" class="text-3xl font-black mb-6 text-center uppercase italic"></h2>
             
-            <div id="form-fields" class="space-y-4 text-left"></div>
+            <div id="form-fields" class="space-y-5 text-left"></div>
 
-            <button onclick="enviarPedido()" class="w-full mt-8 bg-green-500 hover:bg-green-600 text-white font-black py-4 rounded-xl shadow-lg transition-all uppercase tracking-widest">
-                Realizar Pedido
+            <button onclick="enviarPedido()" class="w-full mt-8 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-sm">
+                Confirmar por WhatsApp
             </button>
         </section>
 
@@ -72,11 +75,11 @@
 
             if(type === 'recargas') {
                 currentOrder.categoria = 'Recargas';
-                document.getElementById('title-step-2').innerText = '¿Cuál es tu operadora?';
+                document.getElementById('title-step-2').innerText = 'SELECCIONA OPERADORA';
                 renderBrands(['Claro', 'Movistar', 'CNT', 'Tuenti', 'Maxi Plus']);
             } else if(type === 'juegos') {
                 currentOrder.categoria = 'Juegos';
-                document.getElementById('title-step-2').innerText = '¿Qué juego recargamos?';
+                document.getElementById('title-step-2').innerText = 'SELECCIONA JUEGO';
                 renderBrands(['Free Fire', 'Roblox', 'Call of Duty', 'Mobile Legends']);
             }
         }
@@ -86,7 +89,7 @@
             grid.innerHTML = '';
             brands.forEach(b => {
                 grid.innerHTML += `
-                    <button onclick="selectBrand('${b}')" class="bg-slate-900 border border-slate-700 p-4 rounded-xl hover:border-blue-500 transition font-bold uppercase text-xs">
+                    <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl hover:border-blue-500 transition font-bold uppercase text-[11px] tracking-wider py-6">
                         ${b}
                     </button>`;
             });
@@ -95,20 +98,22 @@
         function selectBrand(brand) {
             currentOrder.marca = brand;
             const fields = document.getElementById('form-fields');
-            document.getElementById('brand-selected').innerText = brand;
+            const brandLabel = document.getElementById('brand-selected');
+            brandLabel.innerText = brand;
+            brandLabel.style.color = currentOrder.categoria === 'Recargas' ? '#001e85' : '#f7941d';
 
             if(currentOrder.categoria === 'Recargas') {
                 fields.innerHTML = `
-                    <div><label class="text-[10px] text-gray-400 uppercase font-bold">Número de Celular</label>
-                    <input type="tel" id="input-id" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg mt-1 text-white" placeholder="09xxxxxxxx"></div>
-                    <div><label class="text-[10px] text-gray-400 uppercase font-bold">Monto o Paquete</label>
-                    <input type="text" id="input-monto" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg mt-1 text-white" placeholder="Ej: $5 o Paquete 2GB"></div>`;
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Número de Celular</label>
+                    <input type="tel" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-blue-500 outline-none" placeholder="09xxxxxxxx"></div>
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Monto o Paquete</label>
+                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-blue-500 outline-none" placeholder="Ej: $5 o Paquete 2GB"></div>`;
             } else {
                 fields.innerHTML = `
-                    <div><label class="text-[10px] text-gray-400 uppercase font-bold">ID de Jugador</label>
-                    <input type="text" id="input-id" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg mt-1 text-white" placeholder="ID del juego"></div>
-                    <div><label class="text-[10px] text-gray-400 uppercase font-bold">Cantidad</label>
-                    <input type="text" id="input-monto" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg mt-1 text-white" placeholder="Ej: 100 Diamantes"></div>`;
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">ID de Jugador / Usuario</label>
+                    <input type="text" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-orange-500 outline-none" placeholder="Ingresa tu ID"></div>
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Monto de Recarga</label>
+                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-orange-500 outline-none" placeholder="Ej: 100 Diamantes"></div>`;
             }
             showStep(3);
         }
@@ -116,12 +121,12 @@
         function enviarPedido() {
             const id = document.getElementById('input-id').value;
             const monto = document.getElementById('input-monto').value;
-            if(!id || !monto) return alert('Llena todos los campos');
+            if(!id || !monto) return alert('Por favor, completa los datos del pedido');
 
-            const numeroWhatsApp = "593900000000"; // PON AQUÍ TU NÚMERO
+            const numeroWhatsApp = "593992225484";
             const msg = `Hola Rexpres Play! 🚀\n\nQuiero una recarga de *${currentOrder.marca}*.\n` +
-                        `💰 Monto/Paquete: ${monto}\n` +
-                        `🆔 ID/Número: ${id}`;
+                        `💰 Monto/Producto: ${monto}\n` +
+                        `🆔 ID/Número: ${id}\n\nQuedo a la espera para realizar el pago.`;
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
 
