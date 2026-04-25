@@ -8,31 +8,35 @@
     <style>
         .step-hidden { display: none; }
         body { background-color: #000000; color: white; font-family: ui-sans-serif, system-ui; }
-        /* Colores oficiales de tu logo */
         .bg-azul-rex { background-color: #001e85; }
         .bg-naranja-rex { background-color: #f7941d; }
         .card-rex { background-color: #0a0a0a; border: 1px solid #1a1a1a; }
+        
+        /* Animación para el Slider */
+        .slider-container { position: relative; overflow: hidden; border-radius: 1rem; height: 160px; }
+        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1s ease-in-out; background-size: cover; background-position: center; }
+        .slide.active { opacity: 1; }
     </style>
 </head>
 <body>
 
-    <header class="p-4 flex justify-between items-center bg-black border-b border-zinc-800 shadow-2xl">
+    <header class="p-4 flex justify-between items-center bg-black border-b border-zinc-800">
         <img src="logo.png" alt="Rexpres Play" class="h-10 w-auto">
     </header>
 
-    <main class="max-w-md mx-auto p-5">
+    <main class="max-w-md mx-auto p-5 text-center">
         
         <section id="step-1">
-            <div class="rounded-2xl bg-gradient-to-br from-[#001e85] to-[#000a2e] p-8 text-center mb-8 shadow-2xl border border-blue-900/30">
-                <h2 class="text-2xl font-black mb-2 italic uppercase">Tu carga al instante</h2>
-                <p class="text-blue-200 text-[10px] tracking-widest uppercase">Servicios Digitales Profesionales</p>
+            <div class="slider-container mb-8 border border-zinc-800 shadow-2xl">
+                <div class="slide active" style="background-image: url('banner1.png');"></div>
+                <div class="slide" style="background-image: url('banner2.png');"></div>
             </div>
             
             <div class="grid gap-5">
                 <button onclick="showStep(2, 'recargas')" class="bg-azul-rex p-6 rounded-2xl flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-lg">
                     <span class="text-3xl">📱</span>
                     <div class="text-left">
-                        <p class="font-bold text-lg leading-tight text-white uppercase">Recargas Móviles</p>
+                        <p class="font-bold text-lg leading-tight text-white uppercase italic">Recargas Móviles</p>
                         <p class="text-[10px] text-blue-200 uppercase tracking-tighter">Saldo y Paquetes</p>
                     </div>
                 </button>
@@ -40,7 +44,7 @@
                 <button onclick="showStep(2, 'juegos')" class="bg-naranja-rex p-6 rounded-2xl flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-lg">
                     <span class="text-3xl">🎮</span>
                     <div class="text-left">
-                        <p class="font-bold text-lg leading-tight text-white uppercase">Videojuegos</p>
+                        <p class="font-bold text-lg leading-tight text-white uppercase italic">Videojuegos</p>
                         <p class="text-[10px] text-orange-100 uppercase tracking-tighter">Diamantes y Monedas</p>
                     </div>
                 </button>
@@ -53,12 +57,10 @@
             <div id="grid-options" class="grid grid-cols-2 gap-4"></div>
         </section>
 
-        <section id="step-3" class="step-hidden card-rex p-6 rounded-3xl shadow-2xl border-t-4 border-zinc-700">
+        <section id="step-3" class="step-hidden card-rex p-6 rounded-3xl shadow-2xl border-t-4 border-zinc-800">
             <button onclick="goBack(2)" class="text-zinc-500 mb-4 inline-block text-xs font-bold uppercase tracking-widest">← Volver</button>
             <h2 id="brand-selected" class="text-3xl font-black mb-6 text-center uppercase italic"></h2>
-            
             <div id="form-fields" class="space-y-5 text-left"></div>
-
             <button onclick="enviarPedido()" class="w-full mt-8 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-sm">
                 Confirmar por WhatsApp
             </button>
@@ -67,6 +69,19 @@
     </main>
 
     <script>
+        // Lógica del Slider
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function nextSlide() {
+            if (slides.length > 0) {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }
+        }
+        setInterval(nextSlide, 4000); // Cambia cada 4 segundos
+
         let currentOrder = {};
 
         function showStep(step, type = '') {
@@ -89,7 +104,7 @@
             grid.innerHTML = '';
             brands.forEach(b => {
                 grid.innerHTML += `
-                    <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl hover:border-blue-500 transition font-bold uppercase text-[11px] tracking-wider py-6">
+                    <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-4 rounded-xl hover:border-blue-500 transition font-bold uppercase text-[11px] py-6">
                         ${b}
                     </button>`;
             });
@@ -105,15 +120,15 @@
             if(currentOrder.categoria === 'Recargas') {
                 fields.innerHTML = `
                     <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Número de Celular</label>
-                    <input type="tel" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-blue-500 outline-none" placeholder="09xxxxxxxx"></div>
-                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Monto o Paquete</label>
-                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-blue-500 outline-none" placeholder="Ej: $5 o Paquete 2GB"></div>`;
+                    <input type="tel" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white outline-none focus:border-blue-500" placeholder="09xxxxxxxx"></div>
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Monto / Paquete</label>
+                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white outline-none focus:border-blue-500" placeholder="Ej: $5 o 2GB"></div>`;
             } else {
                 fields.innerHTML = `
-                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">ID de Jugador / Usuario</label>
-                    <input type="text" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-orange-500 outline-none" placeholder="Ingresa tu ID"></div>
-                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Monto de Recarga</label>
-                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white focus:border-orange-500 outline-none" placeholder="Ej: 100 Diamantes"></div>`;
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">ID de Jugador</label>
+                    <input type="text" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white outline-none focus:border-orange-500" placeholder="Ingresa tu ID"></div>
+                    <div><label class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Cantidad</label>
+                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl mt-1 text-white outline-none focus:border-orange-500" placeholder="Ej: 100 Diamantes"></div>`;
             }
             showStep(3);
         }
@@ -121,12 +136,10 @@
         function enviarPedido() {
             const id = document.getElementById('input-id').value;
             const monto = document.getElementById('input-monto').value;
-            if(!id || !monto) return alert('Por favor, completa los datos del pedido');
+            if(!id || !monto) return alert('Completa los datos del pedido');
 
             const numeroWhatsApp = "593992225484";
-            const msg = `Hola Rexpres Play! 🚀\n\nQuiero una recarga de *${currentOrder.marca}*.\n` +
-                        `💰 Monto/Producto: ${monto}\n` +
-                        `🆔 ID/Número: ${id}\n\nQuedo a la espera para realizar el pago.`;
+            const msg = `Hola Rexpres Play! 🚀\n\nQuiero una recarga de *${currentOrder.marca}*.\n💰 Monto: ${monto}\n🆔 ID/Número: ${id}`;
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
 
