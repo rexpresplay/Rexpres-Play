@@ -12,13 +12,13 @@
         .bg-naranja-rex { background-color: #f7941d; }
         .card-rex { background-color: #0a0a0a; border: 1px solid #1a1a1a; }
         
-        /* Slider de Banners */
         .slider-container { 
             position: relative; 
             overflow: hidden; 
             border-radius: 1.5rem; 
             height: 180px; 
             margin-bottom: 2rem;
+            background-color: #111;
         }
         @media (min-width: 768px) {
             .slider-container { height: 350px; }
@@ -38,7 +38,9 @@
 
     <header class="p-4 bg-black border-b border-zinc-800 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto">
+            <button onclick="goBack(1)" class="hover:opacity-80 transition-all">
+                <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto">
+            </button>
             <span class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase tracking-widest italic">Ecuador</span>
         </div>
     </header>
@@ -47,21 +49,21 @@
         
         <section id="step-1">
             <div class="slider-container border border-zinc-800 shadow-2xl">
-                <div class="slide active" style="background-image: url('ChatGPT Image 25 abr 2026, 06_36_24 p.m..jpg');"></div>
-                <div class="slide" style="background-image: url('ChatGPT Image 25 abr 2026, 06_38_37 p.m..jpg');"></div>
+                <div class="slide active" style="background-image: url('banner 1.png');"></div>
+                <div class="slide" style="background-image: url('banner 2.png');"></div>
             </div>
 
             <div class="text-center mb-10">
                 <h2 class="text-2xl md:text-4xl font-black uppercase italic tracking-tighter text-white">¿Qué deseas realizar hoy?</h2>
-                <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold">Servicios garantizados en todo el país</p>
+                <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold">Servicios garantizados</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <button onclick="showSubCategory()" class="bg-azul-rex p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl group text-left border border-blue-400/20">
-                    <img src="topup.svg" class="w-16 h-16 md:w-20 md:h-20 group-hover:rotate-6 transition-transform" alt="Icono Recargas">
+                    <img src="topup.svg" class="w-16 h-16 md:w-20 md:h-20 group-hover:rotate-6 transition-transform" alt="Recargas">
                     <div>
                         <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Recargas Móviles</p>
-                        <p class="text-xs md:text-sm text-blue-200 uppercase tracking-widest mt-1">Saldo y Paquetes Nacionales</p>
+                        <p class="text-xs md:text-sm text-blue-200 uppercase tracking-widest mt-1">Saldo y Paquetes</p>
                     </div>
                 </button>
 
@@ -109,15 +111,13 @@
         </section>
 
         <section id="step-3" class="step-hidden flex justify-center">
-            <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700">
+            <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700 text-center">
                 <button onclick="goBack(2)" class="text-zinc-400 mb-6 inline-block text-xs font-bold uppercase tracking-widest hover:text-white">← Regresar</button>
-                <div class="flex flex-col items-center mb-8">
-                    <img id="final-brand-img" src="" class="w-24 h-24 object-contain mb-4" alt="Marca">
-                    <h2 id="brand-selected" class="text-3xl md:text-4xl font-black text-center uppercase italic"></h2>
-                </div>
+                <img id="final-brand-img" src="" class="w-24 h-24 object-contain mx-auto mb-4" alt="Marca">
+                <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-8 uppercase italic"></h2>
                 <div id="form-fields" class="space-y-6"></div>
-                <button onclick="enviarPedido()" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base flex items-center justify-center gap-3">
-                    <span>Confirmar por WhatsApp</span>
+                <button onclick="enviarPedido()" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
+                    Confirmar por WhatsApp
                 </button>
             </div>
         </section>
@@ -125,7 +125,6 @@
     </main>
 
     <script>
-        // Lógica de Slider
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -135,32 +134,29 @@
                 slides[currentSlide].classList.add('active');
             }
         }
-        setInterval(nextSlide, 5000);
+        setInterval(nextSlide, 4000);
 
         let currentOrder = {};
 
-        // MAPA EXACTO DE TUS IMÁGENES
         const imageMap = {
             'Claro': 'claro.webp',
             'Movistar': 'movistar.webp',
             'Tuenti': 'tuenti.webp',
             'CNT': 'cnt.webp',
             'Aki Móvil': 'akimovil (1).webp',
-            'Maxi Plus': 'maxiplus.webp',
-            'Free Fire': 'ChatGPT Image 25 abr 2026, 06_38_37 p.m..jpg',
-            'Roblox': 'roblox_icon.png' // marcador
+            'Maxi Plus': 'maxiplus.webp'
         };
-
-        function showSubCategory() {
-            hideAllSteps();
-            document.getElementById('step-sub').classList.remove('step-hidden');
-            window.scrollTo(0,0);
-        }
 
         function hideAllSteps() {
             ['step-1', 'step-sub', 'step-2', 'step-3'].forEach(id => {
                 document.getElementById(id).classList.add('step-hidden');
             });
+        }
+
+        function showSubCategory() {
+            hideAllSteps();
+            document.getElementById('step-sub').classList.remove('step-hidden');
+            window.scrollTo(0,0);
         }
 
         function showStep(step, type = '', subType = '') {
@@ -170,14 +166,14 @@
 
             if(type === 'recargas') {
                 currentOrder.categoria = subType; 
-                document.getElementById('title-step-2').innerText = 'Selecciona Operadora';
+                document.getElementById('title-step-2').innerText = 'Elige Operadora';
                 renderBrands(['Claro', 'Movistar', 'CNT', 'Tuenti', 'Aki Móvil', 'Maxi Plus']);
                 backBtn.onclick = () => showSubCategory();
             } else if(type === 'juegos') {
                 currentOrder.categoria = 'Juegos';
-                document.getElementById('title-step-2').innerText = 'Selecciona Juego';
-                renderBrands(['Free Fire', 'Roblox']);
-                backBtn.onclick = () => showStep(1);
+                document.getElementById('title-step-2').innerText = 'Elige Juego';
+                renderBrands(['Free Fire', 'Roblox', 'Call of Duty', 'Mobile Legends']);
+                backBtn.onclick = () => goBack(1);
             }
             window.scrollTo(0,0);
         }
@@ -207,12 +203,12 @@
             const placeholderMonto = currentOrder.categoria === 'Paquetes' ? 'Ej: Paquete de 5GB' : 'Ej: $3, $5, $10';
 
             fields.innerHTML = `
-                <div class="space-y-2">
+                <div class="space-y-2 text-left">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Número de Celular' : 'ID de Jugador'}</label>
                     <input type="text" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
                 </div>
-                <div class="space-y-2">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto / Detalle' : 'Cantidad (Diamantes/Monedas)'}</label>
+                <div class="space-y-2 text-left">
+                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto / Tipo de Paquete' : 'Cantidad'}</label>
                     <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${placeholderMonto}">
                 </div>`;
             
@@ -232,10 +228,13 @@
         }
 
         function goBack(step) {
-            if(step === 2 && currentOrder.categoria !== 'Juegos') {
+            hideAllSteps();
+            if(step === 1) {
+                document.getElementById('step-1').classList.remove('step-hidden');
+            } else if(step === 2 && currentOrder.categoria !== 'Juegos') {
                 showStep(2, 'recargas', currentOrder.categoria);
-            } else {
-                showStep(step);
+            } else if(step === 2 && currentOrder.categoria === 'Juegos') {
+                showStep(2, 'juegos');
             }
         }
     </script>
