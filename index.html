@@ -12,6 +12,7 @@
         .bg-naranja-rex { background-color: #f7941d; }
         .card-rex { background-color: #0a0a0a; border: 1px solid #1a1a1a; }
         
+        /* Slider de Banners */
         .slider-container { 
             position: relative; 
             overflow: hidden; 
@@ -38,9 +39,7 @@
 
     <header class="p-4 bg-black border-b border-zinc-800 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <button onclick="goBack(1)" class="hover:opacity-80 transition-all">
-                <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto">
-            </button>
+            <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto">
             <span class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase tracking-widest italic">Ecuador</span>
         </div>
     </header>
@@ -49,18 +48,18 @@
         
         <section id="step-1">
             <div class="slider-container border border-zinc-800 shadow-2xl">
-                <div class="slide active" style="background-image: url('banner 1.png');"></div>
-                <div class="slide" style="background-image: url('banner 2.png');"></div>
+                <div class="slide active" style="background-image: url('banner1.png');"></div>
+                <div class="slide" style="background-image: url('banner2.png');"></div>
             </div>
 
             <div class="text-center mb-10">
                 <h2 class="text-2xl md:text-4xl font-black uppercase italic tracking-tighter text-white">¿Qué deseas realizar hoy?</h2>
-                <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold">Servicios garantizados</p>
+                <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold italic">Selecciona un servicio</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <button onclick="showSubCategory()" class="bg-azul-rex p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl group text-left border border-blue-400/20">
-                    <img src="topup.svg" class="w-16 h-16 md:w-20 md:h-20 group-hover:rotate-6 transition-transform" alt="Recargas">
+                    <img src="topup.svg" class="w-16 h-16 md:w-20 md:h-20" alt="Recargas">
                     <div>
                         <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Recargas Móviles</p>
                         <p class="text-xs md:text-sm text-blue-200 uppercase tracking-widest mt-1">Saldo y Paquetes</p>
@@ -68,7 +67,7 @@
                 </button>
 
                 <button onclick="showStep(2, 'juegos')" class="bg-naranja-rex p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl group text-left border border-orange-400/20">
-                    <span class="text-5xl md:text-7xl group-hover:rotate-12 transition-transform">🎮</span>
+                    <span class="text-5xl md:text-7xl group-hover:rotate-6 transition-transform">🎮</span>
                     <div>
                         <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Videojuegos</p>
                         <p class="text-xs md:text-sm text-orange-100 uppercase tracking-widest mt-1">Diamantes y Monedas</p>
@@ -80,10 +79,10 @@
         <section id="step-sub" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button onclick="goBack(1)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
-                    <span class="mr-2">←</span> Regresar
+                    <span class="mr-2">←</span> Volver al inicio
                 </button>
-                <h2 class="text-xl md:text-2xl font-black italic uppercase">Selecciona el tipo</h2>
-                <div class="w-20"></div>
+                <h2 class="text-xl md:text-2xl font-black italic uppercase text-center flex-1">Selecciona el tipo</h2>
+                <div class="w-10"></div>
             </div>
             
             <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -102,22 +101,21 @@
         <section id="step-2" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button id="btn-back-step2" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
-                    <span class="mr-2">←</span> Volver
+                    <span class="mr-2">←</span> Regresar
                 </button>
-                <h2 id="title-step-2" class="text-xl md:text-3xl font-black italic uppercase text-center flex-1"></h2>
+                <h2 id="title-step-2" class="text-xl md:text-3xl font-black italic uppercase text-center flex-1 text-white"></h2>
                 <div class="w-10"></div>
             </div>
             <div id="grid-options" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"></div>
         </section>
 
         <section id="step-3" class="step-hidden flex justify-center">
-            <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700 text-center">
+            <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700">
                 <button onclick="goBack(2)" class="text-zinc-400 mb-6 inline-block text-xs font-bold uppercase tracking-widest hover:text-white">← Regresar</button>
-                <img id="final-brand-img" src="" class="w-24 h-24 object-contain mx-auto mb-4" alt="Marca">
-                <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-8 uppercase italic"></h2>
+                <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-8 text-center uppercase italic text-white"></h2>
                 <div id="form-fields" class="space-y-6"></div>
                 <button onclick="enviarPedido()" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
-                    Confirmar por WhatsApp
+                    Confirmar pedido
                 </button>
             </div>
         </section>
@@ -125,6 +123,7 @@
     </main>
 
     <script>
+        // Lógica de Slider
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -138,6 +137,7 @@
 
         let currentOrder = {};
 
+        // Mapa de imágenes para operadoras
         const imageMap = {
             'Claro': 'claro.webp',
             'Movistar': 'movistar.webp',
@@ -166,12 +166,12 @@
 
             if(type === 'recargas') {
                 currentOrder.categoria = subType; 
-                document.getElementById('title-step-2').innerText = 'Elige Operadora';
+                document.getElementById('title-step-2').innerText = 'Operadoras';
                 renderBrands(['Claro', 'Movistar', 'CNT', 'Tuenti', 'Aki Móvil', 'Maxi Plus']);
                 backBtn.onclick = () => showSubCategory();
             } else if(type === 'juegos') {
                 currentOrder.categoria = 'Juegos';
-                document.getElementById('title-step-2').innerText = 'Elige Juego';
+                document.getElementById('title-step-2').innerText = 'Videojuegos';
                 renderBrands(['Free Fire', 'Roblox', 'Call of Duty', 'Mobile Legends']);
                 backBtn.onclick = () => goBack(1);
             }
@@ -182,14 +182,24 @@
             const grid = document.getElementById('grid-options');
             grid.innerHTML = '';
             brands.forEach(b => {
-                const imgFile = imageMap[b] || 'logo.png';
-                grid.innerHTML += `
-                    <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
-                        <div class="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
-                            <img src="${imgFile}" alt="${b}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform">
-                        </div>
-                        <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white text-center">${b}</span>
-                    </button>`;
+                const imgFile = imageMap[b];
+                
+                if(imgFile) {
+                    // Render para Operadoras con imagen
+                    grid.innerHTML += `
+                        <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
+                            <div class="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
+                                <img src="${imgFile}" alt="${b}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform">
+                            </div>
+                            <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${b}</span>
+                        </button>`;
+                } else {
+                    // Render para Juegos con botones de texto elegantes
+                    grid.innerHTML += `
+                        <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-white transition-all font-bold uppercase text-xs md:text-sm tracking-widest text-center text-white">
+                            ${b}
+                        </button>`;
+                }
             });
         }
 
@@ -197,7 +207,6 @@
             currentOrder.marca = brand;
             const fields = document.getElementById('form-fields');
             document.getElementById('brand-selected').innerText = brand;
-            document.getElementById('final-brand-img').src = imageMap[brand] || 'logo.png';
             
             const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
             const placeholderMonto = currentOrder.categoria === 'Paquetes' ? 'Ej: Paquete de 5GB' : 'Ej: $3, $5, $10';
@@ -208,7 +217,7 @@
                     <input type="text" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
                 </div>
                 <div class="space-y-2 text-left">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto / Tipo de Paquete' : 'Cantidad'}</label>
+                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto / Detalle' : 'Cantidad'}</label>
                     <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${placeholderMonto}">
                 </div>`;
             
@@ -220,10 +229,9 @@
         function enviarPedido() {
             const id = document.getElementById('input-id').value;
             const monto = document.getElementById('input-monto').value;
-            if(!id || !monto) return alert('Por favor completa todos los datos');
-
+            if(!id || !monto) return alert('Por favor completa los datos');
             const numeroWhatsApp = "593992225484";
-            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}\n*Marca:* ${currentOrder.marca}\n*ID/Número:* ${id}\n*Monto/Detalle:* ${monto}\n\nQuedo atento a los datos de pago.`;
+            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}\n*Marca:* ${currentOrder.marca}\n*ID/Número:* ${id}\n*Monto/Detalle:* ${monto}`;
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
 
@@ -231,10 +239,8 @@
             hideAllSteps();
             if(step === 1) {
                 document.getElementById('step-1').classList.remove('step-hidden');
-            } else if(step === 2 && currentOrder.categoria !== 'Juegos') {
-                showStep(2, 'recargas', currentOrder.categoria);
-            } else if(step === 2 && currentOrder.categoria === 'Juegos') {
-                showStep(2, 'juegos');
+            } else if(step === 2) {
+                showStep(2, (currentOrder.categoria === 'Juegos' ? 'juegos' : 'recargas'), currentOrder.categoria);
             }
         }
     </script>
