@@ -127,7 +127,7 @@
             <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700">
                 <button id="btn-back-step3" class="text-zinc-400 mb-6 inline-block text-xs font-bold uppercase tracking-widest hover:text-white">← Regresar</button>
                 <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-2 text-center uppercase italic text-white"></h2>
-                <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-xs tracking-widest mb-8"></p>
+                <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-[10px] md:text-xs tracking-widest mb-8 leading-tight"></p>
                 
                 <div id="form-fields" class="space-y-6"></div>
                 
@@ -154,25 +154,25 @@
 
         let currentOrder = {};
 
-        // DATOS REALES DE CLARO (Basados en tu tabla)
+        // DATOS EXACTOS DE CLARO SEGÚN TU ARCHIVO
         const paquetesData = {
             'Claro': [
-                { nombre: 'Paquete 1GB', detalle: '1GB (512MB libres + 512MB YT/TikTok) + WhatsApp + Llamadas Ilimitadas (1 día)', precio: '1.05', descuento: '1.03' },
-                { nombre: 'Paquete 4GB', detalle: '4GB (2GB YT/TikTok + 2GB IG/FB) (2 días)', precio: '1.50', descuento: '1.47' },
-                { nombre: 'Paquete 2GB', detalle: '2GB (1GB libre + 1GB YT/TikTok) + 1GB WA + Minutos (2 días)', precio: '2.05', descuento: '2.01' },
-                { nombre: 'Horas Ilimitadas', detalle: 'Gigas libres por 4 horas', precio: '2.05', descuento: '2.01' },
-                { nombre: 'Paquete 5GB', detalle: '5GB (2GB libres + 3GB YT/TikTok) + WA + Minutos (3 días)', precio: '2.50', descuento: '2.45' },
-                { nombre: 'Paquete 7GB', detalle: '7GB (4GB libres + 3GB YT/TikTok) + WA + Minutos (3 días)', precio: '3.10', descuento: '3.05' },
-                { nombre: 'Paquete 9GB', detalle: '9GB (4GB libres + 5GB YT/TikTok) + WA + Minutos (7 días)', precio: '3.50', descuento: '3.44' },
-                { nombre: 'Paquete 8GB (10d)', detalle: '8GB (3GB libres + 5GB YT/TikTok) + WA + Minutos (10 días)', precio: '4.10', descuento: '4.03' },
-                { nombre: 'Paquete 8GB (15d)', detalle: '8GB (3GB libres + 5GB YT/TikTok) + WA + Minutos + Claro Video (15 días)', precio: '5.15', descuento: '5.05' },
-                { nombre: 'Paquete 10GB', detalle: '10GB (5GB libres + 5GB YT/TikTok) + WA + Minutos + Claro Video (15 días)', precio: '5.50', descuento: '5.40' },
-                { nombre: 'Paquete ECDF', detalle: '6GB (4GB libres + 2GB YT/TikTok) + WA + Suscripción ECDF (3 días)', precio: '6.00', descuento: '5.90' },
-                { nombre: 'Paquete 12GB', detalle: '12GB (7GB libres + 5GB YT/TikTok) + WA + Minutos + Claro Video (25 días)', precio: '8.00', descuento: '7.85' },
-                { nombre: 'Paquete 16GB', detalle: '16GB (10GB libres + 6GB YT/TikTok) + WA + Minutos + Claro Video (30 días)', precio: '10.50', descuento: '10.30' },
-                { nombre: 'Paquete 19GB', detalle: '19GB (13GB libres + 6GB YT/TikTok) + WA + Minutos + Claro Video (30 días)', precio: '12.50', descuento: '12.25' },
-                { nombre: 'Paquete 22GB', detalle: '22GB (15GB libres + 2GB RRSS + 5GB YT/TK) + WA + Minutos (30 días)', precio: '15.50', descuento: '15.20' },
-                { nombre: 'Paquete 27GB', detalle: '27GB (20GB libres + 2GB RRSS + 5GB YT/TK) + WA + Minutos (30 días)', precio: '20.50', descuento: '20.10' }
+                { nombre: 'Paquete $1.05', detalle: '1GB (512MB libres + 512MB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 100 SMS (1 día).', precio: '1.05', descuento: '1.03' },
+                { nombre: 'Paquete $1.50', detalle: '4GB (2GB YT/TikTok + 2GB IG/FB) (2 días).', precio: '1.50', descuento: '1.47' },
+                { nombre: 'Paquete $2.05', detalle: '2GB (1GB libre + 1GB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 20 min otras + 200 SMS (2 días).', precio: '2.05', descuento: '2.01' },
+                { nombre: 'Horas Ilimitadas', detalle: 'Horas Ilimitadas: Gigas libres por 4 horas.', precio: '2.05', descuento: '2.01' },
+                { nombre: 'Paquete $2.50', detalle: '5GB (2GB libres + 3GB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 20 min otras + 200 SMS (3 días).', precio: '2.50', descuento: '2.45' },
+                { nombre: 'Paquete $3.10', detalle: '7GB (4GB libres + 3GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS (3 días).', precio: '3.10', descuento: '3.05' },
+                { nombre: 'Paquete $3.50', detalle: '9GB (4GB libres + 5GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS (7 días).', precio: '3.50', descuento: '3.44' },
+                { nombre: 'Paquete $4.10', detalle: '8GB (3GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 40 min otras + 300 SMS (10 días).', precio: '4.10', descuento: '4.03' },
+                { nombre: 'Paquete $5.15', detalle: '8GB (3GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 50 min otras + 300 SMS + 10GB Claro Video (15 días).', precio: '5.15', descuento: '5.05' },
+                { nombre: 'Paquete $5.50', detalle: '10GB (5GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 50 min otras + 300 SMS + 10GB Claro Video (15 días).', precio: '5.50', descuento: '5.40' },
+                { nombre: 'Paquete $6.00', detalle: '6GB (4GB libres + 2GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS + Suscripción ECDF + Claro Video (3 días).', precio: '6.00', descuento: '5.90' },
+                { nombre: 'Paquete $8.00', detalle: '12GB (7GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 80 min todas + 15GB Claro Video (25 días).', precio: '8.00', descuento: '7.85' },
+                { nombre: 'Paquete $10.50', detalle: '16GB (10GB libres + 6GB YT/TikTok) + 5GB WhatsApp + Llamadas ilimitadas Claro + 100 min otras + 15GB Claro Video (30 días).', precio: '10.50', descuento: '10.30' },
+                { nombre: 'Paquete $12.50', detalle: '19GB (13GB libres + 6GB YT/TikTok) + 5GB WhatsApp + Llamadas ilimitadas Claro + 120 min otras + 15GB Claro Video (30 días).', precio: '12.50', descuento: '12.25' },
+                { nombre: 'Paquete $15.50', detalle: '22GB (15GB libres + 2GB IG/FB + 5GB YT/TK) + 5GB WhatsApp + Llamadas ilimitadas Claro + 150 min otras + 15GB Claro Video (30 días).', precio: '15.50', descuento: '15.20' },
+                { nombre: 'Paquete $20.50', detalle: '27GB (20GB libres + 2GB IG/FB + 5GB YT/TK) + 5GB WhatsApp + Llamadas ilimitadas Claro + 150 min otras + 15GB Claro Video (30 días).', precio: '20.50', descuento: '20.10' }
             ]
         };
 
@@ -250,7 +250,7 @@
             
             paquetesData[brand].forEach(p => {
                 container.innerHTML += `
-                    <button onclick="selectPaquete('${p.nombre}', '${p.descuento}')" class="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl text-left hover:border-blue-500 transition-all flex justify-between items-center group">
+                    <button onclick="selectPaquete('${p.nombre}', '${p.descuento}', '${p.detalle.replace(/'/g, "\\'")}')" class="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl text-left hover:border-blue-500 transition-all flex justify-between items-center group">
                         <div class="pr-4">
                             <p class="font-black text-sm md:text-base uppercase italic text-white">${p.nombre}</p>
                             <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1">${p.detalle}</p>
@@ -264,9 +264,10 @@
             window.scrollTo(0,0);
         }
 
-        function selectPaquete(nombre, precio) {
+        function selectPaquete(nombre, precio, detalle) {
             currentOrder.paqueteNombre = nombre;
             currentOrder.monto = precio;
+            currentOrder.detalleCompleto = detalle;
             selectBrand(currentOrder.marca, true);
         }
 
@@ -279,12 +280,12 @@
             document.getElementById('brand-selected').innerText = brand;
             
             if (comesFromPaquete) {
-                detailLabel.innerText = `${currentOrder.paqueteNombre} • Precio Rexpres: $${currentOrder.monto}`;
+                detailLabel.innerText = currentOrder.detalleCompleto;
                 backBtnStep3.onclick = () => showPaquetesList(brand);
             } else {
                 detailLabel.innerText = currentOrder.categoria;
                 backBtnStep3.onclick = () => goBack(2);
-                currentOrder.paqueteNombre = null; // Limpiar si es recarga normal
+                currentOrder.paqueteNombre = null;
             }
 
             const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
@@ -312,9 +313,9 @@
             if(!id || !monto) return alert('Por favor completa los datos');
             
             const numeroWhatsApp = "593992225484";
-            const detalleExtra = currentOrder.paqueteNombre ? `\n*Paquete:* ${currentOrder.paqueteNombre}` : '';
+            const detalleExtra = currentOrder.detalleCompleto ? `\n*Detalle:* ${currentOrder.detalleCompleto}` : '';
             
-            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Monto:* $${monto}`;
+            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Monto Rexpres:* $${monto}`;
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
 
