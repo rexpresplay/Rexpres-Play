@@ -32,6 +32,9 @@
             background-position: center; 
         }
         .slide.active { opacity: 1; }
+
+        /* Estilos Checkout */
+        .order-summary { background: rgba(255,255,255,0.03); border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
     </style>
 </head>
 <body class="bg-black">
@@ -130,6 +133,30 @@
                 <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-[10px] md:text-xs tracking-widest mb-8 leading-tight"></p>
                 
                 <div id="form-fields" class="space-y-6"></div>
+
+                <div class="mt-8 pt-8 border-t border-zinc-800">
+                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">¿Tienes un código?</label>
+                    <div class="flex gap-2 mt-2">
+                        <input type="text" id="promo-code" class="flex-1 bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none text-sm uppercase" placeholder="Código de Referido">
+                        <button onclick="validarCodigo()" class="bg-zinc-800 px-6 rounded-xl font-bold text-xs uppercase hover:bg-zinc-700 transition-colors">Aplicar</button>
+                    </div>
+                    <p id="promo-msg" class="text-[10px] mt-2 font-bold uppercase hidden"></p>
+                </div>
+
+                <div class="order-summary mt-6">
+                    <div class="flex justify-between text-xs text-zinc-400 uppercase font-bold mb-2">
+                        <span>Subtotal</span>
+                        <span id="resumen-subtotal">$0.00</span>
+                    </div>
+                    <div id="resumen-desc-row" class="flex justify-between text-xs text-green-500 uppercase font-bold mb-2 hidden">
+                        <span>Descuento</span>
+                        <span id="resumen-descuento">-$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-black text-white uppercase italic pt-2 border-t border-zinc-800">
+                        <span>Total Final</span>
+                        <span id="resumen-total">$0.00</span>
+                    </div>
+                </div>
                 
                 <button onclick="enviarPedido()" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
                     Confirmar pedido
@@ -140,6 +167,9 @@
     </main>
 
     <script>
+        // CONFIGURACIÓN DE CONEXIÓN AL EXCEL (Google Sheets Apps Script)
+        const URL_WEB_APP = "TU_URL_DE_APPS_SCRIPT_AQUI"; // Debes colocar tu URL generada
+
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -151,7 +181,15 @@
         }
         setInterval(nextSlide, 4000);
 
-        let currentOrder = {};
+        let currentOrder = {
+            categoria: '',
+            marca: '',
+            paqueteNombre: null,
+            monto: 0,
+            detalleCompleto: '',
+            descuentoAplicado: 0,
+            codigoUsado: 'SISTEMA'
+        };
 
         const paquetesData = {
             'Claro': [
@@ -197,7 +235,7 @@
                 { nombre: 'Combo CNT $3', detalle: '4GB, 7 DÍAS, 35 min todas operadoras, Ilimitados a CNT, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '3.00', descuento: '2.95' },
                 { nombre: 'Combo CNT $5', detalle: '5GB, 30 DÍAS, 50 min todas operadoras, ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '5.00', descuento: '4.90' },
                 { nombre: 'Combo CNT $6', detalle: '7GB, 30 DÍAS, 100 min todas operadoras, Ilimitados a CNT, 30 min LDI, 50 SMS, 4GB Whatsapp, 1GB FB, 1GB IG y 1GB TK.', precio: '6.00', descuento: '5.90' },
-                { nombre: 'Combo Datos $10', detalle: '25GB navegación libre por 30 DÍAS.', precio: '10.00', descuento: '0.00' },
+                { nombre: 'Combo Datos $10', detalle: '25GB navegación libre por 30 DÍAS.', precio: '10.00', descuento: '9.80' },
                 { nombre: 'Combo $10 Plus', detalle: '15GB, 30 DÍAS, 200 min todas operadoras, Ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '10.00', descuento: '9.80' },
                 { nombre: 'Combo $15 Plus', detalle: '20GB, 30 DÍAS, 300 min todas operadoras, Ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '15.00', descuento: '14.70' },
                 { nombre: 'Combo $20 Plus', detalle: '25GB, 30 DÍAS, Minutos Ilimitados todas las operadoras, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '20.00', descuento: '19.60' },
@@ -313,7 +351,7 @@
 
         function selectPaquete(nombre, precio, detalle) {
             currentOrder.paqueteNombre = nombre;
-            currentOrder.monto = precio;
+            currentOrder.monto = parseFloat(precio);
             currentOrder.detalleCompleto = detalle;
             selectBrand(currentOrder.marca, true);
         }
@@ -333,7 +371,7 @@
                 detailLabel.innerText = currentOrder.categoria;
                 backBtnStep3.onclick = () => goBack(2);
                 currentOrder.paqueteNombre = null;
-                currentOrder.monto = null;
+                currentOrder.monto = 0;
             }
 
             const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
@@ -346,22 +384,91 @@
                 ${!comesFromPaquete ? `
                 <div class="space-y-2 text-left">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto de Recarga' : 'Cantidad'}</label>
-                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="Ej: $3, $5, $10">
+                    <input type="number" id="input-monto" oninput="actualizarCheckout()" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="0.00">
                 </div>` : ''}`;
             
             hideAllSteps();
             document.getElementById('step-3').classList.remove('step-hidden');
+            actualizarCheckout();
             window.scrollTo(0,0);
+        }
+
+        // LÓGICA DE CÓDIGOS DE REFERIDO / PROMO
+        const codigosValidos = {
+            "ISAA": 0.50,
+            "AMIGO_77": 0.50,
+            "GAMER2026": 0.25,
+            "REXPRES": 0.30
+        };
+
+        function validarCodigo() {
+            const input = document.getElementById('promo-code').value.toUpperCase();
+            const msg = document.getElementById('promo-msg');
+            
+            if(codigosValidos[input]) {
+                currentOrder.descuentoAplicado = codigosValidos[input];
+                currentOrder.codigoUsado = input;
+                msg.innerText = `¡Código ${input} aplicado! Descuento de $${currentOrder.descuentoAplicado.toFixed(2)}`;
+                msg.className = "text-[10px] mt-2 font-bold uppercase text-green-500 block";
+            } else {
+                currentOrder.descuentoAplicado = 0;
+                currentOrder.codigoUsado = 'SISTEMA';
+                msg.innerText = "Código no válido";
+                msg.className = "text-[10px] mt-2 font-bold uppercase text-red-500 block";
+            }
+            actualizarCheckout();
+        }
+
+        function actualizarCheckout() {
+            const inputMonto = document.getElementById('input-monto');
+            let subtotal = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
+            
+            let totalFinal = subtotal - currentOrder.descuentoAplicado;
+            if(totalFinal < 0) totalFinal = 0;
+
+            document.getElementById('resumen-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('resumen-descuento').innerText = `-$${currentOrder.descuentoAplicado.toFixed(2)}`;
+            document.getElementById('resumen-total').innerText = `$${totalFinal.toFixed(2)}`;
+            
+            const descRow = document.getElementById('resumen-desc-row');
+            if(currentOrder.descuentoAplicado > 0) descRow.classList.remove('hidden');
+            else descRow.classList.add('hidden');
         }
 
         function enviarPedido() {
             const id = document.getElementById('input-id').value;
-            const monto = currentOrder.monto || document.getElementById('input-monto').value;
-            if(!id || !monto) return alert('Por favor completa los datos');
-            
+            const inputMonto = document.getElementById('input-monto');
+            const subtotal = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
+            const totalFinal = subtotal - currentOrder.descuentoAplicado;
+
+            if(!id || subtotal <= 0) return alert('Por favor completa los datos correctamente');
+
+            // 1. Guardar en Google Sheets (Excel)
+            const datosExcel = {
+                fecha: new Date().toLocaleString(),
+                cliente: id,
+                servicio: currentOrder.categoria,
+                marca: currentOrder.marca,
+                monto: subtotal.toFixed(2),
+                codigo: currentOrder.codigoUsado,
+                descuento: currentOrder.descuentoAplicado.toFixed(2),
+                total: totalFinal.toFixed(2),
+                estado: "PENDIENTE"
+            };
+
+            // Llamada asíncrona al Sheets (opcionalmente puedes poner un loader aquí)
+            fetch(URL_WEB_APP, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datosExcel)
+            });
+
+            // 2. Redirigir a WhatsApp
             const numeroWhatsApp = "593992225484";
             const detalleExtra = currentOrder.detalleCompleto ? `\n*Paquete:* ${currentOrder.paqueteNombre}\n*Detalle:* ${currentOrder.detalleCompleto}` : '';
-            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Monto Rexpres:* $${monto}`;
+            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Subtotal:* $${subtotal.toFixed(2)}\n*Código:* ${currentOrder.codigoUsado}\n*Total Final:* $${totalFinal.toFixed(2)}`;
+            
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
 
