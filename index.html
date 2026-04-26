@@ -39,7 +39,7 @@
     <header class="p-4 bg-black border-b border-zinc-800 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto">
-            <span class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase tracking-widest italic text-zinc-400">Ecuador</span>
+            <span class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase tracking-widest italic">Ecuador</span>
         </div>
     </header>
 
@@ -84,19 +84,19 @@
                 <button onclick="goBack(1)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
                     <span class="mr-2">←</span> Inicio
                 </button>
-                <h2 class="text-xl md:text-2xl font-black italic uppercase text-center flex-1">Selecciona el tipo</h2>
+                <h2 class="text-xl md:text-2xl font-black italic uppercase text-center flex-1">¿Qué necesitas?</h2>
                 <div class="w-10"></div>
             </div>
             
             <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
                 <button onclick="showStep(2, 'recargas', 'Recargas')" class="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl hover:border-blue-500 transition-all group flex flex-col items-center gap-4">
-                    <svg viewBox="0 0 24 24" class="w-12 h-12 fill-blue-500 group-hover:scale-110 transition-transform" xmlns="http://www.w3.org/2000/svg"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4.25-11L10 11h3l-1.25 3L15 10h-3l1.25-3z"/></svg>
-                    <span class="font-black uppercase italic tracking-widest text-sm md:text-lg">Recargas</span>
+                    <svg viewBox="0 0 24 24" class="w-12 h-12 fill-blue-500" xmlns="http://www.w3.org/2000/svg"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4.25-11L10 11h3l-1.25 3L15 10h-3l1.25-3z"/></svg>
+                    <span class="font-black uppercase italic tracking-widest text-sm md:text-lg text-white">Recargas</span>
                 </button>
 
                 <button onclick="showStep(2, 'recargas', 'Paquetes')" class="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl hover:border-blue-500 transition-all group flex flex-col items-center gap-4">
-                    <svg viewBox="0 0 24 24" class="w-12 h-12 fill-orange-500 group-hover:scale-110 transition-transform" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/></svg>
-                    <span class="font-black uppercase italic tracking-widest text-sm md:text-lg">Paquetes</span>
+                    <svg viewBox="0 0 24 24" class="w-12 h-12 fill-orange-500" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/></svg>
+                    <span class="font-black uppercase italic tracking-widest text-sm md:text-lg text-white">Paquetes</span>
                 </button>
             </div>
         </section>
@@ -104,7 +104,7 @@
         <section id="step-2" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button id="btn-back-step2" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
-                    <span class="mr-2">←</span> Regresar
+                    <span class="mr-2">←</span> Volver
                 </button>
                 <h2 id="title-step-2" class="text-xl md:text-3xl font-black italic uppercase text-center flex-1 text-white"></h2>
                 <div class="w-10"></div>
@@ -112,11 +112,25 @@
             <div id="grid-options" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"></div>
         </section>
 
+        <section id="step-paquetes" class="step-hidden">
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="goBack(2)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
+                    <span class="mr-2">←</span> Regresar
+                </button>
+                <h2 id="title-paquetes" class="text-xl md:text-2xl font-black italic uppercase text-center flex-1 text-white">Paquetes Disponibles</h2>
+                <div class="w-10"></div>
+            </div>
+            <div id="lista-paquetes" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
+        </section>
+
         <section id="step-3" class="step-hidden flex justify-center">
             <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700">
-                <button onclick="goBack(2)" class="text-zinc-400 mb-6 inline-block text-xs font-bold uppercase tracking-widest hover:text-white">← Regresar</button>
-                <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-8 text-center uppercase italic text-white"></h2>
+                <button id="btn-back-step3" class="text-zinc-400 mb-6 inline-block text-xs font-bold uppercase tracking-widest hover:text-white">← Regresar</button>
+                <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-2 text-center uppercase italic text-white"></h2>
+                <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-xs tracking-widest mb-8"></p>
+                
                 <div id="form-fields" class="space-y-6"></div>
+                
                 <button onclick="enviarPedido()" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
                     Confirmar pedido
                 </button>
@@ -140,6 +154,28 @@
 
         let currentOrder = {};
 
+        // DATOS REALES DE CLARO (Basados en tu tabla)
+        const paquetesData = {
+            'Claro': [
+                { nombre: 'Paquete 1GB', detalle: '1GB (512MB libres + 512MB YT/TikTok) + WhatsApp + Llamadas Ilimitadas (1 día)', precio: '1.05', descuento: '1.03' },
+                { nombre: 'Paquete 4GB', detalle: '4GB (2GB YT/TikTok + 2GB IG/FB) (2 días)', precio: '1.50', descuento: '1.47' },
+                { nombre: 'Paquete 2GB', detalle: '2GB (1GB libre + 1GB YT/TikTok) + 1GB WA + Minutos (2 días)', precio: '2.05', descuento: '2.01' },
+                { nombre: 'Horas Ilimitadas', detalle: 'Gigas libres por 4 horas', precio: '2.05', descuento: '2.01' },
+                { nombre: 'Paquete 5GB', detalle: '5GB (2GB libres + 3GB YT/TikTok) + WA + Minutos (3 días)', precio: '2.50', descuento: '2.45' },
+                { nombre: 'Paquete 7GB', detalle: '7GB (4GB libres + 3GB YT/TikTok) + WA + Minutos (3 días)', precio: '3.10', descuento: '3.05' },
+                { nombre: 'Paquete 9GB', detalle: '9GB (4GB libres + 5GB YT/TikTok) + WA + Minutos (7 días)', precio: '3.50', descuento: '3.44' },
+                { nombre: 'Paquete 8GB (10d)', detalle: '8GB (3GB libres + 5GB YT/TikTok) + WA + Minutos (10 días)', precio: '4.10', descuento: '4.03' },
+                { nombre: 'Paquete 8GB (15d)', detalle: '8GB (3GB libres + 5GB YT/TikTok) + WA + Minutos + Claro Video (15 días)', precio: '5.15', descuento: '5.05' },
+                { nombre: 'Paquete 10GB', detalle: '10GB (5GB libres + 5GB YT/TikTok) + WA + Minutos + Claro Video (15 días)', precio: '5.50', descuento: '5.40' },
+                { nombre: 'Paquete ECDF', detalle: '6GB (4GB libres + 2GB YT/TikTok) + WA + Suscripción ECDF (3 días)', precio: '6.00', descuento: '5.90' },
+                { nombre: 'Paquete 12GB', detalle: '12GB (7GB libres + 5GB YT/TikTok) + WA + Minutos + Claro Video (25 días)', precio: '8.00', descuento: '7.85' },
+                { nombre: 'Paquete 16GB', detalle: '16GB (10GB libres + 6GB YT/TikTok) + WA + Minutos + Claro Video (30 días)', precio: '10.50', descuento: '10.30' },
+                { nombre: 'Paquete 19GB', detalle: '19GB (13GB libres + 6GB YT/TikTok) + WA + Minutos + Claro Video (30 días)', precio: '12.50', descuento: '12.25' },
+                { nombre: 'Paquete 22GB', detalle: '22GB (15GB libres + 2GB RRSS + 5GB YT/TK) + WA + Minutos (30 días)', precio: '15.50', descuento: '15.20' },
+                { nombre: 'Paquete 27GB', detalle: '27GB (20GB libres + 2GB RRSS + 5GB YT/TK) + WA + Minutos (30 días)', precio: '20.50', descuento: '20.10' }
+            ]
+        };
+
         const imageMap = {
             'Claro': 'claro.webp',
             'Movistar': 'movistar.webp',
@@ -150,7 +186,7 @@
         };
 
         function hideAllSteps() {
-            ['step-1', 'step-sub', 'step-2', 'step-3'].forEach(id => {
+            ['step-1', 'step-sub', 'step-2', 'step-paquetes', 'step-3'].forEach(id => {
                 document.getElementById(id).classList.add('step-hidden');
             });
         }
@@ -168,7 +204,7 @@
 
             if(type === 'recargas') {
                 currentOrder.categoria = subType; 
-                document.getElementById('title-step-2').innerText = 'Operadoras';
+                document.getElementById('title-step-2').innerText = 'Elige Operadora';
                 renderBrands(['Claro', 'Movistar', 'CNT', 'Tuenti', 'Aki Móvil', 'Maxi Plus']);
                 backBtn.onclick = () => showSubCategory();
             } else if(type === 'juegos') {
@@ -185,40 +221,84 @@
             grid.innerHTML = '';
             brands.forEach(b => {
                 const imgFile = imageMap[b];
-                if(imgFile) {
-                    grid.innerHTML += `
-                        <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
-                            <div class="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
-                                <img src="${imgFile}" alt="${b}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform">
-                            </div>
-                            <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${b}</span>
-                        </button>`;
-                } else {
-                    grid.innerHTML += `
-                        <button onclick="selectBrand('${b}')" class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl hover:border-white transition-all font-bold uppercase text-xs md:text-sm tracking-widest text-center text-white">
-                            ${b}
-                        </button>`;
-                }
+                grid.innerHTML += `
+                    <button onclick="handleBrandSelection('${b}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
+                        <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+                            <img src="${imgFile}" alt="${b}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform">
+                        </div>
+                        <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${b}</span>
+                    </button>`;
             });
         }
 
-        function selectBrand(brand) {
+        function handleBrandSelection(brand) {
+            currentOrder.marca = brand;
+            if (currentOrder.categoria === 'Paquetes' && paquetesData[brand]) {
+                showPaquetesList(brand);
+            } else {
+                selectBrand(brand);
+            }
+        }
+
+        function showPaquetesList(brand) {
+            hideAllSteps();
+            document.getElementById('step-paquetes').classList.remove('step-hidden');
+            document.getElementById('title-paquetes').innerText = `Paquetes ${brand}`;
+            
+            const container = document.getElementById('lista-paquetes');
+            container.innerHTML = '';
+            
+            paquetesData[brand].forEach(p => {
+                container.innerHTML += `
+                    <button onclick="selectPaquete('${p.nombre}', '${p.descuento}')" class="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl text-left hover:border-blue-500 transition-all flex justify-between items-center group">
+                        <div class="pr-4">
+                            <p class="font-black text-sm md:text-base uppercase italic text-white">${p.nombre}</p>
+                            <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1">${p.detalle}</p>
+                        </div>
+                        <div class="text-right min-w-[70px]">
+                            <p class="text-[10px] text-zinc-600 line-through font-bold">$${p.precio}</p>
+                            <p class="text-lg font-black text-green-500">$${p.descuento}</p>
+                        </div>
+                    </button>`;
+            });
+            window.scrollTo(0,0);
+        }
+
+        function selectPaquete(nombre, precio) {
+            currentOrder.paqueteNombre = nombre;
+            currentOrder.monto = precio;
+            selectBrand(currentOrder.marca, true);
+        }
+
+        function selectBrand(brand, comesFromPaquete = false) {
             currentOrder.marca = brand;
             const fields = document.getElementById('form-fields');
+            const detailLabel = document.getElementById('paquete-detalle-final');
+            const backBtnStep3 = document.getElementById('btn-back-step3');
+
             document.getElementById('brand-selected').innerText = brand;
             
-            const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
-            const placeholderMonto = currentOrder.categoria === 'Paquetes' ? 'Ej: Paquete de 5GB' : 'Ej: $3, $5, $10';
+            if (comesFromPaquete) {
+                detailLabel.innerText = `${currentOrder.paqueteNombre} • Precio Rexpres: $${currentOrder.monto}`;
+                backBtnStep3.onclick = () => showPaquetesList(brand);
+            } else {
+                detailLabel.innerText = currentOrder.categoria;
+                backBtnStep3.onclick = () => goBack(2);
+                currentOrder.paqueteNombre = null; // Limpiar si es recarga normal
+            }
 
+            const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
+            
             fields.innerHTML = `
                 <div class="space-y-2 text-left">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Número de Celular' : 'ID de Jugador'}</label>
-                    <input type="text" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
+                    <input type="tel" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
                 </div>
+                ${!comesFromPaquete ? `
                 <div class="space-y-2 text-left">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto / Detalle' : 'Cantidad'}</label>
-                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${placeholderMonto}">
-                </div>`;
+                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto de Recarga' : 'Cantidad'}</label>
+                    <input type="text" id="input-monto" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="Ej: $3, $5, $10">
+                </div>` : ''}`;
             
             hideAllSteps();
             document.getElementById('step-3').classList.remove('step-hidden');
@@ -227,10 +307,14 @@
 
         function enviarPedido() {
             const id = document.getElementById('input-id').value;
-            const monto = document.getElementById('input-monto').value;
+            const monto = currentOrder.monto || document.getElementById('input-monto').value;
+            
             if(!id || !monto) return alert('Por favor completa los datos');
+            
             const numeroWhatsApp = "593992225484";
-            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}\n*Marca:* ${currentOrder.marca}\n*ID/Número:* ${id}\n*Monto/Detalle:* ${monto}`;
+            const detalleExtra = currentOrder.paqueteNombre ? `\n*Paquete:* ${currentOrder.paqueteNombre}` : '';
+            
+            const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Monto:* $${monto}`;
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
 
