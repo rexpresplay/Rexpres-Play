@@ -134,7 +134,8 @@
                 
                 <div id="form-fields" class="space-y-6"></div>
 
-                <div class="mt-8 pt-8 border-t border-zinc-800">
+                <!-- SECCIÓN CUPÓN: solo visible para Videojuegos -->
+                <div id="seccion-cupon" class="mt-8 pt-8 border-t border-zinc-800 hidden">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">¿Tienes un código?</label>
                     <div class="flex gap-2 mt-2">
                         <input type="text" id="promo-code" class="flex-1 bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none text-sm uppercase" placeholder="Código de Referido">
@@ -158,7 +159,7 @@
                     </div>
                 </div>
                 
-                <button onclick="enviarPedido()" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
+                <button onclick="enviarPedido()" id="btn-confirmar" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
                     Confirmar pedido
                 </button>
             </div>
@@ -167,8 +168,8 @@
     </main>
 
     <script>
-        // CONFIGURACIÓN DE CONEXIÓN AL EXCEL (Google Sheets Apps Script)
-        const URL_WEB_APP = "TU_URL_DE_APPS_SCRIPT_AQUI"; // Debes colocar tu URL generada
+        // ✅ URL DEL APPS SCRIPT CONECTADA
+        const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbz3hovm9iHEh6bjuKyllT-hwEINzqJ22bhzu0ZTrHNfJ3A1ZccBQZ_ti7rnP-iPEJVKiQ/exec";
 
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
@@ -358,6 +359,15 @@
 
         function selectBrand(brand, comesFromPaquete = false) {
             currentOrder.marca = brand;
+
+            // ✅ Resetear cupón al entrar al checkout
+            currentOrder.descuentoAplicado = 0;
+            currentOrder.codigoUsado = 'SISTEMA';
+            const promoInput = document.getElementById('promo-code');
+            const promoMsg = document.getElementById('promo-msg');
+            if(promoInput) promoInput.value = '';
+            if(promoMsg) { promoMsg.innerText = ''; promoMsg.className = 'text-[10px] mt-2 font-bold uppercase hidden'; }
+
             const fields = document.getElementById('form-fields');
             const detailLabel = document.getElementById('paquete-detalle-final');
             const backBtnStep3 = document.getElementById('btn-back-step3');
@@ -375,16 +385,25 @@
             }
 
             const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
-            
+            const isJuego = (currentOrder.categoria === 'Juegos');
+
+            // ✅ Mostrar cupón SOLO en Videojuegos
+            const seccionCupon = document.getElementById('seccion-cupon');
+            if(isJuego) {
+                seccionCupon.classList.remove('hidden');
+            } else {
+                seccionCupon.classList.add('hidden');
+            }
+
             fields.innerHTML = `
                 <div class="space-y-2 text-left">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Número de Celular' : 'ID de Jugador'}</label>
-                    <input type="tel" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
+                    <input type="${isRecarga ? 'tel' : 'text'}" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
                 </div>
                 ${!comesFromPaquete ? `
                 <div class="space-y-2 text-left">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto de Recarga' : 'Cantidad'}</label>
-                    <input type="number" id="input-monto" oninput="actualizarCheckout()" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="0.00">
+                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto de Recarga ($)' : 'Cantidad ($)'}</label>
+                    <input type="number" id="input-monto" min="0.01" step="0.01" oninput="actualizarCheckout()" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="0.00">
                 </div>` : ''}`;
             
             hideAllSteps();
@@ -393,7 +412,7 @@
             window.scrollTo(0,0);
         }
 
-        // LÓGICA DE CÓDIGOS DE REFERIDO / PROMO
+        // ✅ CÓDIGOS DE REFERIDO (solo aplican en Videojuegos)
         const codigosValidos = {
             "ISAA": 0.50,
             "AMIGO_77": 0.50,
@@ -402,7 +421,7 @@
         };
 
         function validarCodigo() {
-            const input = document.getElementById('promo-code').value.toUpperCase();
+            const input = document.getElementById('promo-code').value.toUpperCase().trim();
             const msg = document.getElementById('promo-msg');
             
             if(codigosValidos[input]) {
@@ -436,14 +455,41 @@
         }
 
         function enviarPedido() {
-            const id = document.getElementById('input-id').value;
+            const idInput = document.getElementById('input-id');
             const inputMonto = document.getElementById('input-monto');
+            const id = idInput ? idInput.value.trim() : '';
             const subtotal = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
-            const totalFinal = subtotal - currentOrder.descuentoAplicado;
+            const totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
 
-            if(!id || subtotal <= 0) return alert('Por favor completa los datos correctamente');
+            // ✅ VALIDACIONES ROBUSTAS
+            if(!id) {
+                alert('Por favor ingresa tu número de celular o ID de jugador.');
+                idInput && idInput.focus();
+                return;
+            }
 
-            // 1. Guardar en Google Sheets (Excel)
+            // Validar número de celular (10 dígitos) si es recarga
+            const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
+            if(isRecarga && !/^09\d{8}$/.test(id)) {
+                alert('Ingresa un número de celular válido (debe empezar con 09 y tener 10 dígitos).');
+                idInput && idInput.focus();
+                return;
+            }
+
+            // ✅ Bloquear si el monto es 0 o negativo
+            if(subtotal <= 0) {
+                alert('Por favor ingresa un monto válido mayor a $0.00.');
+                inputMonto && inputMonto.focus();
+                return;
+            }
+
+            // ✅ Estado de carga en el botón
+            const btn = document.getElementById('btn-confirmar');
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
+            btn.classList.add('opacity-60', 'cursor-not-allowed');
+
+            // Guardar en Google Sheets
             const datosExcel = {
                 fecha: new Date().toLocaleString(),
                 cliente: id,
@@ -456,15 +502,19 @@
                 estado: "PENDIENTE"
             };
 
-            // Llamada asíncrona al Sheets (opcionalmente puedes poner un loader aquí)
             fetch(URL_WEB_APP, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datosExcel)
+            }).finally(() => {
+                // Restaurar botón después del fetch
+                btn.disabled = false;
+                btn.innerText = 'Confirmar pedido';
+                btn.classList.remove('opacity-60', 'cursor-not-allowed');
             });
 
-            // 2. Redirigir a WhatsApp
+            // Redirigir a WhatsApp
             const numeroWhatsApp = "593992225484";
             const detalleExtra = currentOrder.detalleCompleto ? `\n*Paquete:* ${currentOrder.paqueteNombre}\n*Detalle:* ${currentOrder.detalleCompleto}` : '';
             const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Subtotal:* $${subtotal.toFixed(2)}\n*Código:* ${currentOrder.codigoUsado}\n*Total Final:* $${totalFinal.toFixed(2)}`;
