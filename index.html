@@ -117,7 +117,7 @@
                 <button onclick="goBack(2)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
                     <span class="mr-2">←</span> Regresar
                 </button>
-                <h2 id="title-paquetes" class="text-xl md:text-2xl font-black italic uppercase text-center flex-1 text-white">Paquetes Disponibles</h2>
+                <h2 id="title-paquetes" class="text-xl md:text-2xl font-black italic uppercase text-center flex-1 text-white"></h2>
                 <div class="w-10"></div>
             </div>
             <div id="lista-paquetes" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
@@ -140,7 +140,6 @@
     </main>
 
     <script>
-        // Lógica de Slider
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -154,13 +153,12 @@
 
         let currentOrder = {};
 
-        // DATOS EXACTOS DE CLARO SEGÚN TU ARCHIVO
         const paquetesData = {
             'Claro': [
                 { nombre: 'Paquete $1.05', detalle: '1GB (512MB libres + 512MB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 100 SMS (1 día).', precio: '1.05', descuento: '1.03' },
                 { nombre: 'Paquete $1.50', detalle: '4GB (2GB YT/TikTok + 2GB IG/FB) (2 días).', precio: '1.50', descuento: '1.47' },
                 { nombre: 'Paquete $2.05', detalle: '2GB (1GB libre + 1GB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 20 min otras + 200 SMS (2 días).', precio: '2.05', descuento: '2.01' },
-                { nombre: 'Horas Ilimitadas', detalle: 'Horas Ilimitadas: Gigas libres por 4 horas.', precio: '2.05', descuento: '2.01' },
+                { nombre: 'Horas Ilimitadas', detalle: 'Gigas libres por 4 horas.', precio: '2.05', descuento: '2.01' },
                 { nombre: 'Paquete $2.50', detalle: '5GB (2GB libres + 3GB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 20 min otras + 200 SMS (3 días).', precio: '2.50', descuento: '2.45' },
                 { nombre: 'Paquete $3.10', detalle: '7GB (4GB libres + 3GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS (3 días).', precio: '3.10', descuento: '3.05' },
                 { nombre: 'Paquete $3.50', detalle: '9GB (4GB libres + 5GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS (7 días).', precio: '3.50', descuento: '3.44' },
@@ -173,21 +171,71 @@
                 { nombre: 'Paquete $12.50', detalle: '19GB (13GB libres + 6GB YT/TikTok) + 5GB WhatsApp + Llamadas ilimitadas Claro + 120 min otras + 15GB Claro Video (30 días).', precio: '12.50', descuento: '12.25' },
                 { nombre: 'Paquete $15.50', detalle: '22GB (15GB libres + 2GB IG/FB + 5GB YT/TK) + 5GB WhatsApp + Llamadas ilimitadas Claro + 150 min otras + 15GB Claro Video (30 días).', precio: '15.50', descuento: '15.20' },
                 { nombre: 'Paquete $20.50', detalle: '27GB (20GB libres + 2GB IG/FB + 5GB YT/TK) + 5GB WhatsApp + Llamadas ilimitadas Claro + 150 min otras + 15GB Claro Video (30 días).', precio: '20.50', descuento: '20.10' }
+            ],
+            'Movistar': [
+                { nombre: 'Paquete $1.05', detalle: 'Llamadas Ilimitadas Movistar + 10 Min todas operadoras + Whatsapp + 512MB navegación + 512MB (FB, IG, X y TK) + 10 sms - 1 Día.', precio: '1.05', descuento: '1.03' },
+                { nombre: 'Paquete $3.00', detalle: 'Llamadas Ilimitadas Movistar + 30 Min todas operadoras + Whatsapp + 3GB + 10 sms + 2GB (FB, IG, X y TK) + 5GB Spotify - 7 Días.', precio: '3.00', descuento: '2.95' },
+                { nombre: 'Paquete $5.00', detalle: 'Llamadas Ilimitadas Movistar + 70 Min todas operadoras + Whatsapp + 3GB + 3GB (FB, IG, X y TK) + 5GB Spotify + 10 sms - 15 Días.', precio: '5.00', descuento: '4.90' },
+                { nombre: 'Paquete $7.00', detalle: 'Llamadas Ilimitadas Movistar + 80 Min todas operadoras + Whatsapp + 4GB + 4GB (FB, IG, X y TK) + 5GB Spotify + 10 sms - 20 Días.', precio: '7.00', descuento: '6.90' },
+                { nombre: 'Paquete $8.00', detalle: 'Llamadas Ilimitadas Movistar + 70 Min todas operadoras + Whatsapp + Spotify + 4GB + 4GB (FB, IG, X y TK) + 10GB Spotify + 10sms - 30 Días.', precio: '8.00', descuento: '7.85' },
+                { nombre: 'Paquete $9.00', detalle: 'Llamadas Ilimitadas Movistar + 100 Min todas operadoras + Whatsapp + Spotify + 6GB + 4GB (FB, IG, X y TK) + 10GB Spotify + 10 sms - 30 Días.', precio: '9.00', descuento: '8.85' },
+                { nombre: 'Paquete $10.25', detalle: 'Llamadas Ilimitadas Movistar + 120 Min todas operadoras + Whatsapp + 10GB + 4GB (FB, IG, X y TK) + 10sms + 10 Min LDI + 10GB Spotify - 30 Días.', precio: '10.25', descuento: '10.05' },
+                { nombre: 'Paquete $15.50', detalle: 'Llamadas Ilimitadas Movistar + 150 Min todas operadoras + Whatsapp + 15GB + 4GB (FB, IG, X y TK) + 10sms + 10 Min LDI + 10GB Spotify - 30 Días.', precio: '15.50', descuento: '15.20' }
+            ],
+            'Tuenti': [
+                { nombre: 'Paquete $1.00', detalle: '1GB + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 10 min a otras operadoras + 50 SMS (1 día).', precio: '1.00', descuento: '0.98' },
+                { nombre: 'Paquete $3.00', detalle: '5GB + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 30 min a otras operadoras + 50 SMS (7 días).', precio: '3.00', descuento: '2.95' },
+                { nombre: 'Paquete $5.00', detalle: '6GB + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 70 min a otras operadoras + 50 SMS (15 días).', precio: '5.00', descuento: '4.90' },
+                { nombre: 'Paquete $8.00', detalle: '8GB + 2GB IG/TK + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 80 min otras + 15 Min LDI (30 días).', precio: '8.00', descuento: '7.85' },
+                { nombre: 'Paquete $10.00', detalle: '12GB + 2GB IG/TK + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 100 min otras + 25 Min LDI (30 días).', precio: '10.00', descuento: '9.80' },
+                { nombre: 'Paquete $15.00', detalle: '17GB + 2GB IG/TK + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 150 min otras + 40 Min LDI (30 días).', precio: '15.00', descuento: '14.70' },
+                { nombre: 'Paquete $25.00', detalle: '25GB + WhatsApp y Spotify + Llamadas ilimitadas a todas las operadoras + 50 SMS + 40 Min LDI (30 días).', precio: '25.00', descuento: '24.50' }
+            ],
+            'CNT': [
+                { nombre: 'Combo CNT $1', detalle: '1GB, 1 DÍA, 15 min todas operadoras, Ilimitados a CNT, 50 SMS, 1GB Whatsapp, 512MB FB y 512MB TK.', precio: '1.00', descuento: '0.98' },
+                { nombre: 'Combo CNT $2', detalle: '2GB, 3 DÍAS, 25 min todas operadoras, Ilimitados a CNT, 50 SMS, 1GB Whatsapp, 512MB FB y 512MB TK.', precio: '2.00', descuento: '1.96' },
+                { nombre: 'Combo CNT $3', detalle: '4GB, 7 DÍAS, 35 min todas operadoras, Ilimitados a CNT, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '3.00', descuento: '2.95' },
+                { nombre: 'Combo CNT $5', detalle: '5GB, 30 DÍAS, 50 min todas operadoras, ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '5.00', descuento: '4.90' },
+                { nombre: 'Combo CNT $6', detalle: '7GB, 30 DÍAS, 100 min todas operadoras, Ilimitados a CNT, 30 min LDI, 50 SMS, 4GB Whatsapp, 1GB FB, 1GB IG y 1GB TK.', precio: '6.00', descuento: '5.90' },
+                { nombre: 'Combo Datos $10', detalle: '25GB navegación libre por 30 DÍAS.', precio: '10.00', descuento: '9.80' },
+                { nombre: 'Combo $10 Plus', detalle: '15GB, 30 DÍAS, 200 min todas operadoras, Ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '10.00', descuento: '9.80' },
+                { nombre: 'Combo $15 Plus', detalle: '20GB, 30 DÍAS, 300 min todas operadoras, Ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '15.00', descuento: '14.70' },
+                { nombre: 'Combo $20 Plus', detalle: '25GB, 30 DÍAS, Minutos Ilimitados todas las operadoras, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio: '20.00', descuento: '19.60' },
+                { nombre: 'Combo Datos $20', detalle: '45GB navegación libre por 30 DÍAS.', precio: '20.00', descuento: '19.60' }
+            ],
+            'Maxi Plus': [
+                { nombre: 'Combo 1GB $1.05', detalle: '512MB Internet, 512MB Redes sociales, Whatsapp Gratis, 10 Min otras, Min ilimitados Maxi, 10 SMS - 1 día', precio: '1.05', descuento: '1.03' },
+                { nombre: 'Combo 5GB $3.00', detalle: '3GB Internet, 2GB Redes sociales, Whatsapp Gratis, 30 Min otras, Min ilimitados Maxi, Spotify - 7 días', precio: '3.00', descuento: '2.95' },
+                { nombre: 'Combo 6GB $5.00', detalle: '3GB Internet, 3GB Redes sociales, Whatsapp Gratis, 70 Min otras, Min ilimitados Maxi, 10 SMS, Spotify - 15 días', precio: '5.00', descuento: '4.90' },
+                { nombre: 'Combo 8GB $7.00', detalle: '4GB Internet, 4GB Redes sociales, Whatsapp Gratis, 80 Min otras, Min ilimitados Maxi, 10 SMS, Spotify - 20 días', precio: '7.00', descuento: '6.90' },
+                { nombre: 'Combo 8GB $8.00', detalle: '4GB Internet, 4GB Redes sociales, Whatsapp Gratis, 70 Min otras, Min ilimitados Maxi, 10 SMS, Spotify GB libres - 30 días', precio: '8.00', descuento: '7.85' },
+                { nombre: 'Combo 10GB $9.00', detalle: '6GB Internet, 4GB Redes sociales, Spotify GB libres, Gratis Whatsapp, 100 Min otras, Min ilimitados Maxi, 10 SMS, 10 Min LDI - 30 días', precio: '9.00', descuento: '8.82' },
+                { nombre: 'Combo 14GB $10.25', detalle: '10GB Internet, 4GB Redes sociales, Spotify GB libres, Gratis Whatsapp, 120 Min otras, Min ilimitados Maxi, 50 SMS, 10 Min LDI - 30 días', precio: '10.25', descuento: '10.05' },
+                { nombre: 'Combo 19GB $15.50', detalle: '15GB Internet, 4GB Redes sociales, Spotify GB libres, Gratis Whatsapp, 150 Min otras, Min ilimitados Maxi, 50 SMS, 20 Min LDI - 30 días', precio: '15.50', descuento: '15.20' },
+                { nombre: 'Combo 35GB $30.81', detalle: '25GB Internet, Redes sociales libre, Whatsapp Gratis, Min otras ilimitados, Min ilimitados Maxi, 100 SMS, 100 Min LD, Spotify, 10GB YT+ Netflix - 30 días', precio: '30.81', descuento: '30.20' }
+            ],
+            'Aki Móvil': [
+                { nombre: 'Aki 1GB $1.05', detalle: '1 Gb - Min Ilimitados AkiMOVIL - 10 Min Todo Destino - Gratis Whatsapp - 10 SMS - 1 Dia', precio: '1.05', descuento: '1.03' },
+                { nombre: 'Aki 5GB $2.99', detalle: '5 Gb - Min Ilimitados AkiMOVIL - 30 Min Todo Destino - Gratis Whatsapp - 10 SMS - 7 Dias', precio: '2.99', descuento: '2.94' },
+                { nombre: 'Aki 6GB $4.99', detalle: '6 Gb - Min Ilimitados AkiMOVIL - 70 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 15 Dias', precio: '4.99', descuento: '4.90' },
+                { nombre: 'Aki 8GB $6.99', detalle: '8 Gb - Min Ilimitados AkiMOVIL - 80 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 20 Dias', precio: '6.99', descuento: '6.86' },
+                { nombre: 'Aki 10GB $8.99', detalle: '10 Gb - Min Ilimitados AkiMOVIL - 100 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 30 Dias', precio: '8.99', descuento: '8.84' },
+                { nombre: 'Aki 14GB $9.99', detalle: '14 Gb - Min Ilimitados AkiMOVIL - 120 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 10 Min LDI - 30 Dias', precio: '9.99', descuento: '9.80' },
+                { nombre: 'Aki 19GB $15.49', detalle: '19 Gb - Min ilimitados AkiMOVIL - 150 Min todo destino - Gratis WhatsApp y Spotify - 50 SMS - 20 Min LDI - 30 Dias', precio: '15.49', descuento: '15.20' },
+                { nombre: 'Aki 22GB $19.99', detalle: '22 Gb - Min ilimitados AkiMOVIL - 200 Min todo destino - Gratis WhatsApp y Spotify - 50 SMS - 20 Min LDI - 30 Dias', precio: '19.99', descuento: '19.60' }
             ]
         };
 
         const imageMap = {
-            'Claro': 'claro.webp',
-            'Movistar': 'movistar.webp',
-            'Tuenti': 'tuenti.webp',
-            'CNT': 'cnt.webp',
-            'Aki Móvil': 'akimovil (1).webp',
-            'Maxi Plus': 'maxiplus.webp'
+            'Claro': 'claro.webp', 'Movistar': 'movistar.webp', 'Tuenti': 'tuenti.webp', 'CNT': 'cnt.webp',
+            'Aki Móvil': 'akimovil (1).webp', 'Maxi Plus': 'maxiplus.webp',
+            'Free Fire': 'freefire.webp', 'Roblox': 'roblox.webp', 'Call of Duty': 'cod.webp', 'Mobile Legends': 'ml.webp'
         };
 
         function hideAllSteps() {
             ['step-1', 'step-sub', 'step-2', 'step-paquetes', 'step-3'].forEach(id => {
-                document.getElementById(id).classList.add('step-hidden');
+                const element = document.getElementById(id);
+                if(element) element.classList.add('step-hidden');
             });
         }
 
@@ -220,7 +268,7 @@
             const grid = document.getElementById('grid-options');
             grid.innerHTML = '';
             brands.forEach(b => {
-                const imgFile = imageMap[b];
+                const imgFile = imageMap[b] || 'default.webp';
                 grid.innerHTML += `
                     <button onclick="handleBrandSelection('${b}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
                         <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
@@ -244,7 +292,6 @@
             hideAllSteps();
             document.getElementById('step-paquetes').classList.remove('step-hidden');
             document.getElementById('title-paquetes').innerText = `Paquetes ${brand}`;
-            
             const container = document.getElementById('lista-paquetes');
             container.innerHTML = '';
             
@@ -253,7 +300,7 @@
                     <button onclick="selectPaquete('${p.nombre}', '${p.descuento}', '${p.detalle.replace(/'/g, "\\'")}')" class="bg-zinc-900 border border-zinc-800 p-5 rounded-3xl text-left hover:border-blue-500 transition-all flex justify-between items-center group">
                         <div class="pr-4">
                             <p class="font-black text-sm md:text-base uppercase italic text-white">${p.nombre}</p>
-                            <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1">${p.detalle}</p>
+                            <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1 font-bold">${p.detalle}</p>
                         </div>
                         <div class="text-right min-w-[70px]">
                             <p class="text-[10px] text-zinc-600 line-through font-bold">$${p.precio}</p>
@@ -286,6 +333,7 @@
                 detailLabel.innerText = currentOrder.categoria;
                 backBtnStep3.onclick = () => goBack(2);
                 currentOrder.paqueteNombre = null;
+                currentOrder.monto = null;
             }
 
             const isRecarga = (currentOrder.categoria === 'Recargas' || currentOrder.categoria === 'Paquetes');
@@ -309,12 +357,10 @@
         function enviarPedido() {
             const id = document.getElementById('input-id').value;
             const monto = currentOrder.monto || document.getElementById('input-monto').value;
-            
             if(!id || !monto) return alert('Por favor completa los datos');
             
             const numeroWhatsApp = "593992225484";
-            const detalleExtra = currentOrder.detalleCompleto ? `\n*Detalle:* ${currentOrder.detalleCompleto}` : '';
-            
+            const detalleExtra = currentOrder.detalleCompleto ? `\n*Paquete:* ${currentOrder.paqueteNombre}\n*Detalle:* ${currentOrder.detalleCompleto}` : '';
             const msg = `¡Hola Rexpres Play! 🚀\n\n*Servicio:* ${currentOrder.categoria}${detalleExtra}\n*Marca:* ${currentOrder.marca}\n*Número/ID:* ${id}\n*Monto Rexpres:* $${monto}`;
             window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`);
         }
