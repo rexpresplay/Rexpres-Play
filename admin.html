@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rexpres Play — Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { background: #050508; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; }
+  .sidebar { width: 240px; background: #0a0a12; border-right: 1px solid #1a1a2e; height: 100vh; position: fixed; top: 0; left: 0; overflow-y: auto; z-index: 50; transition: transform .3s; }
+  .sidebar.closed { transform: translateX(-240px); }
+  .main { margin-left: 240px; min-height: 100vh; transition: margin .3s; }
+  .main.full { margin-left: 0; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #64748b; border-left: 3px solid transparent; transition: all .2s; }
+  .nav-item:hover, .nav-item.active { color: #fff; background: rgba(255,255,255,.04); border-left-color: #f7941d; }
+  .panel { display: none; } .panel.active { display: block; }
+  .card { background: #0f0f1a; border: 1px solid #1e1e30; border-radius: 16px; padding: 20px; }
+  .stat-card { background: linear-gradient(135deg, #0f0f1a, #1a1a2e); border: 1px solid #1e1e30; border-radius: 16px; padding: 20px; }
+  .btn { padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border: none; transition: all .2s; }
+  .btn-primary { background: #001e85; color: #fff; } .btn-primary:hover { background: #0025a8; }
+  .btn-orange { background: #f7941d; color: #fff; } .btn-orange:hover { background: #e8840d; }
+  .btn-red { background: #dc2626; color: #fff; } .btn-red:hover { background: #b91c1c; }
+  .btn-green { background: #16a34a; color: #fff; } .btn-green:hover { background: #15803d; }
+  .btn-gray { background: #1e1e30; color: #94a3b8; } .btn-gray:hover { background: #2a2a40; color: #fff; }
+  input, select, textarea { background: #0a0a12; border: 1px solid #1e1e30; border-radius: 10px; padding: 10px 14px; color: #fff; font-size: 13px; outline: none; width: 100%; transition: border .2s; }
+  input:focus, select:focus, textarea:focus { border-color: #f7941d; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #0a0a12; padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #475569; }
+  td { padding: 10px 14px; border-bottom: 1px solid #1a1a2e; color: #cbd5e1; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+  .badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+  .badge-green { background: rgba(22,163,74,.2); color: #4ade80; }
+  .badge-yellow { background: rgba(234,179,8,.2); color: #fbbf24; }
+  .badge-red { background: rgba(220,38,38,.2); color: #f87171; }
+  .badge-blue { background: rgba(59,130,246,.2); color: #60a5fa; }
+  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:200; align-items:center; justify-content:center; padding:1rem; }
+  .modal-bg.open { display:flex; }
+  .modal { background:#0f0f1a; border:1px solid #1e1e30; border-radius:20px; padding:28px; width:100%; max-width:480px; max-height:90vh; overflow-y:auto; }
+  .tab-btn { padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border: none; background: transparent; color: #64748b; transition: all .2s; }
+  .tab-btn.active { background: #1e1e30; color: #fff; }
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #0a0a12; } ::-webkit-scrollbar-thumb { background: #1e1e30; border-radius: 4px; }
+  @media(max-width:768px) { .sidebar { transform: translateX(-240px); } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; } }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1rem;">
+  <div style="background:#0f0f1a; border:1px solid #1e1e30; border-radius:24px; padding:40px; width:100%; max-width:380px;">
+    <div style="text-align:center; margin-bottom:32px;">
+      <img src="logo.png" alt="Rexpres Play" style="height:50px; margin-bottom:16px;">
+      <p style="color:#64748b; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:3px;">Panel Administrador</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <input type="text" id="l-user" placeholder="Usuario administrador">
+      <input type="password" id="l-pass" placeholder="Contraseña">
+      <p id="l-error" style="color:#f87171; font-size:11px; font-weight:700; text-transform:uppercase; display:none;">Credenciales incorrectas</p>
+      <button class="btn btn-primary" style="padding:14px; font-size:13px;" onclick="doLogin()">Entrar</button>
+      <a href="index.html" style="text-align:center; color:#475569; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; text-decoration:none;">← Volver a la tienda</a>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div style="padding:20px; border-bottom:1px solid #1a1a2e;">
+      <img src="logo.png" alt="Rexpres Play" style="height:36px;">
+      <p style="color:#475569; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:2px; margin-top:8px;">🛡️ Administrador</p>
+    </div>
+    <nav style="padding:12px 0;">
+      <div class="nav-item active" onclick="showPanel('pedidos')">📋 Pedidos</div>
+      <div class="nav-item" onclick="showPanel('estadisticas')">📊 Estadísticas</div>
+      <div class="nav-item" onclick="showPanel('productos')">📦 Productos</div>
+      <div class="nav-item" onclick="showPanel('categorias')">🗂️ Categorías</div>
+      <div class="nav-item" onclick="showPanel('codigos')">🏷️ Códigos</div>
+      <div class="nav-item" onclick="showPanel('afiliados')">🤝 Afiliados</div>
+      <div class="nav-item" onclick="showPanel('usuarios')">👥 Usuarios</div>
+    </nav>
+    <div style="position:absolute; bottom:0; left:0; right:0; padding:16px; border-top:1px solid #1a1a2e;">
+      <button class="btn btn-gray" style="width:100%;" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main-content">
+    <!-- TOPBAR -->
+    <div style="background:#0a0a12; border-bottom:1px solid #1a1a2e; padding:14px 24px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:40;">
+      <button onclick="toggleSidebar()" style="background:none; border:none; color:#64748b; cursor:pointer; font-size:20px;">☰</button>
+      <h1 id="panel-title" style="font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#fff; margin:0;">Pedidos</h1>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+        <span id="admin-name" style="color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase;"></span>
+        <a href="https://rexpresplay.github.io/Rexpres-Play/" target="_blank" class="btn btn-gray" style="font-size:10px;">Ver tienda →</a>
+      </div>
+    </div>
+
+    <div style="padding:24px;">
+
+      <!-- PANEL PEDIDOS -->
+      <div id="panel-pedidos" class="panel active">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:gap;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Todos los pedidos</h2>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="date" id="filtro-fecha-ini" style="width:auto;" onchange="filtrarPedidos()">
+            <input type="date" id="filtro-fecha-fin" style="width:auto;" onchange="filtrarPedidos()">
+            <select id="filtro-servicio" style="width:auto;" onchange="filtrarPedidos()">
+              <option value="">Todos los servicios</option>
+              <option>Recargas</option><option>Paquetes</option><option>Juegos</option>
+            </select>
+            <button class="btn btn-orange" onclick="cargarPedidos()">↻ Actualizar</button>
+          </div>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr>
+              <th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Marca</th>
+              <th>Subtotal</th><th>Código</th><th>Total</th><th>Estado</th><th>Acción</th>
+            </tr></thead>
+            <tbody id="tabla-pedidos"><tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL ESTADÍSTICAS -->
+      <div id="panel-estadisticas" class="panel">
+        <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin-bottom:20px;">Estadísticas</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px;">
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Total Ventas</p><p id="stat-total" style="font-size:28px; font-weight:900; color:#4ade80; margin:8px 0 0;">$0.00</p></div>
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Transacciones</p><p id="stat-count" style="font-size:28px; font-weight:900; color:#60a5fa; margin:8px 0 0;">0</p></div>
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Pendientes</p><p id="stat-pend" style="font-size:28px; font-weight:900; color:#fbbf24; margin:8px 0 0;">0</p></div>
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Completados</p><p id="stat-comp" style="font-size:28px; font-weight:900; color:#a78bfa; margin:8px 0 0;">0</p></div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px;">
+          <div class="card">
+            <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Por Servicio</h3>
+            <div id="stats-servicio"></div>
+          </div>
+          <div class="card">
+            <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Por Marca / Juego</h3>
+            <div id="stats-marca"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL PRODUCTOS -->
+      <div id="panel-productos" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Productos</h2>
+          <button class="btn btn-orange" onclick="abrirModalProducto()">+ Agregar</button>
+        </div>
+        <div style="margin-bottom:16px; display:flex; gap:8px;">
+          <select id="filtro-cat-prod" style="width:auto;" onchange="filtrarTablaProductos()">
+            <option value="">Todas las categorías</option>
+          </select>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>ID</th><th>Categoría</th><th>Tipo</th><th>Nombre</th><th>P. Normal</th><th>P. Desc.</th><th>Activo</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-productos"><tr><td colspan="8" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL CATEGORÍAS -->
+      <div id="panel-categorias" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Categorías</h2>
+          <button class="btn btn-orange" onclick="abrirModalCategoria()">+ Agregar</button>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>ID</th><th>Nombre</th><th>Tipo</th><th>Tipo Servicio</th><th>Activo</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-categorias"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL CÓDIGOS -->
+      <div id="panel-codigos" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Códigos de descuento</h2>
+          <button class="btn btn-orange" onclick="abrirModalCodigo()">+ Agregar</button>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Código</th><th>Descuento ($)</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-codigos"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL AFILIADOS -->
+      <div id="panel-afiliados" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Afiliados</h2>
+          <button class="btn btn-orange" onclick="abrirModalAfiliado()">+ Agregar</button>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Código</th><th>Usuario</th><th>Comisión</th><th>Valor</th><th>Categorías</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-afiliados"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANEL USUARIOS -->
+      <div id="panel-usuarios" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Usuarios</h2>
+          <button class="btn btn-orange" onclick="abrirModalUsuario()">+ Agregar</button>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Usuario</th><th>Tipo</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-usuarios"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALES -->
+<!-- Modal Producto -->
+<div class="modal-bg" id="modal-producto">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;" id="modal-prod-title">Producto</h3>
+      <button onclick="cerrarModal('modal-producto')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <input type="hidden" id="prod-id">
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">ID</label><input type="number" id="prod-id-vis" placeholder="Ej: 2001"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Categoría</label><input type="text" id="prod-cat" placeholder="Ej: Claro, Free Fire"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">SubTipo</label>
+        <select id="prod-subtipo"><option>Paquete</option><option>Recarga</option><option>Diamantes</option></select></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Nombre</label><input type="text" id="prod-nombre" placeholder="Nombre del producto"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Descripción</label><textarea id="prod-desc" rows="3" placeholder="Detalle del producto"></textarea></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Precio Normal</label><input type="number" id="prod-precio" step="0.01" placeholder="0.00"></div>
+        <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Precio Desc.</label><input type="number" id="prod-desc-precio" step="0.01" placeholder="0.00"></div>
+      </div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Activo</label>
+        <select id="prod-activo"><option value="SI">SI</option><option value="NO">NO</option></select></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarProducto()">Guardar producto</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Categoría -->
+<div class="modal-bg" id="modal-categoria">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Categoría</h3>
+      <button onclick="cerrarModal('modal-categoria')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">ID</label><input type="number" id="cat-id" placeholder="Ej: 200"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Nombre</label><input type="text" id="cat-nombre" placeholder="Nombre de la categoría"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo</label>
+        <select id="cat-tipo"><option>Recarga</option><option>Juego</option><option>Deporte</option><option>Otro</option></select></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Icono (emoji o imagen)</label><input type="text" id="cat-icono" placeholder="⚽ o imagen.webp"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo Servicio</label>
+        <select id="cat-tiposerv"><option value="Principal">Principal (inicio tienda)</option><option value="Operadora">Operadora (dentro de Recargas)</option><option value="SubCategoria">SubCategoría (dentro de Juegos)</option></select></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Color Fondo</label><input type="text" id="cat-color" placeholder="#001e85"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Descripción</label><input type="text" id="cat-desc" placeholder="Ej: Saldo y Paquetes"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Activo</label>
+        <select id="cat-activo"><option value="SI">SI</option><option value="NO">NO</option></select></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarCategoria()">Guardar categoría</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Código -->
+<div class="modal-bg" id="modal-codigo">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Código de descuento</h3>
+      <button onclick="cerrarModal('modal-codigo')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Código</label><input type="text" id="cod-codigo" placeholder="Ej: PROMO2026" style="text-transform:uppercase;"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Descuento ($)</label><input type="number" id="cod-desc" step="0.01" placeholder="0.50"></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarCodigo()">Guardar código</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Afiliado -->
+<div class="modal-bg" id="modal-afiliado">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Afiliado</h3>
+      <button onclick="cerrarModal('modal-afiliado')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Código afiliado</label><input type="text" id="afil-codigo" placeholder="Ej: ISAA" style="text-transform:uppercase;"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Usuario</label><input type="text" id="afil-usuario" placeholder="Usuario del afiliado"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo comisión</label>
+        <select id="afil-tipo"><option value="porcentaje">Porcentaje (%)</option><option value="fijo">Valor fijo ($)</option></select></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Valor comisión</label><input type="number" id="afil-valor" step="0.01" placeholder="Ej: 5 (%) o 0.50 ($)"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Categorías activas (separadas por coma)</label><input type="text" id="afil-cats" placeholder="Free Fire,Roblox"></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarAfiliado()">Guardar afiliado</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Usuario -->
+<div class="modal-bg" id="modal-usuario">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Usuario</h3>
+      <button onclick="cerrarModal('modal-usuario')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Usuario</label><input type="text" id="usu-usuario" placeholder="Nombre de usuario"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Contraseña</label><input type="password" id="usu-pass" placeholder="Contraseña"></div>
+      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo</label>
+        <select id="usu-tipo"><option value="admin">Admin</option><option value="afiliado">Afiliado</option></select></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarUsuario()">Guardar usuario</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const URL = "https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
+let pedidosData = [], productosData = [], codigosData = [], afiladosData = [], categoriasData = [];
+
+// ── LOGIN ──────────────────────────────────────
+async function doLogin() {
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value.trim();
+  if(!u || !p) return;
+  try {
+    const r = await fetch(`${URL}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
+    const d = await r.json();
+    if(d.ok && d.tipo === 'admin') {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('admin-name').innerText = u;
+      cargarTodo();
+    } else {
+      document.getElementById('l-error').style.display = 'block';
+    }
+  } catch(e) { document.getElementById('l-error').style.display = 'block'; }
+}
+document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function cerrarSesion() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+}
+
+// ── NAVEGACIÓN ─────────────────────────────────
+function showPanel(nombre) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + nombre).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => { if(n.textContent.toLowerCase().includes(nombre.substring(0,4))) n.classList.add('active'); });
+  const titulos = { pedidos:'Pedidos', estadisticas:'Estadísticas', productos:'Productos', categorias:'Categorías', codigos:'Códigos', afiliados:'Afiliados', usuarios:'Usuarios' };
+  document.getElementById('panel-title').innerText = titulos[nombre] || nombre;
+  if(nombre === 'estadisticas') calcularEstadisticas();
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const main = document.getElementById('main-content');
+  if(window.innerWidth < 768) { sb.classList.toggle('open'); }
+  else { sb.classList.toggle('closed'); main.classList.toggle('full'); }
+}
+
+// ── CARGAR TODO ────────────────────────────────
+async function cargarTodo() {
+  await Promise.all([cargarPedidos(), cargarProductos(), cargarCategorias(), cargarCodigos(), cargarAfiliados(), cargarUsuarios()]);
+}
+
+// ── PEDIDOS ────────────────────────────────────
+async function cargarPedidos() {
+  const r = await fetch(`${URL}?accion=getPedidos`);
+  const d = await r.json();
+  pedidosData = d.pedidos || [];
+  renderPedidos(pedidosData);
+}
+function filtrarPedidos() {
+  const ini = document.getElementById('filtro-fecha-ini').value;
+  const fin = document.getElementById('filtro-fecha-fin').value;
+  const serv = document.getElementById('filtro-servicio').value.toLowerCase();
+  let data = [...pedidosData];
+  if(serv) data = data.filter(p => String(p.servicio).toLowerCase().includes(serv));
+  renderPedidos(data);
+}
+function renderPedidos(data) {
+  const tbody = document.getElementById('tabla-pedidos');
+  if(!data.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;">Sin pedidos</td></tr>'; return; }
+  tbody.innerHTML = data.map(p => `
+    <tr>
+      <td>${p.fecha}</td>
+      <td style="font-family:monospace;">${p.cliente}</td>
+      <td><span class="badge badge-blue">${p.servicio}</span></td>
+      <td>${p.marca}</td>
+      <td>$${p.subtotal}</td>
+      <td><span style="color:#f7941d; font-weight:800;">${p.codigo}</span></td>
+      <td style="font-weight:800; color:#4ade80;">$${p.total}</td>
+      <td>${badgeEstado(p.estado)}</td>
+      <td>
+        <select onchange="cambiarEstado(${p.fila}, this.value)" style="width:auto; padding:4px 8px; font-size:11px;">
+          <option ${p.estado==='PENDIENTE'?'selected':''}>PENDIENTE</option>
+          <option ${p.estado==='COMPLETADO'?'selected':''}>COMPLETADO</option>
+          <option ${p.estado==='CANCELADO'?'selected':''}>CANCELADO</option>
+        </select>
+      </td>
+    </tr>`).join('');
+}
+function badgeEstado(e) {
+  const map = { PENDIENTE:'badge-yellow', COMPLETADO:'badge-green', CANCELADO:'badge-red' };
+  return `<span class="badge ${map[e]||'badge-blue'}">${e}</span>`;
+}
+async function cambiarEstado(fila, estado) {
+  await apiPost({ accion:'actualizarEstado', fila, estado });
+}
+
+// ── ESTADÍSTICAS ───────────────────────────────
+function calcularEstadisticas() {
+  const data = pedidosData;
+  const total = data.reduce((a,p) => a + (parseFloat(p.total)||0), 0);
+  const pend = data.filter(p => p.estado==='PENDIENTE').length;
+  const comp = data.filter(p => p.estado==='COMPLETADO').length;
+  document.getElementById('stat-total').innerText = '$' + total.toFixed(2);
+  document.getElementById('stat-count').innerText = data.length;
+  document.getElementById('stat-pend').innerText = pend;
+  document.getElementById('stat-comp').innerText = comp;
+
+  // Por servicio
+  const porServ = {};
+  data.forEach(p => { porServ[p.servicio] = (porServ[p.servicio]||0) + (parseFloat(p.total)||0); });
+  document.getElementById('stats-servicio').innerHTML = Object.entries(porServ).map(([k,v]) =>
+    `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1a1a2e;">
+      <span style="color:#94a3b8; font-size:12px;">${k}</span>
+      <span style="color:#4ade80; font-weight:800; font-size:12px;">$${v.toFixed(2)}</span>
+    </div>`).join('') || '<p style="color:#475569; font-size:12px;">Sin datos</p>';
+
+  // Por marca
+  const porMarca = {};
+  data.forEach(p => { porMarca[p.marca] = (porMarca[p.marca]||0) + (parseFloat(p.total)||0); });
+  const topMarca = Object.entries(porMarca).sort((a,b) => b[1]-a[1]).slice(0,8);
+  document.getElementById('stats-marca').innerHTML = topMarca.map(([k,v]) =>
+    `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1a1a2e;">
+      <span style="color:#94a3b8; font-size:12px;">${k}</span>
+      <span style="color:#60a5fa; font-weight:800; font-size:12px;">$${v.toFixed(2)}</span>
+    </div>`).join('') || '<p style="color:#475569; font-size:12px;">Sin datos</p>';
+}
+
+// ── PRODUCTOS ──────────────────────────────────
+async function cargarProductos() {
+  const r = await fetch(`${URL}?accion=getProductos`);
+  const d = await r.json();
+  productosData = d.productos || [];
+  renderProductos(productosData);
+  // llenar filtro
+  const cats = [...new Set(productosData.map(p => p.categoria))];
+  const sel = document.getElementById('filtro-cat-prod');
+  sel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option>${c}</option>`).join('');
+}
+function filtrarTablaProductos() {
+  const cat = document.getElementById('filtro-cat-prod').value;
+  renderProductos(cat ? productosData.filter(p => p.categoria === cat) : productosData);
+}
+function renderProductos(data) {
+  const tbody = document.getElementById('tabla-productos');
+  if(!data.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#475569; padding:40px;">Sin productos</td></tr>'; return; }
+  tbody.innerHTML = data.map(p => `
+    <tr>
+      <td style="font-family:monospace; color:#475569;">${p.id}</td>
+      <td><span class="badge badge-blue">${p.categoria}</span></td>
+      <td>${p.subTipo}</td>
+      <td style="max-width:200px;">${p.nombre}</td>
+      <td>$${p.precioNormal}</td>
+      <td style="color:#4ade80;">$${p.precioDesc}</td>
+      <td>${p.activo ? '<span class="badge badge-green">SI</span>' : '<span class="badge badge-red">NO</span>'}</td>
+      <td style="display:flex; gap:6px;">
+        <button class="btn btn-gray" onclick='editarProducto(${JSON.stringify(p)})'>✏️</button>
+        <button class="btn btn-red" onclick="eliminarProducto('${p.id}')">🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+function abrirModalProducto() {
+  document.getElementById('prod-id').value = '';
+  document.getElementById('prod-id-vis').value = '';
+  document.getElementById('prod-cat').value = '';
+  document.getElementById('prod-nombre').value = '';
+  document.getElementById('prod-desc').value = '';
+  document.getElementById('prod-precio').value = '';
+  document.getElementById('prod-desc-precio').value = '';
+  document.getElementById('prod-activo').value = 'SI';
+  document.getElementById('modal-prod-title').innerText = 'Agregar Producto';
+  document.getElementById('modal-producto').classList.add('open');
+}
+function editarProducto(p) {
+  document.getElementById('prod-id').value = p.id;
+  document.getElementById('prod-id-vis').value = p.id;
+  document.getElementById('prod-cat').value = p.categoria;
+  document.getElementById('prod-subtipo').value = p.subTipo;
+  document.getElementById('prod-nombre').value = p.nombre;
+  document.getElementById('prod-desc').value = p.descripcion;
+  document.getElementById('prod-precio').value = p.precioNormal;
+  document.getElementById('prod-desc-precio').value = p.precioDesc;
+  document.getElementById('prod-activo').value = p.activo ? 'SI' : 'NO';
+  document.getElementById('modal-prod-title').innerText = 'Editar Producto';
+  document.getElementById('modal-producto').classList.add('open');
+}
+async function guardarProducto() {
+  const datos = {
+    id: document.getElementById('prod-id-vis').value,
+    categoria: document.getElementById('prod-cat').value,
+    subTipo: document.getElementById('prod-subtipo').value,
+    nombre: document.getElementById('prod-nombre').value,
+    descripcion: document.getElementById('prod-desc').value,
+    precioNormal: document.getElementById('prod-precio').value,
+    precioDesc: document.getElementById('prod-desc-precio').value,
+    activo: document.getElementById('prod-activo').value
+  };
+  if(!datos.id || !datos.nombre) return alert('Completa los campos requeridos');
+  await apiPost({ accion:'guardarProducto', datos });
+  cerrarModal('modal-producto');
+  await cargarProductos();
+}
+async function eliminarProducto(id) {
+  if(!confirm('¿Eliminar este producto?')) return;
+  await apiPost({ accion:'eliminarProducto', id });
+  await cargarProductos();
+}
+
+// ── CATEGORÍAS ─────────────────────────────────
+async function cargarCategorias() {
+  const r = await fetch(`${URL}?accion=getCategorias`);
+  const d = await r.json();
+  categoriasData = d.categorias || [];
+  const tbody = document.getElementById('tabla-categorias');
+  if(!categoriasData.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Sin categorías</td></tr>'; return; }
+  tbody.innerHTML = categoriasData.map(c => `
+    <tr>
+      <td style="font-family:monospace; color:#475569;">${c.id}</td>
+      <td style="font-weight:700;">${c.nombre}</td>
+      <td>${c.tipo}</td>
+      <td><span class="badge badge-blue">${c.tipoServicio}</span></td>
+      <td>${c.activo ? '<span class="badge badge-green">SI</span>' : '<span class="badge badge-red">NO</span>'}</td>
+      <td style="display:flex; gap:6px;">
+        <button class="btn btn-gray" onclick='editarCategoria(${JSON.stringify(c)})'>✏️</button>
+        <button class="btn btn-red" onclick="eliminarCategoria('${c.id}')">🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+function abrirModalCategoria() {
+  ['cat-id','cat-nombre','cat-icono','cat-color','cat-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('modal-categoria').classList.add('open');
+}
+function editarCategoria(c) {
+  document.getElementById('cat-id').value = c.id;
+  document.getElementById('cat-nombre').value = c.nombre;
+  document.getElementById('cat-tipo').value = c.tipo;
+  document.getElementById('cat-icono').value = c.icono;
+  document.getElementById('cat-tiposerv').value = c.tipoServicio;
+  document.getElementById('cat-color').value = c.colorFondo;
+  document.getElementById('cat-desc').value = c.descripcion;
+  document.getElementById('cat-activo').value = c.activo ? 'SI' : 'NO';
+  document.getElementById('modal-categoria').classList.add('open');
+}
+async function guardarCategoria() {
+  const datos = {
+    id: document.getElementById('cat-id').value,
+    nombre: document.getElementById('cat-nombre').value,
+    tipo: document.getElementById('cat-tipo').value,
+    icono: document.getElementById('cat-icono').value,
+    tipoServicio: document.getElementById('cat-tiposerv').value,
+    colorFondo: document.getElementById('cat-color').value,
+    descripcion: document.getElementById('cat-desc').value,
+    activo: document.getElementById('cat-activo').value
+  };
+  if(!datos.id || !datos.nombre) return alert('Completa los campos requeridos');
+  await apiPost({ accion:'guardarCategoria', datos });
+  cerrarModal('modal-categoria');
+  await cargarCategorias();
+}
+async function eliminarCategoria(id) {
+  if(!confirm('¿Eliminar esta categoría?')) return;
+  await apiPost({ accion:'eliminarCategoria', id });
+  await cargarCategorias();
+}
+
+// ── CÓDIGOS ────────────────────────────────────
+async function cargarCodigos() {
+  const r = await fetch(`${URL}?accion=getCodigos`);
+  const d = await r.json();
+  const tbody = document.getElementById('tabla-codigos');
+  const codigos = d.codigos || {};
+  const entries = Object.entries(codigos);
+  if(!entries.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Sin códigos</td></tr>'; return; }
+  tbody.innerHTML = entries.map(([k,v]) => `
+    <tr>
+      <td style="font-family:monospace; font-weight:800; color:#f7941d;">${k}</td>
+      <td style="color:#4ade80; font-weight:800;">$${parseFloat(v).toFixed(2)}</td>
+      <td style="display:flex; gap:6px;">
+        <button class="btn btn-gray" onclick="editarCodigo('${k}',${v})">✏️</button>
+        <button class="btn btn-red" onclick="eliminarCodigo('${k}')">🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+function abrirModalCodigo() {
+  document.getElementById('cod-codigo').value = '';
+  document.getElementById('cod-desc').value = '';
+  document.getElementById('modal-codigo').classList.add('open');
+}
+function editarCodigo(codigo, desc) {
+  document.getElementById('cod-codigo').value = codigo;
+  document.getElementById('cod-desc').value = desc;
+  document.getElementById('modal-codigo').classList.add('open');
+}
+async function guardarCodigo() {
+  const datos = { codigo: document.getElementById('cod-codigo').value.toUpperCase().trim(), descuento: document.getElementById('cod-desc').value };
+  if(!datos.codigo || !datos.descuento) return alert('Completa todos los campos');
+  await apiPost({ accion:'guardarCodigo', datos });
+  cerrarModal('modal-codigo');
+  await cargarCodigos();
+}
+async function eliminarCodigo(codigo) {
+  if(!confirm('¿Eliminar código ' + codigo + '?')) return;
+  await apiPost({ accion:'eliminarCodigo', codigo });
+  await cargarCodigos();
+}
+
+// ── AFILIADOS ──────────────────────────────────
+async function cargarAfiliados() {
+  const r = await fetch(`${URL}?accion=getAfiliados`);
+  const d = await r.json();
+  afiladosData = d.afiliados || [];
+  const tbody = document.getElementById('tabla-afiliados');
+  if(!afiladosData.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Sin afiliados</td></tr>'; return; }
+  tbody.innerHTML = afiladosData.map(a => `
+    <tr>
+      <td style="font-family:monospace; font-weight:800; color:#f7941d;">${a.codigo}</td>
+      <td>${a.usuario}</td>
+      <td>${a.comisionTipo}</td>
+      <td style="color:#4ade80; font-weight:800;">${a.comisionTipo==='porcentaje' ? a.comisionValor+'%' : '$'+parseFloat(a.comisionValor).toFixed(2)}</td>
+      <td style="color:#94a3b8; font-size:11px;">${a.categorias}</td>
+      <td style="display:flex; gap:6px;">
+        <button class="btn btn-gray" onclick='editarAfiliado(${JSON.stringify(a)})'>✏️</button>
+        <button class="btn btn-red" onclick="eliminarAfiliado('${a.codigo}')">🗑️</button>
+      </td>
+    </tr>`).join('');
+}
+function abrirModalAfiliado() {
+  ['afil-codigo','afil-usuario','afil-valor','afil-cats'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('modal-afiliado').classList.add('open');
+}
+function editarAfiliado(a) {
+  document.getElementById('afil-codigo').value = a.codigo;
+  document.getElementById('afil-usuario').value = a.usuario;
+  document.getElementById('afil-tipo').value = a.comisionTipo;
+  document.getElementById('afil-valor').value = a.comisionValor;
+  document.getElementById('afil-cats').value = a.categorias;
+  document.getElementById('modal-afiliado').classList.add('open');
+}
+async function guardarAfiliado() {
+  const datos = {
+    codigo: document.getElementById('afil-codigo').value.toUpperCase().trim(),
+    usuario: document.getElementById('afil-usuario').value.trim(),
+    comisionTipo: document.getElementById('afil-tipo').value,
+    comisionValor: document.getElementById('afil-valor').value,
+    categorias: document.getElementById('afil-cats').value
+  };
+  if(!datos.codigo || !datos.usuario) return alert('Completa los campos requeridos');
+  await apiPost({ accion:'guardarAfiliado', datos });
+  cerrarModal('modal-afiliado');
+  await cargarAfiliados();
+}
+async function eliminarAfiliado(codigo) {
+  if(!confirm('¿Eliminar afiliado ' + codigo + '?')) return;
+  await apiPost({ accion:'eliminarAfiliado', codigo });
+  await cargarAfiliados();
+}
+
+// ── USUARIOS ───────────────────────────────────
+async function cargarUsuarios() {
+  const r = await fetch(`${URL}?accion=login&usuario=__check__&pass=__check__`);
+  // Cargamos desde la hoja directamente con getPedidos como workaround
+  // Para usuarios usamos getAfiliados como referencia y mostramos los que existen
+  const tbody = document.getElementById('tabla-usuarios');
+  tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:20px; font-size:11px;">Gestiona usuarios directamente desde Google Sheets → hoja Usuarios</td></tr>';
+}
+function abrirModalUsuario() { document.getElementById('modal-usuario').classList.add('open'); }
+async function guardarUsuario() {
+  const datos = {
+    usuario: document.getElementById('usu-usuario').value.trim(),
+    pass: document.getElementById('usu-pass').value.trim(),
+    tipo: document.getElementById('usu-tipo').value
+  };
+  if(!datos.usuario || !datos.pass) return alert('Completa todos los campos');
+  await apiPost({ accion:'guardarUsuario', datos });
+  cerrarModal('modal-usuario');
+  alert('✅ Usuario guardado correctamente');
+}
+
+// ── HELPERS ────────────────────────────────────
+function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
+async function apiPost(body) {
+  try {
+    await fetch(URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  } catch(e) {}
+}
+</script>
+</body>
+</html>
