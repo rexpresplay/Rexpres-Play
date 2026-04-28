@@ -8,8 +8,6 @@
     <style>
         .step-hidden { display: none !important; }
         body { background-color: #000000; color: white; font-family: ui-sans-serif, system-ui; overflow-x: hidden; }
-        .bg-azul-rex { background-color: #001e85; }
-        .bg-naranja-rex { background-color: #f7941d; }
         .card-rex { background-color: #0a0a0a; border: 1px solid #1a1a1a; }
         .slider-container {
             position: relative; overflow: hidden; border-radius: 1.5rem;
@@ -24,7 +22,7 @@
         .slide.active { opacity: 1; }
         .order-summary { background: rgba(255,255,255,0.03); border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
 
-        /* Menú desplegable */
+        /* Menú */
         .menu-panel {
             display: none; position: absolute; right: 0; top: calc(100% + 10px);
             background: #111; border: 1px solid #222; border-radius: 1rem;
@@ -36,24 +34,19 @@
             display: block; width: 100%; padding: 14px 20px; color: white;
             text-align: left; background: none; border: none; cursor: pointer;
             font-size: 11px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 2px; border-bottom: 1px solid #1a1a1a;
-            transition: background 0.2s;
+            letter-spacing: 2px; border-bottom: 1px solid #1a1a1a; transition: background 0.2s;
         }
         .menu-item:last-child { border-bottom: none; }
         .menu-item:hover { background: #1a1a1a; }
-        .menu-separator {
-            padding: 8px 20px 4px; font-size: 9px; color: #555;
-            font-weight: 900; letter-spacing: 3px; text-transform: uppercase;
-            background: #0a0a0a;
-        }
+        .menu-separator { padding: 8px 20px 4px; font-size: 9px; color: #555; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; background: #0a0a0a; }
 
-        /* Modal login */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.9); z-index: 1000;
-            align-items: center; justify-content: center; padding: 1rem;
-        }
+        /* Modales */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-overlay.open { display: flex; }
+
+        /* Skeleton loader */
+        .skeleton { background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 1rem; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     </style>
 </head>
 <body class="bg-black">
@@ -64,7 +57,6 @@
             <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto cursor-pointer" onclick="goBack(1)">
             <div class="flex items-center gap-3">
                 <span class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase tracking-widest italic">Ecuador</span>
-                <!-- Botón menú -->
                 <div style="position:relative;">
                     <button onclick="toggleMenu()" class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:border-zinc-600 transition-all">
                         <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
@@ -93,9 +85,7 @@
                 <input type="text" id="admin-user" placeholder="Usuario administrador" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                 <input type="password" id="admin-pass" placeholder="Contraseña" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-blue-600 text-sm">
                 <p id="admin-error" class="text-red-500 text-[10px] font-bold uppercase hidden">Usuario o contraseña incorrectos</p>
-                <button onclick="loginAdmin()" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest text-sm transition-all">
-                    Entrar como Admin
-                </button>
+                <button onclick="loginAdmin()" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest text-sm transition-all">Entrar como Admin</button>
             </div>
         </div>
     </div>
@@ -112,16 +102,14 @@
                 <input type="text" id="afil-user" placeholder="Código de afiliado" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-orange-500 text-sm">
                 <input type="password" id="afil-pass" placeholder="Contraseña" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-orange-500 text-sm">
                 <p id="afil-error" class="text-red-500 text-[10px] font-bold uppercase hidden">Código o contraseña incorrectos</p>
-                <button onclick="loginAfiliado()" class="w-full bg-naranja-rex hover:opacity-90 text-white font-black py-4 rounded-xl uppercase tracking-widest text-sm transition-all">
-                    Entrar como Afiliado
-                </button>
+                <button onclick="loginAfiliado()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-xl uppercase tracking-widest text-sm transition-all">Entrar como Afiliado</button>
             </div>
         </div>
     </div>
 
     <main class="max-w-6xl mx-auto p-4 md:p-8">
 
-        <!-- STEP 1 -->
+        <!-- STEP 1: INICIO -->
         <section id="step-1">
             <div class="slider-container border border-zinc-800 shadow-2xl">
                 <div class="slide active" style="background-image: url('banner1.png');"></div>
@@ -131,29 +119,15 @@
                 <h2 class="text-2xl md:text-4xl font-black uppercase italic tracking-tighter text-white">¿Qué deseas realizar hoy?</h2>
                 <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold italic">Selecciona un servicio</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button onclick="showSubCategory()" class="bg-azul-rex p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl group text-left border border-blue-400/20">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">
-                        <svg viewBox="0 0 24 24" class="w-10 h-10 md:w-12 md:h-12 fill-white"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4-15h-2v2h2V4zm-2 15h2v-2h-2v2zm1.25-11L9 11h3l-1.25 3L14 10h-3l1.25-3z"/></svg>
-                    </div>
-                    <div>
-                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Recargas Móviles</p>
-                        <p class="text-xs md:text-sm text-blue-200 uppercase tracking-widest mt-1 font-bold">Saldo y Paquetes</p>
-                    </div>
-                </button>
-                <button onclick="showStep(2,'juegos')" class="bg-naranja-rex p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl group text-left border border-orange-400/20">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-black/10 rounded-2xl">
-                        <span class="text-4xl md:text-5xl group-hover:rotate-6 transition-transform">🎮</span>
-                    </div>
-                    <div>
-                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Videojuegos</p>
-                        <p class="text-xs md:text-sm text-orange-100 uppercase tracking-widest mt-1 font-bold">Diamantes y Monedas</p>
-                    </div>
-                </button>
+            <!-- Categorías principales — se cargan desde Sheets -->
+            <div id="grid-categorias-principales" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Skeletons mientras carga -->
+                <div class="skeleton h-40 rounded-3xl"></div>
+                <div class="skeleton h-40 rounded-3xl"></div>
             </div>
         </section>
 
-        <!-- STEP SUB -->
+        <!-- STEP SUB: RECARGAS O PAQUETES -->
         <section id="step-sub" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button onclick="goBack(1)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
@@ -174,7 +148,7 @@
             </div>
         </section>
 
-        <!-- STEP 2 -->
+        <!-- STEP 2: GRID DE MARCAS/JUEGOS -->
         <section id="step-2" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button id="btn-back-step2" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
@@ -189,7 +163,7 @@
         <!-- STEP PAQUETES -->
         <section id="step-paquetes" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
-                <button onclick="goBack(2)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
+                <button id="btn-back-paquetes" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
                     <span class="mr-2">←</span> Regresar
                 </button>
                 <h2 id="title-paquetes" class="text-xl md:text-2xl font-black italic uppercase text-center flex-1 text-white"></h2>
@@ -206,7 +180,7 @@
                 <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-[10px] md:text-xs tracking-widest mb-8 leading-tight"></p>
                 <div id="form-fields" class="space-y-6"></div>
 
-                <!-- CUPÓN solo en Videojuegos -->
+                <!-- CUPÓN solo en Juegos -->
                 <div id="seccion-cupon" class="mt-8 pt-8 border-t border-zinc-800 hidden">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">¿Tienes un código?</label>
                     <div class="flex gap-2 mt-2">
@@ -236,16 +210,93 @@
     </main>
 
     <script>
-        const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbyaDqzRZqf5jealp2KTuOLSPmn98DgsV9SJ7oi11MriW4oTwf3665D3hRB8BvrRimsGlA/exec";
+        const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
 
-        // Cargar códigos desde Sheets
         let codigosValidos = {};
-        fetch(URL_WEB_APP)
-          .then(r => r.json())
-          .then(data => { if(data && data.codigos) codigosValidos = data.codigos; })
-          .catch(() => {});
+        let categoriasData = [];
+        let productosCache = {};
 
-        // Slider
+        let currentOrder = {
+            categoria:'', marca:'', paqueteNombre:null,
+            monto:0, detalleCompleto:'',
+            descuentoAplicado:0, codigoUsado:'SISTEMA'
+        };
+
+        // ── INICIALIZAR ────────────────────────
+        async function init() {
+            await Promise.all([cargarCategorias(), cargarCodigos()]);
+        }
+
+        async function cargarCodigos() {
+            try {
+                const r = await fetch(URL_WEB_APP + '?accion=getCodigos');
+                const d = await r.json();
+                if(d.codigos) codigosValidos = d.codigos;
+            } catch(e) {}
+        }
+
+        async function cargarCategorias() {
+            try {
+                const r = await fetch(URL_WEB_APP + '?accion=getCategorias');
+                const d = await r.json();
+                categoriasData = (d.categorias || []).filter(c => c.activo);
+                renderCategoriasIniciales();
+            } catch(e) {
+                // fallback si falla el Sheets
+                renderCategoriasIniciales();
+            }
+        }
+
+        function renderCategoriasIniciales() {
+            const principales = categoriasData.filter(c => c.tipoServicio === 'Principal');
+            const grid = document.getElementById('grid-categorias-principales');
+
+            if(!principales.length) {
+                // Fallback con las 2 categorías originales
+                grid.innerHTML = `
+                <button onclick="showSubCategory()" style="background:#001e85;" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-blue-400/20">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">
+                        <svg viewBox="0 0 24 24" class="w-10 h-10 md:w-12 md:h-12 fill-white"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4-15h-2v2h2V4zm-2 15h2v-2h-2v2zm1.25-11L9 11h3l-1.25 3L14 10h-3l1.25-3z"/></svg>
+                    </div>
+                    <div>
+                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Recargas Móviles</p>
+                        <p class="text-xs md:text-sm text-blue-200 uppercase tracking-widest mt-1 font-bold">Saldo y Paquetes</p>
+                    </div>
+                </button>
+                <button onclick="showStep(2,'juegos')" style="background:#f7941d;" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-orange-400/20">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-black/10 rounded-2xl">
+                        <span class="text-4xl md:text-5xl">🎮</span>
+                    </div>
+                    <div>
+                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Videojuegos</p>
+                        <p class="text-xs md:text-sm text-orange-100 uppercase tracking-widest mt-1 font-bold">Diamantes y Monedas</p>
+                    </div>
+                </button>`;
+                return;
+            }
+
+            grid.innerHTML = principales.map(c => {
+                const color = c.colorFondo || '#1a1a2e';
+                const icono = c.icono && c.icono.includes('.') 
+                    ? `<img src="${c.icono}" class="w-10 h-10 md:w-12 md:h-12 object-contain">`
+                    : `<span class="text-4xl md:text-5xl">${c.icono || '📦'}</span>`;
+                const accion = c.tipo === 'Recarga' 
+                    ? `showSubCategory()` 
+                    : `showStep(2,'juegos','${c.nombre}')`;
+                return `
+                <button onclick="${accion}" style="background:${color};" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-white/10">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">
+                        ${icono}
+                    </div>
+                    <div>
+                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">${c.nombre}</p>
+                        <p class="text-xs md:text-sm text-white/70 uppercase tracking-widest mt-1 font-bold">${c.descripcion || ''}</p>
+                    </div>
+                </button>`;
+            }).join('');
+        }
+
+        // ── SLIDER ─────────────────────────────
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -257,141 +308,53 @@
         }
         setInterval(nextSlide, 4000);
 
-        // Menú
-        function toggleMenu() {
-            document.getElementById('menu-panel').classList.toggle('open');
-        }
-        function closeMenu() {
-            document.getElementById('menu-panel').classList.remove('open');
-        }
+        // ── MENÚ ───────────────────────────────
+        function toggleMenu() { document.getElementById('menu-panel').classList.toggle('open'); }
+        function closeMenu() { document.getElementById('menu-panel').classList.remove('open'); }
         document.addEventListener('click', function(e) {
-            const panel = document.getElementById('menu-panel');
             if(!e.target.closest('#menu-panel') && !e.target.closest('button[onclick="toggleMenu()"]')) {
-                panel.classList.remove('open');
+                closeMenu();
             }
         });
 
-        // Login modals
-        function abrirLogin(tipo) {
-            document.getElementById('modal-' + tipo).classList.add('open');
-        }
+        // ── LOGIN ──────────────────────────────
+        function abrirLogin(tipo) { document.getElementById('modal-' + tipo).classList.add('open'); }
         function cerrarLogin(tipo) {
             document.getElementById('modal-' + tipo).classList.remove('open');
-            document.getElementById(tipo === 'admin' ? 'admin-error' : 'afil-error').classList.add('hidden');
+            document.getElementById(tipo + '-error').classList.add('hidden');
         }
-        function loginAdmin() {
+        async function loginAdmin() {
             const u = document.getElementById('admin-user').value.trim();
             const p = document.getElementById('admin-pass').value.trim();
-            // Credenciales admin — cámbialas aquí
-            if(u === 'admin' && p === 'rexpres2026') {
-                cerrarLogin('admin');
-                alert('✅ Bienvenido Administrador — Dashboard próximamente');
-            } else {
-                document.getElementById('admin-error').classList.remove('hidden');
-            }
+            try {
+                const r = await fetch(`${URL_WEB_APP}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
+                const d = await r.json();
+                if(d.ok && d.tipo === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    document.getElementById('admin-error').classList.remove('hidden');
+                }
+            } catch(e) { document.getElementById('admin-error').classList.remove('hidden'); }
         }
-        function loginAfiliado() {
+        async function loginAfiliado() {
             const u = document.getElementById('afil-user').value.trim();
             const p = document.getElementById('afil-pass').value.trim();
-            // Validación básica — se ampliará con el dashboard
-            if(u && p) {
-                cerrarLogin('afiliado');
-                alert('✅ Bienvenido Afiliado — Dashboard próximamente');
-            } else {
-                document.getElementById('afil-error').classList.remove('hidden');
-            }
+            try {
+                const r = await fetch(`${URL_WEB_APP}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
+                const d = await r.json();
+                if(d.ok && d.tipo === 'afiliado') {
+                    sessionStorage.setItem('afiliado_usuario', u);
+                    window.location.href = 'afiliado.html';
+                } else {
+                    document.getElementById('afil-error').classList.remove('hidden');
+                }
+            } catch(e) { document.getElementById('afil-error').classList.remove('hidden'); }
         }
 
-        let currentOrder = {
-            categoria:'', marca:'', paqueteNombre:null,
-            monto:0, detalleCompleto:'',
-            descuentoAplicado:0, codigoUsado:'SISTEMA'
-        };
-
-        const paquetesData = {
-            'Claro': [
-                { nombre:'Paquete $1.05', detalle:'1GB (512MB libres + 512MB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 100 SMS (1 día).', precio:'1.05', descuento:'1.03' },
-                { nombre:'Paquete $1.50', detalle:'4GB (2GB YT/TikTok + 2GB IG/FB) (2 días).', precio:'1.50', descuento:'1.47' },
-                { nombre:'Paquete $2.05', detalle:'2GB (1GB libre + 1GB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 20 min otras + 200 SMS (2 días).', precio:'2.05', descuento:'2.01' },
-                { nombre:'Horas Ilimitadas', detalle:'Gigas libres por 4 horas.', precio:'2.05', descuento:'2.01' },
-                { nombre:'Paquete $2.50', detalle:'5GB (2GB libres + 3GB YT/TikTok) + 1GB WhatsApp + Llamadas ilimitadas Claro + 20 min otras + 200 SMS (3 días).', precio:'2.50', descuento:'2.45' },
-                { nombre:'Paquete $3.10', detalle:'7GB (4GB libres + 3GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS (3 días).', precio:'3.10', descuento:'3.05' },
-                { nombre:'Paquete $3.50', detalle:'9GB (4GB libres + 5GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS (7 días).', precio:'3.50', descuento:'3.44' },
-                { nombre:'Paquete $4.10', detalle:'8GB (3GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 40 min otras + 300 SMS (10 días).', precio:'4.10', descuento:'4.03' },
-                { nombre:'Paquete $5.15', detalle:'8GB (3GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 50 min otras + 300 SMS + 10GB Claro Video (15 días).', precio:'5.15', descuento:'5.05' },
-                { nombre:'Paquete $5.50', detalle:'10GB (5GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 50 min otras + 300 SMS + 10GB Claro Video (15 días).', precio:'5.50', descuento:'5.40' },
-                { nombre:'Paquete $6.00', detalle:'6GB (4GB libres + 2GB YT/TikTok) + 2GB WhatsApp + Llamadas ilimitadas Claro + 30 min otras + 300 SMS + Claro Video (3 días).', precio:'6.00', descuento:'5.90' },
-                { nombre:'Paquete $8.00', detalle:'12GB (7GB libres + 5GB YT/TikTok) + 4GB WhatsApp + Llamadas ilimitadas Claro + 80 min todas + 15GB Claro Video (25 días).', precio:'8.00', descuento:'7.85' },
-                { nombre:'Paquete $10.50', detalle:'16GB (10GB libres + 6GB YT/TikTok) + 5GB WhatsApp + Llamadas ilimitadas Claro + 100 min otras + 15GB Claro Video (30 días).', precio:'10.50', descuento:'10.30' },
-                { nombre:'Paquete $12.50', detalle:'19GB (13GB libres + 6GB YT/TikTok) + 5GB WhatsApp + Llamadas ilimitadas Claro + 120 min otras + 15GB Claro Video (30 días).', precio:'12.50', descuento:'12.25' },
-                { nombre:'Paquete $15.50', detalle:'22GB (15GB libres + 2GB IG/FB + 5GB YT/TK) + 5GB WhatsApp + Llamadas ilimitadas Claro + 150 min otras + 15GB Claro Video (30 días).', precio:'15.50', descuento:'15.20' },
-                { nombre:'Paquete $20.50', detalle:'27GB (20GB libres + 2GB IG/FB + 5GB YT/TK) + 5GB WhatsApp + Llamadas ilimitadas Claro + 150 min otras + 15GB Claro Video (30 días).', precio:'20.50', descuento:'20.10' }
-            ],
-            'Movistar': [
-                { nombre:'Paquete $1.05', detalle:'Llamadas Ilimitadas Movistar + 10 Min todas operadoras + Whatsapp + 512MB navegación + 512MB (FB, IG, X y TK) + 10 sms - 1 Día.', precio:'1.05', descuento:'1.03' },
-                { nombre:'Paquete $3.00', detalle:'Llamadas Ilimitadas Movistar + 30 Min todas operadoras + Whatsapp + 3GB + 10 sms + 2GB (FB, IG, X y TK) + 5GB Spotify - 7 Días.', precio:'3.00', descuento:'2.95' },
-                { nombre:'Paquete $5.00', detalle:'Llamadas Ilimitadas Movistar + 70 Min todas operadoras + Whatsapp + 3GB + 3GB (FB, IG, X y TK) + 5GB Spotify + 10 sms - 15 Días.', precio:'5.00', descuento:'4.90' },
-                { nombre:'Paquete $7.00', detalle:'Llamadas Ilimitadas Movistar + 80 Min todas operadoras + Whatsapp + 4GB + 4GB (FB, IG, X y TK) + 5GB Spotify + 10 sms - 20 Días.', precio:'7.00', descuento:'6.90' },
-                { nombre:'Paquete $8.00', detalle:'Llamadas Ilimitadas Movistar + 70 Min todas operadoras + Whatsapp + Spotify + 4GB + 4GB (FB, IG, X y TK) + 10GB Spotify + 10sms - 30 Días.', precio:'8.00', descuento:'7.85' },
-                { nombre:'Paquete $9.00', detalle:'Llamadas Ilimitadas Movistar + 100 Min todas operadoras + Whatsapp + Spotify + 6GB + 4GB (FB, IG, X y TK) + 10GB Spotify + 10 sms - 30 Días.', precio:'9.00', descuento:'8.85' },
-                { nombre:'Paquete $10.25', detalle:'Llamadas Ilimitadas Movistar + 120 Min todas operadoras + Whatsapp + 10GB + 4GB (FB, IG, X y TK) + 10sms + 10 Min LDI + 10GB Spotify - 30 Días.', precio:'10.25', descuento:'10.05' },
-                { nombre:'Paquete $15.50', detalle:'Llamadas Ilimitadas Movistar + 150 Min todas operadoras + Whatsapp + 15GB + 4GB (FB, IG, X y TK) + 10sms + 10 Min LDI + 10GB Spotify - 30 Días.', precio:'15.50', descuento:'15.20' }
-            ],
-            'Tuenti': [
-                { nombre:'Paquete $1.00', detalle:'1GB + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 10 min a otras operadoras + 50 SMS (1 día).', precio:'1.00', descuento:'0.98' },
-                { nombre:'Paquete $3.00', detalle:'5GB + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 30 min a otras operadoras + 50 SMS (7 días).', precio:'3.00', descuento:'2.95' },
-                { nombre:'Paquete $5.00', detalle:'6GB + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 70 min a otras operadoras + 50 SMS (15 días).', precio:'5.00', descuento:'4.90' },
-                { nombre:'Paquete $8.00', detalle:'8GB + 2GB IG/TK + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 80 min otras + 15 Min LDI (30 días).', precio:'8.00', descuento:'7.85' },
-                { nombre:'Paquete $10.00', detalle:'12GB + 2GB IG/TK + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 100 min otras + 25 Min LDI (30 días).', precio:'10.00', descuento:'9.80' },
-                { nombre:'Paquete $15.00', detalle:'17GB + 2GB IG/TK + WhatsApp y Spotify + Llamadas ilimitadas a Tuenti + 150 min otras + 40 Min LDI (30 días).', precio:'15.00', descuento:'14.70' },
-                { nombre:'Paquete $25.00', detalle:'25GB + WhatsApp y Spotify + Llamadas ilimitadas a todas las operadoras + 50 SMS + 40 Min LDI (30 días).', precio:'25.00', descuento:'24.50' }
-            ],
-            'CNT': [
-                { nombre:'Combo CNT $1', detalle:'1GB, 1 DÍA, 15 min todas operadoras, Ilimitados a CNT, 50 SMS, 1GB Whatsapp, 512MB FB y 512MB TK.', precio:'1.00', descuento:'0.98' },
-                { nombre:'Combo CNT $2', detalle:'2GB, 3 DÍAS, 25 min todas operadoras, Ilimitados a CNT, 50 SMS, 1GB Whatsapp, 512MB FB y 512MB TK.', precio:'2.00', descuento:'1.96' },
-                { nombre:'Combo CNT $3', detalle:'4GB, 7 DÍAS, 35 min todas operadoras, Ilimitados a CNT, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio:'3.00', descuento:'2.95' },
-                { nombre:'Combo CNT $5', detalle:'5GB, 30 DÍAS, 50 min todas operadoras, ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio:'5.00', descuento:'4.90' },
-                { nombre:'Combo CNT $6', detalle:'7GB, 30 DÍAS, 100 min todas operadoras, Ilimitados a CNT, 30 min LDI, 50 SMS, 4GB Whatsapp, 1GB FB, 1GB IG y 1GB TK.', precio:'6.00', descuento:'5.90' },
-                { nombre:'Combo Datos $10', detalle:'25GB navegación libre por 30 DÍAS.', precio:'10.00', descuento:'9.80' },
-                { nombre:'Combo $10 Plus', detalle:'15GB, 30 DÍAS, 200 min todas operadoras, Ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio:'10.00', descuento:'9.80' },
-                { nombre:'Combo $15 Plus', detalle:'20GB, 30 DÍAS, 300 min todas operadoras, Ilimitados a CNT, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio:'15.00', descuento:'14.70' },
-                { nombre:'Combo $20 Plus', detalle:'25GB, 30 DÍAS, Minutos Ilimitados todas las operadoras, 30 Min internacionales, 50 SMS, 4GB Whatsapp, 1GB FB/IG/TK.', precio:'20.00', descuento:'19.60' },
-                { nombre:'Combo Datos $20', detalle:'45GB navegación libre por 30 DÍAS.', precio:'20.00', descuento:'19.60' }
-            ],
-            'Maxi Plus': [
-                { nombre:'Combo 1GB $1.05', detalle:'512MB Internet, 512MB Redes sociales, Whatsapp Gratis, 10 Min otras, Min ilimitados Maxi, 10 SMS - 1 día', precio:'1.05', descuento:'1.03' },
-                { nombre:'Combo 5GB $3.00', detalle:'3GB Internet, 2GB Redes sociales, Whatsapp Gratis, 30 Min otras, Min ilimitados Maxi, Spotify - 7 días', precio:'3.00', descuento:'2.95' },
-                { nombre:'Combo 6GB $5.00', detalle:'3GB Internet, 3GB Redes sociales, Whatsapp Gratis, 70 Min otras, Min ilimitados Maxi, 10 SMS, Spotify - 15 días', precio:'5.00', descuento:'4.90' },
-                { nombre:'Combo 8GB $7.00', detalle:'4GB Internet, 4GB Redes sociales, Whatsapp Gratis, 80 Min otras, Min ilimitados Maxi, 10 SMS, Spotify - 20 días', precio:'7.00', descuento:'6.90' },
-                { nombre:'Combo 8GB $8.00', detalle:'4GB Internet, 4GB Redes sociales, Whatsapp Gratis, 70 Min otras, Min ilimitados Maxi, 10 SMS, Spotify GB libres - 30 días', precio:'8.00', descuento:'7.85' },
-                { nombre:'Combo 10GB $9.00', detalle:'6GB Internet, 4GB Redes sociales, Spotify GB libres, Gratis Whatsapp, 100 Min otras, Min ilimitados Maxi, 10 SMS, 10 Min LDI - 30 días', precio:'9.00', descuento:'8.82' },
-                { nombre:'Combo 14GB $10.25', detalle:'10GB Internet, 4GB Redes sociales, Spotify GB libres, Gratis Whatsapp, 120 Min otras, Min ilimitados Maxi, 50 SMS, 10 Min LDI - 30 días', precio:'10.25', descuento:'10.05' },
-                { nombre:'Combo 19GB $15.50', detalle:'15GB Internet, 4GB Redes sociales, Spotify GB libres, Gratis Whatsapp, 150 Min otras, Min ilimitados Maxi, 50 SMS, 20 Min LDI - 30 días', precio:'15.50', descuento:'15.20' },
-                { nombre:'Combo 35GB $30.81', detalle:'25GB Internet, Redes sociales libre, Whatsapp Gratis, Min otras ilimitados, Min ilimitados Maxi, 100 SMS, 100 Min LD, Spotify, 10GB YT+ Netflix - 30 días', precio:'30.81', descuento:'30.20' }
-            ],
-            'Aki Móvil': [
-                { nombre:'Aki 1GB $1.05', detalle:'1 Gb - Min Ilimitados AkiMOVIL - 10 Min Todo Destino - Gratis Whatsapp - 10 SMS - 1 Dia', precio:'1.05', descuento:'1.03' },
-                { nombre:'Aki 5GB $2.99', detalle:'5 Gb - Min Ilimitados AkiMOVIL - 30 Min Todo Destino - Gratis Whatsapp - 10 SMS - 7 Dias', precio:'2.99', descuento:'2.94' },
-                { nombre:'Aki 6GB $4.99', detalle:'6 Gb - Min Ilimitados AkiMOVIL - 70 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 15 Dias', precio:'4.99', descuento:'4.90' },
-                { nombre:'Aki 8GB $6.99', detalle:'8 Gb - Min Ilimitados AkiMOVIL - 80 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 20 Dias', precio:'6.99', descuento:'6.86' },
-                { nombre:'Aki 10GB $8.99', detalle:'10 Gb - Min Ilimitados AkiMOVIL - 100 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 30 Dias', precio:'8.99', descuento:'8.84' },
-                { nombre:'Aki 14GB $9.99', detalle:'14 Gb - Min Ilimitados AkiMOVIL - 120 Min Todo Destino - Gratis Whatsapp y Spotify - 10 SMS - 10 Min LDI - 30 Dias', precio:'9.99', descuento:'9.80' },
-                { nombre:'Aki 19GB $15.49', detalle:'19 Gb - Min ilimitados AkiMOVIL - 150 Min todo destino - Gratis WhatsApp y Spotify - 50 SMS - 20 Min LDI - 30 Dias', precio:'15.49', descuento:'15.20' },
-                { nombre:'Aki 22GB $19.99', detalle:'22 Gb - Min ilimitados AkiMOVIL - 200 Min todo destino - Gratis WhatsApp y Spotify - 50 SMS - 20 Min LDI - 30 Dias', precio:'19.99', descuento:'19.60' }
-            ]
-        };
-
-        // ✅ Solo Free Fire con imagen correcta
-        const imageMap = {
-            'Claro':'claro.webp','Movistar':'movistar.webp','Tuenti':'tuenti.webp','CNT':'cnt.webp',
-            'Aki Móvil':'akimovil (1).webp','Maxi Plus':'maxiplus.webp',
-            'Free Fire':'freefireid.webp'
-        };
-
+        // ── NAVEGACIÓN ─────────────────────────
         function hideAllSteps() {
             ['step-1','step-sub','step-2','step-paquetes','step-3'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('step-hidden');
+                document.getElementById(id)?.classList.add('step-hidden');
             });
         }
         function showSubCategory() {
@@ -399,74 +362,105 @@
             document.getElementById('step-sub').classList.remove('step-hidden');
             window.scrollTo(0,0);
         }
-        function showStep(step, type='', subType='') {
+
+        async function showStep(step, type='', subType='') {
             hideAllSteps();
             document.getElementById('step-' + step).classList.remove('step-hidden');
             const backBtn = document.getElementById('btn-back-step2');
-            if(type==='recargas') {
+
+            if(type === 'recargas') {
                 currentOrder.categoria = subType;
                 document.getElementById('title-step-2').innerText = 'Elige Operadora';
-                renderBrands(['Claro','Movistar','CNT','Tuenti','Aki Móvil','Maxi Plus']);
                 backBtn.onclick = () => showSubCategory();
-            } else if(type==='juegos') {
+                await renderMarcasDesdeSheets('Operadora');
+            } else if(type === 'juegos') {
                 currentOrder.categoria = 'Juegos';
                 document.getElementById('title-step-2').innerText = 'Videojuegos';
-                // ✅ Solo Free Fire
-                renderBrands(['Free Fire']);
                 backBtn.onclick = () => goBack(1);
+                await renderMarcasDesdeSheets('SubCategoria');
             }
             window.scrollTo(0,0);
         }
-        function renderBrands(brands) {
+
+        async function renderMarcasDesdeSheets(tipoServicio) {
             const grid = document.getElementById('grid-options');
-            grid.innerHTML = '';
-            brands.forEach(b => {
-                const imgFile = imageMap[b] || 'default.webp';
-                grid.innerHTML += `
-                <button onclick="handleBrandSelection('${b}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
+            grid.innerHTML = '<div class="skeleton h-32 rounded-2xl col-span-2"></div><div class="skeleton h-32 rounded-2xl col-span-2"></div>';
+
+            const marcas = categoriasData.filter(c => c.tipoServicio === tipoServicio && c.activo);
+
+            if(!marcas.length) {
+                grid.innerHTML = '<p class="col-span-4 text-center text-zinc-500 py-10">Sin categorías disponibles</p>';
+                return;
+            }
+
+            grid.innerHTML = marcas.map(m => {
+                const imgOEmoji = m.icono && m.icono.includes('.')
+                    ? `<img src="${m.icono}" alt="${m.nombre}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform rounded-xl">`
+                    : `<span class="text-4xl">${m.icono || '📦'}</span>`;
+                return `
+                <button onclick="handleBrandSelection('${m.nombre}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
-                        <img src="${imgFile}" alt="${b}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform rounded-xl">
+                        ${imgOEmoji}
                     </div>
-                    <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${b}</span>
+                    <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${m.nombre}</span>
                 </button>`;
-            });
+            }).join('');
         }
-        function handleBrandSelection(brand) {
+
+        async function handleBrandSelection(brand) {
             currentOrder.marca = brand;
-            if(currentOrder.categoria==='Paquetes' && paquetesData[brand]) {
-                showPaquetesList(brand);
+            if(currentOrder.categoria === 'Paquetes') {
+                await showPaquetesList(brand);
             } else {
                 selectBrand(brand, false);
             }
         }
-        function showPaquetesList(brand) {
+
+        async function showPaquetesList(brand) {
             hideAllSteps();
             document.getElementById('step-paquetes').classList.remove('step-hidden');
             document.getElementById('title-paquetes').innerText = 'Paquetes ' + brand;
+            document.getElementById('btn-back-paquetes').onclick = () => showStep(2,'recargas', currentOrder.categoria);
+
             const container = document.getElementById('lista-paquetes');
+            container.innerHTML = '<div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div>';
+
+            // Cargar productos desde Sheets si no están en caché
+            if(!productosCache[brand]) {
+                try {
+                    const r = await fetch(`${URL_WEB_APP}?accion=getProductos&categoria=${encodeURIComponent(brand)}`);
+                    const d = await r.json();
+                    productosCache[brand] = d.productos || [];
+                } catch(e) { productosCache[brand] = []; }
+            }
+
+            const productos = productosCache[brand];
             container.innerHTML = '';
-            paquetesData[brand].forEach(function(p) {
+
+            if(!productos.length) {
+                container.innerHTML = '<p class="text-center text-zinc-500 py-10 col-span-2">Sin paquetes disponibles</p>';
+                return;
+            }
+
+            productos.forEach(p => {
                 const btn = document.createElement('button');
                 btn.className = "bg-zinc-900 border border-zinc-800 p-5 rounded-3xl text-left hover:border-blue-500 transition-all flex justify-between items-center group w-full";
+                const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
                 btn.innerHTML = `
                     <div class="pr-4">
                         <p class="font-black text-sm md:text-base uppercase italic text-white">${p.nombre}</p>
-                        <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1 font-bold">${p.detalle}</p>
+                        <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1 font-bold">${p.descripcion}</p>
                     </div>
                     <div class="text-right min-w-[70px]">
-                        <p class="text-[10px] text-zinc-600 line-through font-bold">$${p.precio}</p>
-                        <p class="text-lg font-black text-green-500">$${p.descuento}</p>
+                        ${tieneDesc ? `<p class="text-[10px] text-zinc-600 line-through font-bold">$${parseFloat(p.precioNormal).toFixed(2)}</p>` : ''}
+                        <p class="text-lg font-black text-green-500">$${parseFloat(p.precioDesc).toFixed(2)}</p>
                     </div>`;
-                // ✅ Bug corregido: usar addEventListener en vez de onclick inline
-                btn.addEventListener('click', function() {
-                    selectPaquete(p.nombre, p.descuento, p.detalle);
-                });
+                btn.addEventListener('click', () => selectPaquete(p.nombre, p.precioDesc, p.descripcion));
                 container.appendChild(btn);
             });
             window.scrollTo(0,0);
         }
 
-        // ✅ Bug corregido: selectPaquete llama correctamente a selectBrand
         function selectPaquete(nombre, precio, detalle) {
             currentOrder.paqueteNombre = nombre;
             currentOrder.monto = parseFloat(precio);
@@ -474,7 +468,7 @@
             selectBrand(currentOrder.marca, true);
         }
 
-        function selectBrand(brand, comesFromPaquete) {
+        function selectBrand(brand, comesFromPaquete=false) {
             currentOrder.marca = brand;
             currentOrder.descuentoAplicado = 0;
             currentOrder.codigoUsado = 'SISTEMA';
@@ -498,11 +492,11 @@
             }
 
             const isRecarga = (currentOrder.categoria==='Recargas' || currentOrder.categoria==='Paquetes');
-            const isJuego  = (currentOrder.categoria==='Juegos');
+            const isJuego   = (currentOrder.categoria==='Juegos');
             document.getElementById('seccion-cupon').classList.toggle('hidden', !isJuego);
 
-            document.getElementById('form-fields').innerHTML =
-                `<div class="space-y-2 text-left">
+            document.getElementById('form-fields').innerHTML = `
+                <div class="space-y-2 text-left">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Número de Celular' : 'ID de Jugador'}</label>
                     <input type="${isRecarga ? 'tel' : 'text'}" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
                 </div>
@@ -536,7 +530,7 @@
 
         function actualizarCheckout() {
             const inputMonto = document.getElementById('input-monto');
-            let subtotal = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto ? inputMonto.value : 0) || 0);
+            let subtotal = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
             let totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
             document.getElementById('resumen-subtotal').innerText  = '$' + subtotal.toFixed(2);
             document.getElementById('resumen-descuento').innerText = '-$' + currentOrder.descuentoAplicado.toFixed(2);
@@ -548,13 +542,13 @@
             const idInput    = document.getElementById('input-id');
             const inputMonto = document.getElementById('input-monto');
             const id         = idInput ? idInput.value.trim() : '';
-            const subtotal   = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto ? inputMonto.value : 0) || 0);
+            const subtotal   = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
             const totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
             const isRecarga  = (currentOrder.categoria==='Recargas' || currentOrder.categoria==='Paquetes');
 
-            if(!id) { alert('Por favor ingresa tu número de celular o ID de jugador.'); idInput && idInput.focus(); return; }
-            if(isRecarga && !/^09\d{8}$/.test(id)) { alert('Ingresa un número válido (debe empezar con 09 y tener 10 dígitos).'); idInput && idInput.focus(); return; }
-            if(subtotal <= 0) { alert('Por favor ingresa un monto válido mayor a $0.00.'); inputMonto && inputMonto.focus(); return; }
+            if(!id) { alert('Por favor ingresa tu número de celular o ID de jugador.'); idInput?.focus(); return; }
+            if(isRecarga && !/^09\d{8}$/.test(id)) { alert('Ingresa un número válido (debe empezar con 09 y tener 10 dígitos).'); idInput?.focus(); return; }
+            if(subtotal <= 0) { alert('Por favor ingresa un monto válido mayor a $0.00.'); inputMonto?.focus(); return; }
 
             const btn = document.getElementById('btn-confirmar');
             btn.disabled = true; btn.innerText = 'Enviando...';
@@ -587,17 +581,17 @@
                 '\n*Subtotal:* $' + subtotal.toFixed(2) +
                 '\n*Código:* ' + currentOrder.codigoUsado +
                 '\n*Total Final:* $' + totalFinal.toFixed(2);
-            window.open('https://wa.me/' + numeroWhatsApp + '?text=' + encodeURIComponent(msg));
+            window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
         }
 
         function goBack(step) {
             hideAllSteps();
-            if(step===1) {
-                document.getElementById('step-1').classList.remove('step-hidden');
-            } else if(step===2) {
-                showStep(2, currentOrder.categoria==='Juegos' ? 'juegos' : 'recargas', currentOrder.categoria);
-            }
+            if(step===1) document.getElementById('step-1').classList.remove('step-hidden');
+            else if(step===2) showStep(2, currentOrder.categoria==='Juegos' ? 'juegos' : 'recargas', currentOrder.categoria);
         }
+
+        // Iniciar
+        init();
     </script>
 </body>
 </html>
