@@ -3,165 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rexpres Play - Catálogo Oficial</title>
+    <title>Rexpres Play - Ecuador</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .step-hidden { display: none !important; }
-        body { background-color: #000000; color: white; font-family: ui-sans-serif, system-ui; overflow-x: hidden; }
-        .card-rex { background-color: #0a0a0a; border: 1px solid #1a1a1a; }
-        .slider-container {
-            position: relative; overflow: hidden; border-radius: 1.5rem;
-            height: 180px; margin-bottom: 2rem; background-color: #111;
-        }
-        @media (min-width: 768px) { .slider-container { height: 350px; } }
-        .slide {
-            position: absolute; inset: 0; opacity: 0;
-            transition: opacity 1s ease-in-out;
-            background-size: cover; background-position: center;
-        }
-        .slide.active { opacity: 1; }
-        .order-summary { background: rgba(255,255,255,0.03); border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
-        .menu-panel {
-            display: none; position: absolute; right: 0; top: calc(100% + 10px);
-            background: #111; border: 1px solid #222; border-radius: 1rem;
-            min-width: 200px; z-index: 999; overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-        }
-        .menu-panel.open { display: block; }
-        .menu-item {
-            display: block; width: 100%; padding: 14px 20px; color: white;
-            text-align: left; background: none; border: none; cursor: pointer;
-            font-size: 11px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 2px; border-bottom: 1px solid #1a1a1a; transition: background 0.2s;
-        }
-        .menu-item:last-child { border-bottom: none; }
-        .menu-item:hover { background: #1a1a1a; }
-        .menu-separator { padding: 8px 20px 4px; font-size: 9px; color: #555; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; background: #0a0a0a; }
-        .skeleton { background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 1rem; }
-        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        :root { --orange:#f7941d; --blue:#001e85; --dark:#06060a; --card:#0e0e16; --border:#1c1c28; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { background:var(--dark); color:white; font-family:'Segoe UI',system-ui,sans-serif; overflow-x:hidden; }
+
+        /* HEADER */
+        .header { position:sticky; top:0; z-index:100; background:rgba(6,6,10,0.95); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); }
+
+        /* HERO */
+        .hero { position:relative; overflow:hidden; border-radius:20px; height:200px; margin-bottom:2rem; }
+        @media(min-width:768px){ .hero { height:360px; } }
+        .hero-slide { position:absolute; inset:0; opacity:0; transition:opacity 1s ease; background-size:cover; background-position:center; }
+        .hero-slide.active { opacity:1; }
+        .hero-overlay { position:absolute; inset:0; background:linear-gradient(to right, rgba(0,30,133,0.5) 0%, transparent 60%); }
+        .hero-dots { position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:6px; }
+        .hero-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.3); cursor:pointer; transition:all .3s; }
+        .hero-dot.active { width:22px; border-radius:3px; background:var(--orange); }
+
+        /* CATEGORÍAS */
+        .cat-card { border-radius:20px; padding:28px 24px; display:flex; align-items:center; gap:20px; cursor:pointer; border:1px solid transparent; transition:transform .2s, box-shadow .2s; }
+        .cat-card:hover { transform:translateY(-3px); box-shadow:0 16px 40px rgba(0,0,0,0.4); }
+        .cat-card:active { transform:scale(0.98); }
+        .cat-blue { background:linear-gradient(135deg, #001e85, #002db3); }
+        .cat-orange { background:linear-gradient(135deg, #b86010, #f7941d); }
+        .cat-icon { width:64px; height:64px; min-width:64px; background:rgba(255,255,255,0.12); border-radius:16px; display:flex; align-items:center; justify-content:center; }
+
+        /* GARANTÍAS */
+        .garantia-item { display:flex; align-items:center; gap:10px; }
+        .garantia-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); flex-shrink:0; }
+
+        /* MARCAS */
+        .brand-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:22px 16px; display:flex; flex-direction:column; align-items:center; gap:12px; cursor:pointer; transition:border-color .2s, transform .2s; }
+        .brand-card:hover { border-color:var(--orange); transform:translateY(-2px); }
+        .brand-card:active { transform:scale(0.97); }
+
+        /* PAQUETES */
+        .paquete-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:border-color .2s; width:100%; text-align:left; }
+        .paquete-card:hover { border-color:rgba(247,148,29,0.5); }
+        .paquete-card:active { opacity:.85; }
+
+        /* CHECKOUT */
+        .checkout-wrap { background:var(--card); border:1px solid var(--border); border-radius:24px; padding:32px; width:100%; max-width:420px; }
+        .field-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:14px 18px; color:white; font-size:14px; outline:none; transition:border .2s; }
+        .field-input:focus { border-color:var(--orange); }
+
+        /* BTN */
+        .btn-confirm { width:100%; background:linear-gradient(135deg,#15803d,#22c55e); color:white; font-weight:900; padding:16px; border-radius:14px; font-size:13px; text-transform:uppercase; letter-spacing:2px; border:none; cursor:pointer; transition:opacity .2s, transform .2s; }
+        .btn-confirm:hover { opacity:.9; transform:translateY(-1px); }
+        .btn-confirm:active { transform:scale(0.98); }
+
+        /* BACK BTN */
+        .back-btn { display:inline-flex; align-items:center; gap:8px; color:#64748b; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1px; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:8px 14px; border-radius:10px; cursor:pointer; transition:color .2s; }
+        .back-btn:hover { color:white; }
+
+        /* MENÚ */
+        .menu-panel { display:none; position:absolute; right:0; top:calc(100% + 10px); background:#0e0e16; border:1px solid var(--border); border-radius:14px; min-width:190px; z-index:999; overflow:hidden; box-shadow:0 16px 40px rgba(0,0,0,0.7); }
+        .menu-panel.open { display:block; }
+        .menu-item { display:block; width:100%; padding:13px 18px; color:#94a3b8; text-align:left; background:none; border:none; cursor:pointer; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; border-bottom:1px solid var(--border); transition:background .15s, color .15s; }
+        .menu-item:last-child { border-bottom:none; }
+        .menu-item:hover { background:rgba(255,255,255,0.04); color:white; }
+        .menu-sep { padding:7px 18px 4px; font-size:9px; color:#334155; font-weight:900; letter-spacing:3px; text-transform:uppercase; background:rgba(0,0,0,0.3); }
+
+        /* RESUMEN */
+        .summary { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:14px; padding:18px; margin-top:18px; }
+
+        /* CUPÓN */
+        .cupon-wrap { background:rgba(247,148,29,0.05); border:1px solid rgba(247,148,29,0.15); border-radius:14px; padding:18px; margin-top:18px; }
+
+        .step-hidden { display:none !important; }
+        ::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
     </style>
 </head>
-<body class="bg-black">
+<body>
 
-    <header class="p-4 bg-black border-b border-zinc-800 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto cursor-pointer" onclick="goBack(1)">
-            <div class="flex items-center gap-3">
-                <span class="text-[10px] md:text-xs text-zinc-500 font-bold uppercase tracking-widest italic">Ecuador</span>
+    <!-- HEADER -->
+    <header class="header px-4 py-3">
+        <div style="max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;">
+            <img src="logo.png" alt="Rexpres Play" style="height:40px;cursor:pointer;" onclick="goBack(1)">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#334155;">🇪🇨 Ecuador</span>
                 <div style="position:relative;">
-                    <button onclick="toggleMenu()" class="flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:border-zinc-600 transition-all">
-                        <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                    <button onclick="toggleMenu()" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);padding:8px 14px;border-radius:10px;color:white;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;cursor:pointer;">
+                        <svg width="15" height="15" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
                         Menú
                     </button>
                     <div class="menu-panel" id="menu-panel">
-                        <!-- ✅ Directo a la tienda, sin modal -->
-                        <button class="menu-item" onclick="goBack(1); closeMenu()">🏠 &nbsp;Tienda</button>
-                        <div class="menu-separator">Acceso</div>
-                        <!-- ✅ Directo a admin.html sin modal -->
-                        <button class="menu-item" onclick="window.location.href='admin.html'">🛡️ &nbsp;Admin</button>
-                        <!-- ✅ Directo a afiliado.html sin modal -->
-                        <button class="menu-item" onclick="window.location.href='afiliado.html'">🤝 &nbsp;Afiliado</button>
+                        <button class="menu-item" onclick="goBack(1);closeMenu()">🏠 Tienda</button>
+                        <div class="menu-sep">Acceso</div>
+                        <button class="menu-item" onclick="window.location.href='admin.html'">🛡️ Administrador</button>
+                        <button class="menu-item" onclick="window.location.href='afiliado.html'">🤝 Afiliado</button>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto p-4 md:p-8">
+    <main style="max-width:960px;margin:0 auto;padding:20px 16px 60px;">
 
         <!-- STEP 1 -->
         <section id="step-1">
-            <div class="slider-container border border-zinc-800 shadow-2xl">
-                <div class="slide active" style="background-image: url('banner1.png');"></div>
-                <div class="slide" style="background-image: url('banner2.png');"></div>
+
+            <!-- HERO -->
+            <div class="hero">
+                <div class="hero-slide active" style="background-image:url('banner1.png');"></div>
+                <div class="hero-slide" style="background-image:url('banner2.png');"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-dots">
+                    <div class="hero-dot active" onclick="goSlide(0)"></div>
+                    <div class="hero-dot" onclick="goSlide(1)"></div>
+                </div>
             </div>
-            <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-4xl font-black uppercase italic tracking-tighter text-white">¿Qué deseas realizar hoy?</h2>
-                <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold italic">Selecciona un servicio</p>
+
+            <!-- TÍTULO -->
+            <div style="text-align:center;margin-bottom:28px;">
+                <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--orange);margin-bottom:10px;">Selecciona un servicio</p>
+                <h1 style="font-size:clamp(22px,5vw,40px);font-weight:900;text-transform:uppercase;letter-spacing:-1px;color:white;line-height:1.1;">¿Qué deseas<br>realizar hoy?</h1>
             </div>
-            <div id="grid-categorias-principales" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="skeleton h-40 rounded-3xl"></div>
-                <div class="skeleton h-40 rounded-3xl"></div>
+
+            <!-- CATEGORÍAS FIJAS -->
+            <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:32px;">
+                <button class="cat-card cat-blue" onclick="showSubCategory()">
+                    <div class="cat-icon">
+                        <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:white;"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4-15h-2v2h2V4zm-2 15h2v-2h-2v2zm1.25-11L9 11h3l-1.25 3L14 10h-3l1.25-3z"/></svg>
+                    </div>
+                    <div style="text-align:left;">
+                        <p style="font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;">Recargas Móviles</p>
+                        <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.6);margin-top:4px;">Saldo · Paquetes · Datos</p>
+                    </div>
+                    <span style="margin-left:auto;font-size:20px;opacity:.5;">›</span>
+                </button>
+
+                <button class="cat-card cat-orange" onclick="showStep(2,'juegos')">
+                    <div class="cat-icon" style="font-size:30px;">🎮</div>
+                    <div style="text-align:left;">
+                        <p style="font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;">Videojuegos</p>
+                        <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.7);margin-top:4px;">Diamantes · Monedas · Gemas</p>
+                    </div>
+                    <span style="margin-left:auto;font-size:20px;opacity:.5;">›</span>
+                </button>
+            </div>
+
+            <!-- GARANTÍAS -->
+            <div style="border:1px solid var(--border);border-radius:16px;padding:20px 24px;background:var(--card);">
+                <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:3px;color:#475569;margin-bottom:16px;">¿Por qué elegirnos?</p>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="garantia-item">
+                        <div class="garantia-dot"></div>
+                        <p style="font-size:13px;font-weight:700;color:#94a3b8;"><span style="color:white;font-weight:800;">Atención personalizada</span> — respondemos cada pedido</p>
+                    </div>
+                    <div class="garantia-item">
+                        <div class="garantia-dot" style="background:var(--blue);"></div>
+                        <p style="font-size:13px;font-weight:700;color:#94a3b8;"><span style="color:white;font-weight:800;">Entrega rápida</span> — recarga aplicada al instante</p>
+                    </div>
+                    <div class="garantia-item">
+                        <div class="garantia-dot"></div>
+                        <p style="font-size:13px;font-weight:700;color:#94a3b8;"><span style="color:white;font-weight:800;">Pago seguro</span> — confirmación vía WhatsApp</p>
+                    </div>
+                    <div class="garantia-item">
+                        <div class="garantia-dot" style="background:var(--blue);"></div>
+                        <p style="font-size:13px;font-weight:700;color:#94a3b8;"><span style="color:white;font-weight:800;">Precios competitivos</span> — las mejores tarifas del mercado</p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- STEP SUB -->
         <section id="step-sub" class="step-hidden">
-            <div class="flex items-center justify-between mb-8">
-                <button onclick="goBack(1)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
-                    <span class="mr-2">←</span> Inicio
-                </button>
-                <h2 class="text-xl md:text-2xl font-black italic uppercase text-center flex-1">¿Qué necesitas?</h2>
-                <div class="w-10"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+                <button class="back-btn" onclick="goBack(1)">← Inicio</button>
+                <h2 style="font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;">¿Qué necesitas?</h2>
             </div>
-            <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
-                <button onclick="showStep(2,'recargas','Recargas')" class="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl hover:border-blue-500 transition-all group flex flex-col items-center gap-4">
-                    <svg viewBox="0 0 24 24" class="w-12 h-12 fill-blue-500"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4.25-11L10 11h3l-1.25 3L15 10h-3l1.25-3z"/></svg>
-                    <span class="font-black uppercase italic tracking-widest text-sm md:text-lg text-white">Recargas</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:400px;margin:0 auto;">
+                <button class="brand-card" onclick="showStep(2,'recargas','Recargas')" style="padding:28px 16px;">
+                    <svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:#3b82f6;"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4.25-11L10 11h3l-1.25 3L15 10h-3l1.25-3z"/></svg>
+                    <p style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;">Recargas</p>
+                    <p style="font-size:10px;color:#475569;font-weight:700;">Saldo directo</p>
                 </button>
-                <button onclick="showStep(2,'recargas','Paquetes')" class="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl hover:border-blue-500 transition-all group flex flex-col items-center gap-4">
-                    <svg viewBox="0 0 24 24" class="w-12 h-12 fill-orange-500"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/></svg>
-                    <span class="font-black uppercase italic tracking-widest text-sm md:text-lg text-white">Paquetes</span>
+                <button class="brand-card" onclick="showStep(2,'recargas','Paquetes')" style="padding:28px 16px;">
+                    <svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:var(--orange);"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/></svg>
+                    <p style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px;">Paquetes</p>
+                    <p style="font-size:10px;color:#475569;font-weight:700;">GB + llamadas</p>
                 </button>
             </div>
         </section>
 
-        <!-- STEP 2: GRID MARCAS -->
+        <!-- STEP 2 -->
         <section id="step-2" class="step-hidden">
-            <div class="flex items-center justify-between mb-8">
-                <button id="btn-back-step2" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
-                    <span class="mr-2">←</span> Volver
-                </button>
-                <h2 id="title-step-2" class="text-xl md:text-3xl font-black italic uppercase text-center flex-1 text-white"></h2>
-                <div class="w-10"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+                <button class="back-btn" id="btn-back-step2">← Volver</button>
+                <h2 id="title-step-2" style="font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;"></h2>
             </div>
-            <div id="grid-options" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"></div>
+            <div id="grid-options" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;"></div>
         </section>
 
         <!-- STEP PAQUETES -->
         <section id="step-paquetes" class="step-hidden">
-            <div class="flex items-center justify-between mb-8">
-                <button id="btn-back-paquetes" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
-                    <span class="mr-2">←</span> Regresar
-                </button>
-                <h2 id="title-paquetes" class="text-xl md:text-2xl font-black italic uppercase text-center flex-1 text-white"></h2>
-                <div class="w-10"></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+                <button class="back-btn" id="btn-back-paquetes">← Regresar</button>
+                <h2 id="title-paquetes" style="font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;"></h2>
             </div>
-            <div id="lista-paquetes" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto"></div>
+            <div id="lista-paquetes" style="display:grid;grid-template-columns:1fr;gap:10px;max-width:720px;margin:0 auto;"></div>
         </section>
 
         <!-- STEP 3: CHECKOUT -->
-        <section id="step-3" class="step-hidden flex justify-center">
-            <div class="card-rex p-8 md:p-12 rounded-[2rem] shadow-2xl w-full max-w-lg border-t-4 border-zinc-700">
-                <button id="btn-back-step3" class="text-zinc-400 mb-6 inline-block text-xs font-bold uppercase tracking-widest hover:text-white">← Regresar</button>
-                <h2 id="brand-selected" class="text-3xl md:text-4xl font-black mb-2 text-center uppercase italic text-white"></h2>
-                <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-[10px] md:text-xs tracking-widest mb-8 leading-tight"></p>
-                <div id="form-fields" class="space-y-6"></div>
+        <section id="step-3" class="step-hidden" style="display:flex;justify-content:center;">
+            <div class="checkout-wrap">
+                <button class="back-btn" id="btn-back-step3" style="margin-bottom:24px;">← Regresar</button>
+                <div style="text-align:center;margin-bottom:24px;">
+                    <h2 id="brand-selected" style="font-size:26px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;"></h2>
+                    <p id="paquete-detalle-final" style="font-size:11px;color:#60a5fa;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:8px;line-height:1.6;"></p>
+                </div>
+                <div id="form-fields" style="display:flex;flex-direction:column;gap:14px;"></div>
 
-                <div id="seccion-cupon" class="mt-8 pt-8 border-t border-zinc-800 hidden">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">¿Tienes un código?</label>
-                    <div class="flex gap-2 mt-2">
-                        <input type="text" id="promo-code" class="flex-1 bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none text-sm uppercase" placeholder="Código de Referido">
-                        <button onclick="validarCodigo()" class="bg-zinc-800 px-6 rounded-xl font-bold text-xs uppercase hover:bg-zinc-700 transition-colors">Aplicar</button>
+                <!-- CUPÓN -->
+                <div id="seccion-cupon" class="cupon-wrap hidden">
+                    <p style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:var(--orange);margin-bottom:12px;">🏷️ Código de descuento</p>
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="promo-code" class="field-input" placeholder="Tu código" style="text-transform:uppercase;flex:1;">
+                        <button onclick="validarCodigo()" style="background:var(--orange);color:#000;font-weight:900;font-size:11px;text-transform:uppercase;padding:0 18px;border-radius:10px;border:none;cursor:pointer;">Aplicar</button>
                     </div>
-                    <p id="promo-msg" class="text-[10px] mt-2 font-bold uppercase hidden"></p>
+                    <p id="promo-msg" class="hidden" style="font-size:10px;font-weight:800;text-transform:uppercase;margin-top:8px;"></p>
                 </div>
 
-                <div class="order-summary mt-6">
-                    <div class="flex justify-between text-xs text-zinc-400 uppercase font-bold mb-2">
-                        <span>Subtotal</span><span id="resumen-subtotal">$0.00</span>
+                <!-- RESUMEN -->
+                <div class="summary">
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+                        <span style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Subtotal</span>
+                        <span id="resumen-subtotal" style="font-size:13px;font-weight:800;color:#94a3b8;">$0.00</span>
                     </div>
-                    <div id="resumen-desc-row" class="flex justify-between text-xs text-green-500 uppercase font-bold mb-2 hidden">
-                        <span>Descuento</span><span id="resumen-descuento">-$0.00</span>
+                    <div id="resumen-desc-row" style="display:none;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+                        <span style="font-size:11px;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Descuento</span>
+                        <span id="resumen-descuento" style="font-size:13px;font-weight:800;color:#4ade80;">-$0.00</span>
                     </div>
-                    <div class="flex justify-between text-lg font-black text-white uppercase italic pt-2 border-t border-zinc-800">
-                        <span>Total Final</span><span id="resumen-total">$0.00</span>
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0 0;">
+                        <span style="font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:1px;">Total Final</span>
+                        <span id="resumen-total" style="font-size:24px;font-weight:900;color:var(--orange);">$0.00</span>
                     </div>
                 </div>
 
-                <button onclick="enviarPedido()" id="btn-confirmar" class="w-full mt-10 bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl shadow-lg transition-all uppercase tracking-widest text-base">
-                    Confirmar pedido
+                <button class="btn-confirm" style="margin-top:20px;" onclick="enviarPedido()" id="btn-confirmar">
+                    ✅ Confirmar pedido
                 </button>
+                <p style="text-align:center;font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:12px;">🔒 Confirmación vía WhatsApp</p>
             </div>
         </section>
     </main>
@@ -169,331 +255,184 @@
     <script>
         const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
 
-        let codigosValidos = {};
-        let categoriasData = [];
-        // ✅ Cache global de todos los productos cargados de una sola vez
-        let todosLosProductos = [];
+        let codigosValidos = {}, categoriasData = [], todosLosProductos = [];
+        let currentOrder = { categoria:'', marca:'', paqueteNombre:null, monto:0, detalleCompleto:'', descuentoAplicado:0, codigoUsado:'SISTEMA' };
 
-        let currentOrder = {
-            categoria:'', marca:'', paqueteNombre:null,
-            monto:0, detalleCompleto:'',
-            descuentoAplicado:0, codigoUsado:'SISTEMA'
-        };
-
-        // ✅ Carga todo al inicio en paralelo — más rápido
-        async function init() {
-            const [resCats, resCods, resProd] = await Promise.all([
-                fetch(URL_WEB_APP + '?accion=getCategorias').then(r=>r.json()).catch(()=>({categorias:[]})),
-                fetch(URL_WEB_APP + '?accion=getCodigos').then(r=>r.json()).catch(()=>({codigos:{}})),
-                fetch(URL_WEB_APP + '?accion=getProductos').then(r=>r.json()).catch(()=>({productos:[]}))
-            ]);
-            codigosValidos     = resCods.codigos || {};
-            categoriasData     = (resCats.categorias || []).filter(c => c.activo);
-            todosLosProductos  = resProd.productos || [];
-            renderCategoriasIniciales();
-        }
-
-        function renderCategoriasIniciales() {
-            const principales = categoriasData.filter(c => c.tipoServicio === 'Principal');
-            const grid = document.getElementById('grid-categorias-principales');
-
-            if(!principales.length) {
-                grid.innerHTML = `
-                <button onclick="showSubCategory()" style="background:#001e85;" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-blue-400/20">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">
-                        <svg viewBox="0 0 24 24" class="w-10 h-10 fill-white"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4-15h-2v2h2V4zm-2 15h2v-2h-2v2zm1.25-11L9 11h3l-1.25 3L14 10h-3l1.25-3z"/></svg>
-                    </div>
-                    <div>
-                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Recargas Móviles</p>
-                        <p class="text-xs text-blue-200 uppercase tracking-widest mt-1 font-bold">Saldo y Paquetes</p>
-                    </div>
-                </button>
-                <button onclick="showStep(2,'juegos')" style="background:#f7941d;" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-orange-400/20">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-black/10 rounded-2xl">
-                        <span class="text-4xl md:text-5xl">🎮</span>
-                    </div>
-                    <div>
-                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Videojuegos</p>
-                        <p class="text-xs text-orange-100 uppercase tracking-widest mt-1 font-bold">Diamantes y Monedas</p>
-                    </div>
-                </button>`;
-                return;
-            }
-
-            grid.innerHTML = principales.map(c => {
-                const icono = c.icono && c.icono.includes('.')
-                    ? `<img src="${c.icono}" class="w-10 h-10 object-contain">`
-                    : `<span class="text-4xl md:text-5xl">${c.icono || '📦'}</span>`;
-                const accion = c.tipo === 'Recarga' ? `showSubCategory()` : `showStep(2,'juegos')`;
-                return `
-                <button onclick="${accion}" style="background:${c.colorFondo||'#1a1a2e'};" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-white/10">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">${icono}</div>
-                    <div>
-                        <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">${c.nombre}</p>
-                        <p class="text-xs text-white/70 uppercase tracking-widest mt-1 font-bold">${c.descripcion||''}</p>
-                    </div>
-                </button>`;
-            }).join('');
-        }
-
-        // Slider
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        function nextSlide() {
-            if(slides.length > 0) {
-                slides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % slides.length;
-                slides[currentSlide].classList.add('active');
-            }
-        }
-        setInterval(nextSlide, 4000);
-
-        // Menú
-        function toggleMenu() { document.getElementById('menu-panel').classList.toggle('open'); }
-        function closeMenu()  { document.getElementById('menu-panel').classList.remove('open'); }
-        document.addEventListener('click', e => {
-            if(!e.target.closest('#menu-panel') && !e.target.closest('button[onclick="toggleMenu()"]')) closeMenu();
+        // Carga en paralelo — sin bloquear la UI
+        Promise.all([
+            fetch(URL_WEB_APP+'?accion=getCodigos').then(r=>r.json()).catch(()=>({codigos:{}})),
+            fetch(URL_WEB_APP+'?accion=getProductos').then(r=>r.json()).catch(()=>({productos:[]})),
+            fetch(URL_WEB_APP+'?accion=getCategorias').then(r=>r.json()).catch(()=>({categorias:[]}))
+        ]).then(([rc,rp,rcat]) => {
+            codigosValidos    = rc.codigos   || {};
+            todosLosProductos = rp.productos || [];
+            categoriasData    = (rcat.categorias||[]).filter(c=>c.activo);
         });
 
-        // Navegación
-        function hideAllSteps() {
-            ['step-1','step-sub','step-2','step-paquetes','step-3'].forEach(id =>
-                document.getElementById(id)?.classList.add('step-hidden'));
+        // HERO
+        let slide=0;
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        const heroDots   = document.querySelectorAll('.hero-dot');
+        function goSlide(n) {
+            heroSlides[slide].classList.remove('active'); heroDots[slide].classList.remove('active');
+            slide=n; heroSlides[slide].classList.add('active'); heroDots[slide].classList.add('active');
         }
-        function showSubCategory() {
-            hideAllSteps();
-            document.getElementById('step-sub').classList.remove('step-hidden');
-            window.scrollTo(0,0);
-        }
+        setInterval(()=>goSlide((slide+1)%heroSlides.length), 4500);
 
-        function showStep(step, type='', subType='') {
-            hideAllSteps();
-            document.getElementById('step-' + step).classList.remove('step-hidden');
-            const backBtn = document.getElementById('btn-back-step2');
+        // MENÚ
+        function toggleMenu(){ document.getElementById('menu-panel').classList.toggle('open'); }
+        function closeMenu(){ document.getElementById('menu-panel').classList.remove('open'); }
+        document.addEventListener('click', e=>{ if(!e.target.closest('#menu-panel')&&!e.target.closest('button[onclick="toggleMenu()"]')) closeMenu(); });
 
-            if(type === 'recargas') {
-                currentOrder.categoria = subType;
-                document.getElementById('title-step-2').innerText = 'Elige Operadora';
-                backBtn.onclick = () => showSubCategory();
+        // STEPS
+        function hideAll(){ ['step-1','step-sub','step-2','step-paquetes','step-3'].forEach(id=>document.getElementById(id)?.classList.add('step-hidden')); }
+        function showSubCategory(){ hideAll(); document.getElementById('step-sub').classList.remove('step-hidden'); window.scrollTo(0,0); }
+
+        function showStep(step, type, subType='') {
+            hideAll(); document.getElementById('step-'+step).classList.remove('step-hidden');
+            const bb = document.getElementById('btn-back-step2');
+            if(type==='recargas'){
+                currentOrder.categoria=subType;
+                document.getElementById('title-step-2').innerText='Elige Operadora';
+                bb.onclick=()=>showSubCategory();
                 renderMarcas('Operadora');
-            } else if(type === 'juegos') {
-                currentOrder.categoria = 'Juegos';
-                document.getElementById('title-step-2').innerText = 'Videojuegos';
-                backBtn.onclick = () => goBack(1);
+            } else if(type==='juegos'){
+                currentOrder.categoria='Juegos';
+                document.getElementById('title-step-2').innerText='Videojuegos';
+                bb.onclick=()=>goBack(1);
                 renderMarcas('SubCategoria');
             }
             window.scrollTo(0,0);
         }
 
-        // ✅ Renderiza marcas desde caché — instantáneo
-        function renderMarcas(tipoServicio) {
-            const grid = document.getElementById('grid-options');
-            const marcas = categoriasData.filter(c => c.tipoServicio === tipoServicio && c.activo);
+        const fallback = {
+            Operadora:[
+                {nombre:'Claro',icono:'claro.webp'},{nombre:'Movistar',icono:'movistar.webp'},
+                {nombre:'CNT',icono:'cnt.webp'},{nombre:'Tuenti',icono:'tuenti.webp'},
+                {nombre:'Aki Móvil',icono:'akimovil (1).webp'},{nombre:'Maxi Plus',icono:'maxiplus.webp'}
+            ],
+            SubCategoria:[{nombre:'Free Fire',icono:'freefireid.webp'}]
+        };
 
-            if(!marcas.length) {
-                grid.innerHTML = '<p class="col-span-4 text-center text-zinc-500 py-10">Sin categorías disponibles</p>';
-                return;
-            }
-            grid.innerHTML = marcas.map(m => {
-                const img = m.icono && m.icono.includes('.')
-                    ? `<img src="${m.icono}" alt="${m.nombre}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform rounded-xl">`
-                    : `<span class="text-4xl">${m.icono||'📦'}</span>`;
-                return `
-                <button onclick="handleBrandSelection('${m.nombre}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">${img}</div>
-                    <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${m.nombre}</span>
+        function renderMarcas(tipo) {
+            const grid = document.getElementById('grid-options');
+            let marcas = categoriasData.filter(c=>c.tipoServicio===tipo&&c.activo);
+            if(!marcas.length) marcas = (fallback[tipo]||[]).map(m=>({...m,activo:true,tipoServicio:tipo}));
+            grid.innerHTML = marcas.map(m=>{
+                const img = m.icono&&m.icono.includes('.')
+                    ? `<img src="${m.icono}" alt="${m.nombre}" style="max-width:56px;max-height:56px;object-fit:contain;">`
+                    : `<span style="font-size:32px;">${m.icono||'📦'}</span>`;
+                return `<button class="brand-card" onclick="handleBrandSelection('${m.nombre}')">
+                    <div style="height:56px;display:flex;align-items:center;justify-content:center;">${img}</div>
+                    <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;">${m.nombre}</span>
                 </button>`;
             }).join('');
         }
 
         function handleBrandSelection(brand) {
-            currentOrder.marca = brand;
-            // ✅ Recargas → checkout directo | Paquetes y Juegos → mostrar lista de paquetes
-            if(currentOrder.categoria === 'Recargas') {
-                selectBrand(brand, false);
-            } else {
-                // Paquetes de operadora O paquetes de juego — ambos muestran lista
-                showPaquetesList(brand);
-            }
+            currentOrder.marca=brand;
+            if(currentOrder.categoria==='Recargas') selectBrand(brand,false);
+            else showPaquetesList(brand);
         }
 
-        // ✅ Usa caché local — sin llamada extra al Sheets
         function showPaquetesList(brand) {
-            hideAllSteps();
-            document.getElementById('step-paquetes').classList.remove('step-hidden');
-            document.getElementById('title-paquetes').innerText = (currentOrder.categoria === 'Juegos' ? '' : 'Paquetes ') + brand;
-
-            // Botón regresar según desde dónde viene
-            const btnBack = document.getElementById('btn-back-paquetes');
-            if(currentOrder.categoria === 'Juegos') {
-                btnBack.onclick = () => showStep(2,'juegos');
-            } else {
-                btnBack.onclick = () => showStep(2,'recargas', currentOrder.categoria);
-            }
-
+            hideAll(); document.getElementById('step-paquetes').classList.remove('step-hidden');
+            document.getElementById('title-paquetes').innerText = brand;
+            const bb = document.getElementById('btn-back-paquetes');
+            bb.onclick = currentOrder.categoria==='Juegos' ? ()=>showStep(2,'juegos') : ()=>showStep(2,'recargas',currentOrder.categoria);
             const container = document.getElementById('lista-paquetes');
-
-            // ✅ Filtrar desde caché — instantáneo, sin fetch
-            const productos = todosLosProductos.filter(p =>
-                p.categoria.trim().toLowerCase() === brand.trim().toLowerCase() && p.activo
-            );
-
-            container.innerHTML = '';
-
-            if(!productos.length) {
-                container.innerHTML = '<p class="text-center text-zinc-500 py-10 col-span-2">Sin paquetes disponibles</p>';
-                window.scrollTo(0,0);
-                return;
-            }
-
-            productos.forEach(p => {
-                const btn = document.createElement('button');
-                btn.className = "bg-zinc-900 border border-zinc-800 p-5 rounded-3xl text-left hover:border-blue-500 transition-all flex justify-between items-center group w-full";
-                const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
-                btn.innerHTML = `
-                    <div class="pr-4">
-                        <p class="font-black text-sm md:text-base uppercase italic text-white">${p.nombre}</p>
-                        <p class="text-[10px] md:text-xs text-zinc-500 uppercase leading-tight mt-1 font-bold">${p.descripcion}</p>
+            const prods = todosLosProductos.filter(p=>p.categoria.trim().toLowerCase()===brand.trim().toLowerCase()&&p.activo);
+            if(!prods.length){ container.innerHTML='<p style="text-align:center;color:#475569;padding:40px;">Sin paquetes disponibles</p>'; window.scrollTo(0,0); return; }
+            container.innerHTML='';
+            prods.forEach(p=>{
+                const btn=document.createElement('button'); btn.className='paquete-card';
+                const tieneDesc=parseFloat(p.precioNormal)>parseFloat(p.precioDesc);
+                btn.innerHTML=`
+                    <div style="flex:1;padding-right:14px;text-align:left;">
+                        <p style="font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:-0.3px;color:white;">${p.nombre}</p>
+                        <p style="font-size:10px;color:#475569;font-weight:700;margin-top:4px;line-height:1.5;">${p.descripcion}</p>
                     </div>
-                    <div class="text-right min-w-[70px]">
-                        ${tieneDesc ? `<p class="text-[10px] text-zinc-600 line-through font-bold">$${parseFloat(p.precioNormal).toFixed(2)}</p>` : ''}
-                        <p class="text-lg font-black text-green-500">$${parseFloat(p.precioDesc).toFixed(2)}</p>
+                    <div style="text-align:right;min-width:75px;">
+                        ${tieneDesc?`<p style="font-size:11px;color:#334155;text-decoration:line-through;font-weight:700;">$${parseFloat(p.precioNormal).toFixed(2)}</p>`:''}
+                        <p style="font-size:20px;font-weight:900;color:#4ade80;">$${parseFloat(p.precioDesc).toFixed(2)}</p>
                     </div>`;
-                btn.addEventListener('click', () => selectPaquete(p.nombre, p.precioDesc, p.descripcion));
+                btn.addEventListener('click',()=>selectPaquete(p.nombre,p.precioDesc,p.descripcion));
                 container.appendChild(btn);
             });
             window.scrollTo(0,0);
         }
 
-        function selectPaquete(nombre, precio, detalle) {
-            currentOrder.paqueteNombre = nombre;
-            currentOrder.monto = parseFloat(precio);
-            currentOrder.detalleCompleto = detalle;
-            selectBrand(currentOrder.marca, true);
+        function selectPaquete(nombre,precio,detalle){ currentOrder.paqueteNombre=nombre; currentOrder.monto=parseFloat(precio); currentOrder.detalleCompleto=detalle; selectBrand(currentOrder.marca,true); }
+
+        function selectBrand(brand,comesFromPaquete=false){
+            currentOrder.marca=brand; currentOrder.descuentoAplicado=0; currentOrder.codigoUsado='SISTEMA';
+            const pi=document.getElementById('promo-code'); const pm=document.getElementById('promo-msg');
+            if(pi) pi.value=''; if(pm){pm.innerText='';pm.className='hidden';}
+            document.getElementById('brand-selected').innerText=brand;
+            const dl=document.getElementById('paquete-detalle-final'); const b3=document.getElementById('btn-back-step3');
+            if(comesFromPaquete){dl.innerText=currentOrder.detalleCompleto;b3.onclick=()=>showPaquetesList(brand);}
+            else{dl.innerText=currentOrder.categoria;b3.onclick=()=>goBack(2);currentOrder.paqueteNombre=null;currentOrder.monto=0;}
+            const isRec=currentOrder.categoria==='Recargas'||currentOrder.categoria==='Paquetes';
+            document.getElementById('seccion-cupon').classList.toggle('hidden',currentOrder.categoria!=='Juegos');
+            document.getElementById('form-fields').innerHTML=`
+                <div><label style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:#64748b;display:block;margin-bottom:8px;">${isRec?'Número de Celular':'ID de Jugador'}</label>
+                <input type="${isRec?'tel':'text'}" id="input-id" class="field-input" placeholder="${isRec?'09xxxxxxxx':'Ingresa tu ID'}"></div>
+                ${!comesFromPaquete?`<div><label style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:2px;color:#64748b;display:block;margin-bottom:8px;">${isRec?'Monto ($)':'Cantidad ($)'}</label>
+                <input type="number" id="input-monto" min="0.01" step="0.01" oninput="actualizarCheckout()" class="field-input" placeholder="0.00"></div>`:''}`;
+            hideAll(); document.getElementById('step-3').classList.remove('step-hidden'); actualizarCheckout(); window.scrollTo(0,0);
         }
 
-        function selectBrand(brand, comesFromPaquete=false) {
-            currentOrder.marca = brand;
-            currentOrder.descuentoAplicado = 0;
-            currentOrder.codigoUsado = 'SISTEMA';
-            const promoInput = document.getElementById('promo-code');
-            const promoMsg   = document.getElementById('promo-msg');
-            if(promoInput) promoInput.value = '';
-            if(promoMsg) { promoMsg.innerText=''; promoMsg.className='text-[10px] mt-2 font-bold uppercase hidden'; }
-
-            document.getElementById('brand-selected').innerText = brand;
-            const detailLabel  = document.getElementById('paquete-detalle-final');
-            const backBtnStep3 = document.getElementById('btn-back-step3');
-
-            if(comesFromPaquete) {
-                detailLabel.innerText = currentOrder.detalleCompleto;
-                backBtnStep3.onclick = () => showPaquetesList(brand);
-            } else {
-                detailLabel.innerText = currentOrder.categoria;
-                backBtnStep3.onclick = () => goBack(2);
-                currentOrder.paqueteNombre = null;
-                currentOrder.monto = 0;
-            }
-
-            const isRecarga = (currentOrder.categoria==='Recargas' || currentOrder.categoria==='Paquetes');
-            const isJuego   = (currentOrder.categoria==='Juegos');
-            document.getElementById('seccion-cupon').classList.toggle('hidden', !isJuego);
-
-            document.getElementById('form-fields').innerHTML = `
-                <div class="space-y-2 text-left">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Número de Celular' : 'ID de Jugador'}</label>
-                    <input type="${isRecarga ? 'tel' : 'text'}" id="input-id" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="${isRecarga ? '09xxxxxxxx' : 'ID del juego'}">
-                </div>
-                ${!comesFromPaquete ? `<div class="space-y-2 text-left">
-                    <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">${isRecarga ? 'Monto de Recarga ($)' : 'Cantidad ($)'}</label>
-                    <input type="number" id="input-monto" min="0.01" step="0.01" oninput="actualizarCheckout()" class="w-full bg-zinc-900 border border-zinc-800 p-5 rounded-2xl text-white outline-none focus:ring-2 focus:ring-blue-600" placeholder="0.00">
-                </div>` : ''}`;
-
-            hideAllSteps();
-            document.getElementById('step-3').classList.remove('step-hidden');
-            actualizarCheckout();
-            window.scrollTo(0,0);
-        }
-
-        function validarCodigo() {
-            const input = document.getElementById('promo-code').value.toUpperCase().trim();
-            const msg   = document.getElementById('promo-msg');
-            if(codigosValidos[input] !== undefined) {
-                currentOrder.descuentoAplicado = Number(codigosValidos[input]);
-                currentOrder.codigoUsado = input;
-                msg.innerText = '¡Código ' + input + ' aplicado! Descuento de $' + currentOrder.descuentoAplicado.toFixed(2);
-                msg.className = "text-[10px] mt-2 font-bold uppercase text-green-500 block";
-            } else {
-                currentOrder.descuentoAplicado = 0;
-                currentOrder.codigoUsado = 'SISTEMA';
-                msg.innerText = "Código no válido";
-                msg.className = "text-[10px] mt-2 font-bold uppercase text-red-500 block";
+        function validarCodigo(){
+            const input=document.getElementById('promo-code').value.toUpperCase().trim();
+            const msg=document.getElementById('promo-msg');
+            if(codigosValidos[input]!==undefined){
+                currentOrder.descuentoAplicado=Number(codigosValidos[input]);currentOrder.codigoUsado=input;
+                msg.innerText='✅ Código '+input+' aplicado — $'+currentOrder.descuentoAplicado.toFixed(2)+' de descuento';
+                msg.style.color='#4ade80';msg.className='';
+            }else{
+                currentOrder.descuentoAplicado=0;currentOrder.codigoUsado='SISTEMA';
+                msg.innerText='❌ Código no válido';msg.style.color='#f87171';msg.className='';
             }
             actualizarCheckout();
         }
 
-        function actualizarCheckout() {
-            const inputMonto = document.getElementById('input-monto');
-            let subtotal  = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value)||0);
-            let totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
-            document.getElementById('resumen-subtotal').innerText  = '$' + subtotal.toFixed(2);
-            document.getElementById('resumen-descuento').innerText = '-$' + currentOrder.descuentoAplicado.toFixed(2);
-            document.getElementById('resumen-total').innerText     = '$' + totalFinal.toFixed(2);
-            document.getElementById('resumen-desc-row').classList.toggle('hidden', currentOrder.descuentoAplicado <= 0);
+        function actualizarCheckout(){
+            const im=document.getElementById('input-monto');
+            let sub=currentOrder.paqueteNombre?currentOrder.monto:(parseFloat(im?.value)||0);
+            let tot=Math.max(sub-currentOrder.descuentoAplicado,0);
+            document.getElementById('resumen-subtotal').innerText='$'+sub.toFixed(2);
+            document.getElementById('resumen-descuento').innerText='-$'+currentOrder.descuentoAplicado.toFixed(2);
+            document.getElementById('resumen-total').innerText='$'+tot.toFixed(2);
+            document.getElementById('resumen-desc-row').style.display=currentOrder.descuentoAplicado>0?'flex':'none';
         }
 
-        function enviarPedido() {
-            const idInput    = document.getElementById('input-id');
-            const inputMonto = document.getElementById('input-monto');
-            const id         = idInput ? idInput.value.trim() : '';
-            const subtotal   = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value)||0);
-            const totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
-            const isRecarga  = (currentOrder.categoria==='Recargas' || currentOrder.categoria==='Paquetes');
-
-            if(!id) { alert('Por favor ingresa tu número de celular o ID de jugador.'); idInput?.focus(); return; }
-            if(isRecarga && !/^09\d{8}$/.test(id)) { alert('Ingresa un número válido (debe empezar con 09 y tener 10 dígitos).'); idInput?.focus(); return; }
-            if(subtotal <= 0) { alert('Por favor ingresa un monto válido mayor a $0.00.'); inputMonto?.focus(); return; }
-
-            const btn = document.getElementById('btn-confirmar');
-            btn.disabled = true; btn.innerText = 'Enviando...';
-            btn.classList.add('opacity-60','cursor-not-allowed');
-
-            const datosExcel = {
-                fecha: new Date().toLocaleString(), cliente: id,
-                servicio: currentOrder.categoria, marca: currentOrder.marca,
-                monto: subtotal.toFixed(2), codigo: currentOrder.codigoUsado,
-                descuento: currentOrder.descuentoAplicado.toFixed(2),
-                total: totalFinal.toFixed(2), estado: "PENDIENTE"
-            };
-
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = URL_WEB_APP + '?datos=' + encodeURIComponent(JSON.stringify(datosExcel));
-            document.body.appendChild(iframe);
-            setTimeout(() => { try { document.body.removeChild(iframe); } catch(e){} }, 5000);
-
-            setTimeout(() => {
-                btn.disabled = false; btn.innerText = 'Confirmar pedido';
-                btn.classList.remove('opacity-60','cursor-not-allowed');
-            }, 3000);
-
-            const detalleExtra = currentOrder.detalleCompleto
-                ? '\n*Paquete:* ' + currentOrder.paqueteNombre + '\n*Detalle:* ' + currentOrder.detalleCompleto : '';
-            const msg = '¡Hola Rexpres Play! 🚀\n\n*Servicio:* ' + currentOrder.categoria + detalleExtra +
-                '\n*Marca:* ' + currentOrder.marca + '\n*Número/ID:* ' + id +
-                '\n*Subtotal:* $' + subtotal.toFixed(2) +
-                '\n*Código:* ' + currentOrder.codigoUsado +
-                '\n*Total Final:* $' + totalFinal.toFixed(2);
-            window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+        function enviarPedido(){
+            const ii=document.getElementById('input-id');const im=document.getElementById('input-monto');
+            const id=ii?ii.value.trim():'';
+            const sub=currentOrder.paqueteNombre?currentOrder.monto:(parseFloat(im?.value)||0);
+            const tot=Math.max(sub-currentOrder.descuentoAplicado,0);
+            const isRec=currentOrder.categoria==='Recargas'||currentOrder.categoria==='Paquetes';
+            if(!id){alert('Por favor ingresa tu número de celular o ID.');ii?.focus();return;}
+            if(isRec&&!/^09\d{8}$/.test(id)){alert('Número inválido — debe empezar con 09 y tener 10 dígitos.');ii?.focus();return;}
+            if(sub<=0){alert('Por favor ingresa un monto mayor a $0.00.');im?.focus();return;}
+            const btn=document.getElementById('btn-confirmar');
+            btn.disabled=true;btn.innerText='⏳ Enviando...';btn.style.opacity='.7';
+            const datos={fecha:new Date().toLocaleString(),cliente:id,servicio:currentOrder.categoria,marca:currentOrder.marca,monto:sub.toFixed(2),codigo:currentOrder.codigoUsado,descuento:currentOrder.descuentoAplicado.toFixed(2),total:tot.toFixed(2),estado:'PENDIENTE'};
+            const ifr=document.createElement('iframe');ifr.style.display='none';
+            ifr.src=URL_WEB_APP+'?datos='+encodeURIComponent(JSON.stringify(datos));
+            document.body.appendChild(ifr);
+            setTimeout(()=>{try{document.body.removeChild(ifr);}catch(e){}},5000);
+            setTimeout(()=>{btn.disabled=false;btn.innerText='✅ Confirmar pedido';btn.style.opacity='1';},3000);
+            const det=currentOrder.detalleCompleto?'\n*Paquete:* '+currentOrder.paqueteNombre+'\n*Detalle:* '+currentOrder.detalleCompleto:'';
+            const msg='¡Hola Rexpres Play! 🚀\n\n*Servicio:* '+currentOrder.categoria+det+'\n*Marca:* '+currentOrder.marca+'\n*Número/ID:* '+id+'\n*Subtotal:* $'+sub.toFixed(2)+'\n*Código:* '+currentOrder.codigoUsado+'\n*Total Final:* $'+tot.toFixed(2);
+            window.open('https://wa.me/593992225484?text='+encodeURIComponent(msg));
         }
 
-        function goBack(step) {
-            hideAllSteps();
+        function goBack(step){
+            hideAll();
             if(step===1) document.getElementById('step-1').classList.remove('step-hidden');
-            else if(step===2) showStep(2, currentOrder.categoria==='Juegos' ? 'juegos' : 'recargas', currentOrder.categoria);
+            else if(step===2) showStep(2,currentOrder.categoria==='Juegos'?'juegos':'recargas',currentOrder.categoria);
         }
-
-        init();
     </script>
 </body>
 </html>
