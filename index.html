@@ -21,8 +21,6 @@
         }
         .slide.active { opacity: 1; }
         .order-summary { background: rgba(255,255,255,0.03); border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
-
-        /* Menú */
         .menu-panel {
             display: none; position: absolute; right: 0; top: calc(100% + 10px);
             background: #111; border: 1px solid #222; border-radius: 1rem;
@@ -39,19 +37,12 @@
         .menu-item:last-child { border-bottom: none; }
         .menu-item:hover { background: #1a1a1a; }
         .menu-separator { padding: 8px 20px 4px; font-size: 9px; color: #555; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; background: #0a0a0a; }
-
-        /* Modales */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
-        .modal-overlay.open { display: flex; }
-
-        /* Skeleton loader */
-        .skeleton { background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 1rem; }
+        .skeleton { background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 1rem; }
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     </style>
 </head>
 <body class="bg-black">
 
-    <!-- HEADER -->
     <header class="p-4 bg-black border-b border-zinc-800 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <img src="logo.png" alt="Rexpres Play" class="h-10 md:h-14 w-auto cursor-pointer" onclick="goBack(1)">
@@ -63,53 +54,22 @@
                         Menú
                     </button>
                     <div class="menu-panel" id="menu-panel">
+                        <!-- ✅ Directo a la tienda, sin modal -->
                         <button class="menu-item" onclick="goBack(1); closeMenu()">🏠 &nbsp;Tienda</button>
                         <div class="menu-separator">Acceso</div>
-                        <button class="menu-item" onclick="abrirLogin('admin'); closeMenu()">🛡️ &nbsp;Admin</button>
-                        <button class="menu-item" onclick="abrirLogin('afiliado'); closeMenu()">🤝 &nbsp;Afiliado</button>
+                        <!-- ✅ Directo a admin.html sin modal -->
+                        <button class="menu-item" onclick="window.location.href='admin.html'">🛡️ &nbsp;Admin</button>
+                        <!-- ✅ Directo a afiliado.html sin modal -->
+                        <button class="menu-item" onclick="window.location.href='afiliado.html'">🤝 &nbsp;Afiliado</button>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- MODAL LOGIN ADMIN -->
-    <div class="modal-overlay" id="modal-admin">
-        <div class="card-rex p-8 rounded-3xl w-full max-w-sm border border-zinc-800">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xl font-black uppercase italic">🛡️ Administrador</h2>
-                <button onclick="cerrarLogin('admin')" class="text-zinc-500 hover:text-white text-2xl leading-none">✕</button>
-            </div>
-            <p class="text-zinc-600 text-[10px] uppercase font-bold tracking-widest mb-6">Acceso panel de control</p>
-            <div class="space-y-4">
-                <input type="text" id="admin-user" placeholder="Usuario administrador" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-                <input type="password" id="admin-pass" placeholder="Contraseña" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-blue-600 text-sm">
-                <p id="admin-error" class="text-red-500 text-[10px] font-bold uppercase hidden">Usuario o contraseña incorrectos</p>
-                <button onclick="loginAdmin()" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest text-sm transition-all">Entrar como Admin</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL LOGIN AFILIADO -->
-    <div class="modal-overlay" id="modal-afiliado">
-        <div class="card-rex p-8 rounded-3xl w-full max-w-sm border border-zinc-800">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xl font-black uppercase italic">🤝 Afiliado</h2>
-                <button onclick="cerrarLogin('afiliado')" class="text-zinc-500 hover:text-white text-2xl leading-none">✕</button>
-            </div>
-            <p class="text-zinc-600 text-[10px] uppercase font-bold tracking-widest mb-6">Acceso panel de afiliado</p>
-            <div class="space-y-4">
-                <input type="text" id="afil-user" placeholder="Código de afiliado" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-                <input type="password" id="afil-pass" placeholder="Contraseña" class="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-xl text-white outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-                <p id="afil-error" class="text-red-500 text-[10px] font-bold uppercase hidden">Código o contraseña incorrectos</p>
-                <button onclick="loginAfiliado()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-xl uppercase tracking-widest text-sm transition-all">Entrar como Afiliado</button>
-            </div>
-        </div>
-    </div>
-
     <main class="max-w-6xl mx-auto p-4 md:p-8">
 
-        <!-- STEP 1: INICIO -->
+        <!-- STEP 1 -->
         <section id="step-1">
             <div class="slider-container border border-zinc-800 shadow-2xl">
                 <div class="slide active" style="background-image: url('banner1.png');"></div>
@@ -119,15 +79,13 @@
                 <h2 class="text-2xl md:text-4xl font-black uppercase italic tracking-tighter text-white">¿Qué deseas realizar hoy?</h2>
                 <p class="text-zinc-500 text-xs md:text-base uppercase tracking-widest mt-2 font-bold italic">Selecciona un servicio</p>
             </div>
-            <!-- Categorías principales — se cargan desde Sheets -->
             <div id="grid-categorias-principales" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Skeletons mientras carga -->
                 <div class="skeleton h-40 rounded-3xl"></div>
                 <div class="skeleton h-40 rounded-3xl"></div>
             </div>
         </section>
 
-        <!-- STEP SUB: RECARGAS O PAQUETES -->
+        <!-- STEP SUB -->
         <section id="step-sub" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button onclick="goBack(1)" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
@@ -148,7 +106,7 @@
             </div>
         </section>
 
-        <!-- STEP 2: GRID DE MARCAS/JUEGOS -->
+        <!-- STEP 2: GRID MARCAS -->
         <section id="step-2" class="step-hidden">
             <div class="flex items-center justify-between mb-8">
                 <button id="btn-back-step2" class="text-zinc-400 hover:text-white transition flex items-center text-sm font-bold uppercase tracking-widest">
@@ -180,7 +138,6 @@
                 <p id="paquete-detalle-final" class="text-center text-blue-400 font-bold uppercase text-[10px] md:text-xs tracking-widest mb-8 leading-tight"></p>
                 <div id="form-fields" class="space-y-6"></div>
 
-                <!-- CUPÓN solo en Juegos -->
                 <div id="seccion-cupon" class="mt-8 pt-8 border-t border-zinc-800 hidden">
                     <label class="text-xs text-zinc-500 uppercase font-black tracking-widest ml-1">¿Tienes un código?</label>
                     <div class="flex gap-2 mt-2">
@@ -214,7 +171,8 @@
 
         let codigosValidos = {};
         let categoriasData = [];
-        let productosCache = {};
+        // ✅ Cache global de todos los productos cargados de una sola vez
+        let todosLosProductos = [];
 
         let currentOrder = {
             categoria:'', marca:'', paqueteNombre:null,
@@ -222,29 +180,17 @@
             descuentoAplicado:0, codigoUsado:'SISTEMA'
         };
 
-        // ── INICIALIZAR ────────────────────────
+        // ✅ Carga todo al inicio en paralelo — más rápido
         async function init() {
-            await Promise.all([cargarCategorias(), cargarCodigos()]);
-        }
-
-        async function cargarCodigos() {
-            try {
-                const r = await fetch(URL_WEB_APP + '?accion=getCodigos');
-                const d = await r.json();
-                if(d.codigos) codigosValidos = d.codigos;
-            } catch(e) {}
-        }
-
-        async function cargarCategorias() {
-            try {
-                const r = await fetch(URL_WEB_APP + '?accion=getCategorias');
-                const d = await r.json();
-                categoriasData = (d.categorias || []).filter(c => c.activo);
-                renderCategoriasIniciales();
-            } catch(e) {
-                // fallback si falla el Sheets
-                renderCategoriasIniciales();
-            }
+            const [resCats, resCods, resProd] = await Promise.all([
+                fetch(URL_WEB_APP + '?accion=getCategorias').then(r=>r.json()).catch(()=>({categorias:[]})),
+                fetch(URL_WEB_APP + '?accion=getCodigos').then(r=>r.json()).catch(()=>({codigos:{}})),
+                fetch(URL_WEB_APP + '?accion=getProductos').then(r=>r.json()).catch(()=>({productos:[]}))
+            ]);
+            codigosValidos     = resCods.codigos || {};
+            categoriasData     = (resCats.categorias || []).filter(c => c.activo);
+            todosLosProductos  = resProd.productos || [];
+            renderCategoriasIniciales();
         }
 
         function renderCategoriasIniciales() {
@@ -252,15 +198,14 @@
             const grid = document.getElementById('grid-categorias-principales');
 
             if(!principales.length) {
-                // Fallback con las 2 categorías originales
                 grid.innerHTML = `
                 <button onclick="showSubCategory()" style="background:#001e85;" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-blue-400/20">
                     <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">
-                        <svg viewBox="0 0 24 24" class="w-10 h-10 md:w-12 md:h-12 fill-white"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4-15h-2v2h2V4zm-2 15h2v-2h-2v2zm1.25-11L9 11h3l-1.25 3L14 10h-3l1.25-3z"/></svg>
+                        <svg viewBox="0 0 24 24" class="w-10 h-10 fill-white"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4-15h-2v2h2V4zm-2 15h2v-2h-2v2zm1.25-11L9 11h3l-1.25 3L14 10h-3l1.25-3z"/></svg>
                     </div>
                     <div>
                         <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Recargas Móviles</p>
-                        <p class="text-xs md:text-sm text-blue-200 uppercase tracking-widest mt-1 font-bold">Saldo y Paquetes</p>
+                        <p class="text-xs text-blue-200 uppercase tracking-widest mt-1 font-bold">Saldo y Paquetes</p>
                     </div>
                 </button>
                 <button onclick="showStep(2,'juegos')" style="background:#f7941d;" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-orange-400/20">
@@ -269,34 +214,29 @@
                     </div>
                     <div>
                         <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">Videojuegos</p>
-                        <p class="text-xs md:text-sm text-orange-100 uppercase tracking-widest mt-1 font-bold">Diamantes y Monedas</p>
+                        <p class="text-xs text-orange-100 uppercase tracking-widest mt-1 font-bold">Diamantes y Monedas</p>
                     </div>
                 </button>`;
                 return;
             }
 
             grid.innerHTML = principales.map(c => {
-                const color = c.colorFondo || '#1a1a2e';
-                const icono = c.icono && c.icono.includes('.') 
-                    ? `<img src="${c.icono}" class="w-10 h-10 md:w-12 md:h-12 object-contain">`
+                const icono = c.icono && c.icono.includes('.')
+                    ? `<img src="${c.icono}" class="w-10 h-10 object-contain">`
                     : `<span class="text-4xl md:text-5xl">${c.icono || '📦'}</span>`;
-                const accion = c.tipo === 'Recarga' 
-                    ? `showSubCategory()` 
-                    : `showStep(2,'juegos','${c.nombre}')`;
+                const accion = c.tipo === 'Recarga' ? `showSubCategory()` : `showStep(2,'juegos')`;
                 return `
-                <button onclick="${accion}" style="background:${color};" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-white/10">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">
-                        ${icono}
-                    </div>
+                <button onclick="${accion}" style="background:${c.colorFondo||'#1a1a2e'};" class="p-8 md:p-12 rounded-3xl flex items-center gap-6 hover:scale-[1.02] transition-all shadow-xl text-left border border-white/10">
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center bg-white/10 rounded-2xl">${icono}</div>
                     <div>
                         <p class="font-black text-xl md:text-3xl leading-tight text-white uppercase italic">${c.nombre}</p>
-                        <p class="text-xs md:text-sm text-white/70 uppercase tracking-widest mt-1 font-bold">${c.descripcion || ''}</p>
+                        <p class="text-xs text-white/70 uppercase tracking-widest mt-1 font-bold">${c.descripcion||''}</p>
                     </div>
                 </button>`;
             }).join('');
         }
 
-        // ── SLIDER ─────────────────────────────
+        // Slider
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         function nextSlide() {
@@ -308,54 +248,17 @@
         }
         setInterval(nextSlide, 4000);
 
-        // ── MENÚ ───────────────────────────────
+        // Menú
         function toggleMenu() { document.getElementById('menu-panel').classList.toggle('open'); }
-        function closeMenu() { document.getElementById('menu-panel').classList.remove('open'); }
-        document.addEventListener('click', function(e) {
-            if(!e.target.closest('#menu-panel') && !e.target.closest('button[onclick="toggleMenu()"]')) {
-                closeMenu();
-            }
+        function closeMenu()  { document.getElementById('menu-panel').classList.remove('open'); }
+        document.addEventListener('click', e => {
+            if(!e.target.closest('#menu-panel') && !e.target.closest('button[onclick="toggleMenu()"]')) closeMenu();
         });
 
-        // ── LOGIN ──────────────────────────────
-        function abrirLogin(tipo) { document.getElementById('modal-' + tipo).classList.add('open'); }
-        function cerrarLogin(tipo) {
-            document.getElementById('modal-' + tipo).classList.remove('open');
-            document.getElementById(tipo + '-error').classList.add('hidden');
-        }
-        async function loginAdmin() {
-            const u = document.getElementById('admin-user').value.trim();
-            const p = document.getElementById('admin-pass').value.trim();
-            try {
-                const r = await fetch(`${URL_WEB_APP}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
-                const d = await r.json();
-                if(d.ok && d.tipo === 'admin') {
-                    window.location.href = 'admin.html';
-                } else {
-                    document.getElementById('admin-error').classList.remove('hidden');
-                }
-            } catch(e) { document.getElementById('admin-error').classList.remove('hidden'); }
-        }
-        async function loginAfiliado() {
-            const u = document.getElementById('afil-user').value.trim();
-            const p = document.getElementById('afil-pass').value.trim();
-            try {
-                const r = await fetch(`${URL_WEB_APP}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
-                const d = await r.json();
-                if(d.ok && d.tipo === 'afiliado') {
-                    sessionStorage.setItem('afiliado_usuario', u);
-                    window.location.href = 'afiliado.html';
-                } else {
-                    document.getElementById('afil-error').classList.remove('hidden');
-                }
-            } catch(e) { document.getElementById('afil-error').classList.remove('hidden'); }
-        }
-
-        // ── NAVEGACIÓN ─────────────────────────
+        // Navegación
         function hideAllSteps() {
-            ['step-1','step-sub','step-2','step-paquetes','step-3'].forEach(id => {
-                document.getElementById(id)?.classList.add('step-hidden');
-            });
+            ['step-1','step-sub','step-2','step-paquetes','step-3'].forEach(id =>
+                document.getElementById(id)?.classList.add('step-hidden'));
         }
         function showSubCategory() {
             hideAllSteps();
@@ -363,7 +266,7 @@
             window.scrollTo(0,0);
         }
 
-        async function showStep(step, type='', subType='') {
+        function showStep(step, type='', subType='') {
             hideAllSteps();
             document.getElementById('step-' + step).classList.remove('step-hidden');
             const backBtn = document.getElementById('btn-back-step2');
@@ -372,73 +275,74 @@
                 currentOrder.categoria = subType;
                 document.getElementById('title-step-2').innerText = 'Elige Operadora';
                 backBtn.onclick = () => showSubCategory();
-                await renderMarcasDesdeSheets('Operadora');
+                renderMarcas('Operadora');
             } else if(type === 'juegos') {
                 currentOrder.categoria = 'Juegos';
                 document.getElementById('title-step-2').innerText = 'Videojuegos';
                 backBtn.onclick = () => goBack(1);
-                await renderMarcasDesdeSheets('SubCategoria');
+                renderMarcas('SubCategoria');
             }
             window.scrollTo(0,0);
         }
 
-        async function renderMarcasDesdeSheets(tipoServicio) {
+        // ✅ Renderiza marcas desde caché — instantáneo
+        function renderMarcas(tipoServicio) {
             const grid = document.getElementById('grid-options');
-            grid.innerHTML = '<div class="skeleton h-32 rounded-2xl col-span-2"></div><div class="skeleton h-32 rounded-2xl col-span-2"></div>';
-
             const marcas = categoriasData.filter(c => c.tipoServicio === tipoServicio && c.activo);
 
             if(!marcas.length) {
                 grid.innerHTML = '<p class="col-span-4 text-center text-zinc-500 py-10">Sin categorías disponibles</p>';
                 return;
             }
-
             grid.innerHTML = marcas.map(m => {
-                const imgOEmoji = m.icono && m.icono.includes('.')
+                const img = m.icono && m.icono.includes('.')
                     ? `<img src="${m.icono}" alt="${m.nombre}" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform rounded-xl">`
-                    : `<span class="text-4xl">${m.icono || '📦'}</span>`;
+                    : `<span class="text-4xl">${m.icono||'📦'}</span>`;
                 return `
                 <button onclick="handleBrandSelection('${m.nombre}')" class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl hover:border-white transition-all flex flex-col items-center gap-4 group">
-                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
-                        ${imgOEmoji}
-                    </div>
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">${img}</div>
                     <span class="font-bold uppercase text-[10px] md:text-xs tracking-widest text-zinc-400 group-hover:text-white">${m.nombre}</span>
                 </button>`;
             }).join('');
         }
 
-        async function handleBrandSelection(brand) {
+        function handleBrandSelection(brand) {
             currentOrder.marca = brand;
-            if(currentOrder.categoria === 'Paquetes') {
-                await showPaquetesList(brand);
-            } else {
+            // ✅ Recargas → checkout directo | Paquetes y Juegos → mostrar lista de paquetes
+            if(currentOrder.categoria === 'Recargas') {
                 selectBrand(brand, false);
+            } else {
+                // Paquetes de operadora O paquetes de juego — ambos muestran lista
+                showPaquetesList(brand);
             }
         }
 
-        async function showPaquetesList(brand) {
+        // ✅ Usa caché local — sin llamada extra al Sheets
+        function showPaquetesList(brand) {
             hideAllSteps();
             document.getElementById('step-paquetes').classList.remove('step-hidden');
-            document.getElementById('title-paquetes').innerText = 'Paquetes ' + brand;
-            document.getElementById('btn-back-paquetes').onclick = () => showStep(2,'recargas', currentOrder.categoria);
+            document.getElementById('title-paquetes').innerText = (currentOrder.categoria === 'Juegos' ? '' : 'Paquetes ') + brand;
 
-            const container = document.getElementById('lista-paquetes');
-            container.innerHTML = '<div class="skeleton h-20 rounded-2xl"></div><div class="skeleton h-20 rounded-2xl"></div>';
-
-            // Cargar productos desde Sheets si no están en caché
-            if(!productosCache[brand]) {
-                try {
-                    const r = await fetch(`${URL_WEB_APP}?accion=getProductos&categoria=${encodeURIComponent(brand)}`);
-                    const d = await r.json();
-                    productosCache[brand] = d.productos || [];
-                } catch(e) { productosCache[brand] = []; }
+            // Botón regresar según desde dónde viene
+            const btnBack = document.getElementById('btn-back-paquetes');
+            if(currentOrder.categoria === 'Juegos') {
+                btnBack.onclick = () => showStep(2,'juegos');
+            } else {
+                btnBack.onclick = () => showStep(2,'recargas', currentOrder.categoria);
             }
 
-            const productos = productosCache[brand];
+            const container = document.getElementById('lista-paquetes');
+
+            // ✅ Filtrar desde caché — instantáneo, sin fetch
+            const productos = todosLosProductos.filter(p =>
+                p.categoria.trim().toLowerCase() === brand.trim().toLowerCase() && p.activo
+            );
+
             container.innerHTML = '';
 
             if(!productos.length) {
                 container.innerHTML = '<p class="text-center text-zinc-500 py-10 col-span-2">Sin paquetes disponibles</p>';
+                window.scrollTo(0,0);
                 return;
             }
 
@@ -473,12 +377,12 @@
             currentOrder.descuentoAplicado = 0;
             currentOrder.codigoUsado = 'SISTEMA';
             const promoInput = document.getElementById('promo-code');
-            const promoMsg = document.getElementById('promo-msg');
+            const promoMsg   = document.getElementById('promo-msg');
             if(promoInput) promoInput.value = '';
             if(promoMsg) { promoMsg.innerText=''; promoMsg.className='text-[10px] mt-2 font-bold uppercase hidden'; }
 
             document.getElementById('brand-selected').innerText = brand;
-            const detailLabel = document.getElementById('paquete-detalle-final');
+            const detailLabel  = document.getElementById('paquete-detalle-final');
             const backBtnStep3 = document.getElementById('btn-back-step3');
 
             if(comesFromPaquete) {
@@ -513,7 +417,7 @@
 
         function validarCodigo() {
             const input = document.getElementById('promo-code').value.toUpperCase().trim();
-            const msg = document.getElementById('promo-msg');
+            const msg   = document.getElementById('promo-msg');
             if(codigosValidos[input] !== undefined) {
                 currentOrder.descuentoAplicado = Number(codigosValidos[input]);
                 currentOrder.codigoUsado = input;
@@ -530,7 +434,7 @@
 
         function actualizarCheckout() {
             const inputMonto = document.getElementById('input-monto');
-            let subtotal = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
+            let subtotal  = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value)||0);
             let totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
             document.getElementById('resumen-subtotal').innerText  = '$' + subtotal.toFixed(2);
             document.getElementById('resumen-descuento').innerText = '-$' + currentOrder.descuentoAplicado.toFixed(2);
@@ -542,7 +446,7 @@
             const idInput    = document.getElementById('input-id');
             const inputMonto = document.getElementById('input-monto');
             const id         = idInput ? idInput.value.trim() : '';
-            const subtotal   = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value) || 0);
+            const subtotal   = currentOrder.paqueteNombre ? currentOrder.monto : (parseFloat(inputMonto?.value)||0);
             const totalFinal = Math.max(subtotal - currentOrder.descuentoAplicado, 0);
             const isRecarga  = (currentOrder.categoria==='Recargas' || currentOrder.categoria==='Paquetes');
 
@@ -573,7 +477,6 @@
                 btn.classList.remove('opacity-60','cursor-not-allowed');
             }, 3000);
 
-            const numeroWhatsApp = "593992225484";
             const detalleExtra = currentOrder.detalleCompleto
                 ? '\n*Paquete:* ' + currentOrder.paqueteNombre + '\n*Detalle:* ' + currentOrder.detalleCompleto : '';
             const msg = '¡Hola Rexpres Play! 🚀\n\n*Servicio:* ' + currentOrder.categoria + detalleExtra +
@@ -590,7 +493,6 @@
             else if(step===2) showStep(2, currentOrder.categoria==='Juegos' ? 'juegos' : 'recargas', currentOrder.categoria);
         }
 
-        // Iniciar
         init();
     </script>
 </body>
