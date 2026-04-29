@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recargas — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+</head>
+<body>
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
+    <div class="di-sep">Acceso</div>
+    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
+    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+  </div>
+  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main>
+  <a class="back-btn" href="index.html">← Inicio</a>
+  <h2 class="pg-title">Recargas Móviles</h2>
+  <div class="subcats">
+    <a class="subcat" href="operadoras.html?tipo=Recargas">
+      <svg viewBox="0 0 24 24" style="width:38px;height:38px;fill:#3b82f6;"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4.25-11L10 11h3l-1.25 3L15 10h-3l1.25-3z"/></svg>
+      <span class="subcat-label">Recargas</span>
+      <span class="subcat-sub">Saldo directo</span>
+    </a>
+    <a class="subcat" href="operadoras.html?tipo=Paquetes">
+      <svg viewBox="0 0 24 24" style="width:38px;height:38px;fill:#f7941d;"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/></svg>
+      <span class="subcat-label">Paquetes</span>
+      <span class="subcat-sub">GB + llamadas</span>
+    </a>
+  </div>
+</main>
+
+<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<script src="rexpres.js"></script>
+</body>
+</html>
