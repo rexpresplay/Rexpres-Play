@@ -4,624 +4,102 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rexpres Play</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-:root{--or:#f7941d;--bl:#001e85;--bg:#09090f;--card:#131320;--card2:#1a1a28;--border:#21213a;--text:#e2e8f0;--muted:#64748b;}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;}
-
-/* DRAWER MENÚ LATERAL */
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
-.drawer-overlay.open{opacity:1;pointer-events:all;}
-.drawer{position:fixed;top:0;left:0;height:100vh;width:260px;background:#0e0e1a;border-right:1px solid var(--border);z-index:201;transform:translateX(-100%);transition:transform .3s ease;display:flex;flex-direction:column;}
-.drawer.open{transform:translateX(0);}
-.drawer-head{padding:24px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.drawer-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;}
-.drawer-nav{flex:1;padding:12px 0;overflow-y:auto;}
-.drawer-item{display:flex;align-items:center;gap:12px;width:100%;padding:14px 20px;background:none;border:none;color:#94a3b8;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:background .15s,color .15s;text-align:left;}
-.drawer-item:hover{background:rgba(255,255,255,.04);color:white;}
-.drawer-sep{padding:8px 20px 4px;font-size:9px;color:#334155;font-weight:800;letter-spacing:3px;text-transform:uppercase;}
-.drawer-foot{padding:16px 20px;border-top:1px solid var(--border);}
-
-/* HEADER */
-.hdr{position:sticky;top:0;z-index:100;background:rgba(9,9,15,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 16px;}
-.hdr-in{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
-.hdr-left{display:flex;align-items:center;gap:14px;}
-.burger{background:none;border:none;cursor:pointer;padding:6px;color:white;display:flex;align-items:center;}
-
-/* MAIN */
-main{max-width:900px;margin:0 auto;padding:20px 16px 80px;}
-.hidden{display:none!important;}
-
-/* HERO */
-.hero{position:relative;border-radius:18px;overflow:hidden;height:185px;margin-bottom:28px;background:var(--card);}
-@media(min-width:600px){.hero{height:310px;}}
-.h-slide{position:absolute;inset:0;opacity:0;transition:opacity 1s ease;background-size:cover;background-position:center;}
-.h-slide.on{opacity:1;}
-.h-ov{position:absolute;inset:0;background:linear-gradient(120deg,rgba(0,30,133,.5)0%,transparent 60%);}
-.h-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
-.h-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s;}
-.h-dot.on{width:20px;background:var(--or);}
-
-/* FEATURES STRIP */
-.features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;}
-.feat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;}
-.feat-icon{font-size:24px;}
-.feat-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:white;}
-.feat-desc{font-size:10px;color:var(--muted);font-weight:600;line-height:1.4;}
-
-/* SECCIÓN TÍTULO */
-.sec-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
-.sec-title{font-size:24px;font-weight:800;color:white;line-height:1.2;margin-bottom:20px;}
-
-/* TARJETAS CATEGORÍA */
-.cats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
-.cat{position:relative;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s;aspect-ratio:.9/1;}
-.cat:hover{transform:translateY(-3px);}
-.cat:active{transform:scale(.97);}
-.cat-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .4s;}
-.cat:hover .cat-bg{transform:scale(1.04);}
-.cat-ov{position:absolute;inset:0;}
-.cat-blue .cat-ov{background:linear-gradient(170deg,rgba(0,20,100,.92)0%,rgba(0,40,160,.6)100%);}
-.cat-orange .cat-ov{background:linear-gradient(170deg,rgba(140,60,0,.95)0%,rgba(247,148,29,.55)100%);}
-.cat-body{position:absolute;inset:0;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;}
-.cat-ico{font-size:32px;margin-bottom:6px;}
-.cat-name{font-size:16px;font-weight:800;color:white;line-height:1.2;}
-.cat-sub{font-size:10px;color:rgba(255,255,255,.6);font-weight:600;margin-top:2px;}
-.cat-badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;font-size:9px;font-weight:800;color:white;margin-top:8px;backdrop-filter:blur(4px);text-transform:uppercase;letter-spacing:1px;}
-
-/* SPINNER */
-.spinner-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 0;gap:16px;}
-.spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--or);border-radius:50%;animation:spin .75s linear infinite;}
-.spinner-text{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* BACK BTN */
-.back-btn{display:inline-flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border);padding:8px 14px;border-radius:10px;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:color .2s;margin-bottom:22px;}
-.back-btn:hover{color:white;}
-
-/* STEP HEADER */
-.step-hdr{margin-bottom:20px;}
-.step-hdr h2{font-size:20px;font-weight:800;color:white;}
-
-/* MARCAS GRID */
-.brands-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.brand-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s,transform .2s;}
-.brand-card:hover{border-color:var(--or);transform:translateY(-2px);}
-.brand-card:active{transform:scale(.96);}
-.brand-card img{width:50px;height:50px;object-fit:contain;}
-.brand-card span{font-size:10px;font-weight:700;color:#94a3b8;text-align:center;text-transform:uppercase;letter-spacing:.5px;}
-
-/* PAQUETES GRID — estilo bonoxs: grid 2 cols con precio destacado */
-.packs-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:700px;margin:0 auto;}
-@media(min-width:600px){.packs-grid{grid-template-columns:repeat(3,1fr);}}
-.pack{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:border-color .2s,transform .2s;text-align:center;gap:6px;}
-.pack:hover{border-color:var(--or);transform:translateY(-2px);}
-.pack:active{transform:scale(.97);}
-.pack-ico{font-size:28px;margin-bottom:2px;}
-.pack-name{font-size:12px;font-weight:800;color:white;line-height:1.3;}
-.pack-desc{font-size:10px;color:var(--muted);line-height:1.4;}
-.pack-old{font-size:10px;color:#334155;text-decoration:line-through;font-weight:700;margin-top:6px;}
-.pack-price{font-size:18px;font-weight:900;color:var(--or);}
-
-/* SUBCATS */
-.subcats{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:400px;margin:0 auto;}
-.subcat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s,transform .2s;}
-.subcat:hover{border-color:var(--or);transform:translateY(-2px);}
-.subcat:active{transform:scale(.96);}
-.subcat-label{font-size:13px;font-weight:800;color:white;text-transform:uppercase;letter-spacing:1px;}
-.subcat-sub{font-size:10px;color:var(--muted);}
-
-/* CHECKOUT */
-.checkout{background:var(--card);border:1px solid var(--border);border-radius:22px;width:100%;max-width:460px;margin:0 auto;overflow:hidden;}
-.co-hero{width:100%;height:120px;object-fit:cover;display:block;}
-.co-body{padding:24px;}
-.co-brand{font-size:22px;font-weight:900;color:white;margin-bottom:4px;}
-.co-detail{font-size:11px;color:#60a5fa;font-weight:600;line-height:1.6;margin-bottom:20px;}
-
-/* STEP PASOS */
-.step-box{background:var(--card2);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden;}
-.step-box-head{padding:16px 18px;display:flex;align-items:center;gap:12px;}
-.step-num{width:28px;height:28px;min-width:28px;border-radius:50%;background:var(--or);color:#000;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;}
-.step-box-title{font-size:14px;font-weight:800;color:white;}
-.step-box-body{padding:0 18px 18px;}
-.field-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block;}
-.field-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;padding:14px 16px;color:white;font-size:14px;outline:none;transition:border .2s;}
-.field-input:focus{border-color:var(--or);}
-
-/* CUPÓN */
-.cupon-box{background:rgba(247,148,29,.05);border:1px solid rgba(247,148,29,.2);border-radius:14px;padding:16px;margin-bottom:12px;}
-.cupon-label{font-size:10px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
-.cupon-row{display:flex;gap:8px;}
-.cupon-input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:white;font-size:13px;outline:none;text-transform:uppercase;transition:border .2s;}
-.cupon-input:focus{border-color:var(--or);}
-.cupon-btn{background:var(--or);color:#000;font-weight:900;font-size:11px;text-transform:uppercase;padding:0 16px;border-radius:10px;border:none;cursor:pointer;letter-spacing:1px;white-space:nowrap;}
-.cupon-msg{font-size:10px;font-weight:800;text-transform:uppercase;margin-top:8px;}
-
-/* RESUMEN */
-.summary{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;}
-.sum-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
-.sum-row:last-child{border:none;padding-top:12px;}
-.sum-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-.sum-val{font-size:13px;font-weight:800;color:#94a3b8;}
-.sum-total .sum-label{font-size:14px;color:white;font-weight:900;}
-.sum-total .sum-val{font-size:24px;color:var(--or);font-weight:900;}
-.sum-desc .sum-val{color:#4ade80;}
-
-/* BTN */
-.btn-ok{width:100%;background:linear-gradient(135deg,#16a34a,#22c55e);color:white;font-weight:900;padding:16px;border-radius:14px;font-size:14px;text-transform:uppercase;letter-spacing:2px;border:none;cursor:pointer;transition:opacity .2s,transform .2s;}
-.btn-ok:hover{opacity:.9;}
-.btn-ok:active{transform:scale(.98);}
-.btn-ok:disabled{opacity:.55;cursor:not-allowed;}
-.secure-note{text-align:center;font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:12px;}
-
-/* FOOTER */
-footer{text-align:center;padding:28px 16px;border-top:1px solid var(--border);margin-top:40px;}
-footer p{font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;}
-</style>
+<link rel="stylesheet" href="rexpres.css">
 </head>
 <body>
-
-<!-- DRAWER OVERLAY -->
-<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
-
-<!-- DRAWER LATERAL -->
+<div class="drawer-overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
     <img src="logo.png" alt="Rexpres Play" style="height:32px;">
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-nav">
-    <button class="drawer-item" onclick="goBack(1);closeDrawer()">🏠 &nbsp;Tienda</button>
-    <div class="drawer-sep">Acceso</div>
-    <button class="drawer-item" onclick="location.href='admin.html'">🛡️ &nbsp;Administrador</button>
-    <button class="drawer-item" onclick="location.href='afiliado.html'">🤝 &nbsp;Afiliado</button>
+    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
+    <div class="di-sep">Acceso</div>
+    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
+    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
   </div>
   <div class="drawer-foot">
-    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p>
   </div>
 </div>
 
-<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
-    <div class="hdr-left">
+    <div style="display:flex;align-items:center;gap:14px;">
       <button class="burger" onclick="openDrawer()">
         <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
       </button>
-      <img src="logo.png" alt="Rexpres Play" style="height:36px;cursor:pointer;" onclick="goBack(1)">
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
     </div>
     <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
   </div>
 </header>
 
 <main>
-
-  <!-- ── STEP 1: INICIO ── -->
-  <section id="s1">
-
-    <!-- HERO -->
-    <div class="hero">
-      <div class="h-slide on" style="background-image:url('banner1.png');"></div>
-      <div class="h-slide" style="background-image:url('banner2.png');"></div>
-      <div class="h-ov"></div>
-      <div class="h-dots">
-        <div class="h-dot on" onclick="goSlide(0)"></div>
-        <div class="h-dot" onclick="goSlide(1)"></div>
-      </div>
+  <div class="hero">
+    <div class="h-slide on" style="background-image:url('banner1.png');"></div>
+    <div class="h-slide" style="background-image:url('banner2.png');"></div>
+    <div class="h-ov"></div>
+    <div class="h-dots">
+      <div class="h-dot on" onclick="_goSlide(0)"></div>
+      <div class="h-dot" onclick="_goSlide(1)"></div>
     </div>
+  </div>
 
-    <!-- CATEGORÍAS -->
-    <p class="sec-label">¿Qué deseas hacer hoy?</p>
-    <h2 class="sec-title">Selecciona<br>un servicio</h2>
+  <p class="sec-label">¿Qué deseas hacer hoy?</p>
+  <h2 class="sec-title">Selecciona<br>un servicio</h2>
 
-    <div class="cats">
-      <button class="cat cat-blue" onclick="showSub()">
-        <div class="cat-bg" style="background-image:url('banner1.png');filter:brightness(.25);"></div>
-        <div class="cat-ov"></div>
-        <div class="cat-body">
-          <div class="cat-ico">📱</div>
-          <div class="cat-name">Recargas Móviles</div>
-          <div class="cat-sub">Saldo · Paquetes</div>
-          <span class="cat-badge">6 operadoras →</span>
-        </div>
-      </button>
-      <button class="cat cat-orange" onclick="showStep('juegos')">
-        <div class="cat-bg" style="background-image:url('freefireid.webp');filter:brightness(.2);"></div>
-        <div class="cat-ov"></div>
-        <div class="cat-body">
-          <div class="cat-ico">🎮</div>
-          <div class="cat-name">Videojuegos</div>
-          <div class="cat-sub">Diamantes · Gemas</div>
-          <span class="cat-badge">Ver juegos →</span>
-        </div>
-      </button>
+  <div class="cats">
+    <a class="cat cat-blue" href="recargas.html">
+      <div class="cat-bg" style="background-image:url('banner1.png');filter:brightness(.25);"></div>
+      <div class="cat-ov"></div>
+      <div class="cat-body">
+        <div class="cat-ico">📱</div>
+        <div class="cat-name">Recargas Móviles</div>
+        <div class="cat-sub">Saldo · Paquetes</div>
+        <span class="cat-badge">6 operadoras →</span>
+      </div>
+    </a>
+    <a class="cat cat-orange" href="juegos.html">
+      <div class="cat-bg" style="background-image:url('freefireid.webp');filter:brightness(.2);"></div>
+      <div class="cat-ov"></div>
+      <div class="cat-body">
+        <div class="cat-ico">🎮</div>
+        <div class="cat-name">Videojuegos</div>
+        <div class="cat-sub">Diamantes · Gemas</div>
+        <span class="cat-badge">Ver juegos →</span>
+      </div>
+    </a>
+  </div>
+
+  <p class="sec-label" style="text-align:center;margin-bottom:14px;">¿Por qué elegirnos?</p>
+  <div class="features">
+    <div class="feat">
+      <div class="feat-ico">🛡️</div>
+      <div class="feat-title">Atención personalizada</div>
+      <div class="feat-desc">Respondemos cada pedido directamente contigo</div>
     </div>
-
-    <!-- FEATURES — centrado, icono + título + descripción -->
-    <p class="sec-label" style="text-align:center;margin-bottom:16px;">¿Por qué elegirnos?</p>
-    <div class="features" style="grid-template-columns:1fr 1fr;margin-bottom:0;">
-      <div class="feat">
-        <div class="feat-icon">🛡️</div>
-        <div class="feat-title">Atención personalizada</div>
-        <div class="feat-desc">Respondemos cada pedido directamente contigo</div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">⚡</div>
-        <div class="feat-title">Entrega inmediata</div>
-        <div class="feat-desc">Tu recarga aplicada en minutos, sin esperas</div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">🔒</div>
-        <div class="feat-title">Pago seguro</div>
-        <div class="feat-desc">Confirmación vía WhatsApp antes de procesar</div>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">💰</div>
-        <div class="feat-title">Mejores precios</div>
-        <div class="feat-desc">Las tarifas más competitivas del mercado</div>
-      </div>
+    <div class="feat">
+      <div class="feat-ico">⚡</div>
+      <div class="feat-title">Entrega inmediata</div>
+      <div class="feat-desc">Tu recarga aplicada en minutos, sin esperas</div>
     </div>
-  </section>
-
-  <!-- ── STEP SUB ── -->
-  <section id="s-sub" class="hidden">
-    <button class="back-btn" onclick="goBack(1)">← Inicio</button>
-    <div class="step-hdr"><h2>¿Qué necesitas?</h2></div>
-    <div class="subcats">
-      <button class="subcat" onclick="showStep('recargas','Recargas')">
-        <svg viewBox="0 0 24 24" style="width:38px;height:38px;fill:#3b82f6;"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14zm-4.25-11L10 11h3l-1.25 3L15 10h-3l1.25-3z"/></svg>
-        <span class="subcat-label">Recargas</span>
-        <span class="subcat-sub">Saldo directo</span>
-      </button>
-      <button class="subcat" onclick="showStep('recargas','Paquetes')">
-        <svg viewBox="0 0 24 24" style="width:38px;height:38px;fill:#f7941d;"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/></svg>
-        <span class="subcat-label">Paquetes</span>
-        <span class="subcat-sub">GB + llamadas</span>
-      </button>
+    <div class="feat">
+      <div class="feat-ico">🔒</div>
+      <div class="feat-title">Pago seguro</div>
+      <div class="feat-desc">Confirmación vía WhatsApp antes de procesar</div>
     </div>
-  </section>
-
-  <!-- ── STEP MARCAS ── -->
-  <section id="s-marcas" class="hidden">
-    <button class="back-btn" id="bb-marcas">← Volver</button>
-    <div class="step-hdr"><h2 id="t-marcas"></h2></div>
-    <div id="grid-marcas" class="brands-grid">
-      <div class="spinner-wrap" style="grid-column:1/-1;">
-        <div class="spinner"></div>
-        <span class="spinner-text">Cargando...</span>
-      </div>
+    <div class="feat">
+      <div class="feat-ico">💰</div>
+      <div class="feat-title">Mejores precios</div>
+      <div class="feat-desc">Las tarifas más competitivas del mercado</div>
     </div>
-  </section>
-
-  <!-- ── STEP PAQUETES ── -->
-  <section id="s-packs" class="hidden">
-    <button class="back-btn" id="bb-packs">← Regresar</button>
-    <div class="step-hdr"><h2 id="t-packs"></h2></div>
-    <div id="grid-packs" class="packs-grid">
-      <div class="spinner-wrap" style="grid-column:1/-1;">
-        <div class="spinner"></div>
-        <span class="spinner-text">Cargando paquetes...</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── STEP CHECKOUT ── -->
-  <section id="s-co" class="hidden" style="display:flex;justify-content:center;">
-    <div class="checkout">
-      <div class="co-body">
-        <button class="back-btn" id="bb-co">← Regresar</button>
-        <div class="co-brand" id="co-brand"></div>
-        <div class="co-detail" id="co-detail"></div>
-
-        <!-- PASO 1: ID / Número -->
-        <div class="step-box">
-          <div class="step-box-head">
-            <div class="step-num">1</div>
-            <div>
-              <div class="step-box-title" id="co-step1-title">Ingresa tu número</div>
-              <div style="font-size:10px;color:var(--or);font-weight:700;margin-top:2px;">Datos del pedido</div>
-            </div>
-          </div>
-          <div class="step-box-body">
-            <div id="co-fields"></div>
-          </div>
-        </div>
-
-        <!-- PASO 2: Cupón (solo juegos) -->
-        <div id="co-cupon" class="cupon-box hidden">
-          <p class="cupon-label">🏷️ Código de descuento</p>
-          <div class="cupon-row">
-            <input type="text" id="promo-in" class="cupon-input" placeholder="Tu código aquí">
-            <button class="cupon-btn" onclick="aplicarCodigo()">Aplicar</button>
-          </div>
-          <p id="promo-msg" class="cupon-msg hidden"></p>
-        </div>
-
-        <!-- PASO 3: Resumen -->
-        <div class="step-box">
-          <div class="step-box-head">
-            <div class="step-num" style="background:#3b82f6;">3</div>
-            <div>
-              <div class="step-box-title">Confirmar pedido</div>
-              <div style="font-size:10px;color:var(--or);font-weight:700;margin-top:2px;">Precio final incluido</div>
-            </div>
-          </div>
-          <div class="step-box-body">
-            <div class="summary">
-              <div class="sum-row">
-                <span class="sum-label">Subtotal</span>
-                <span class="sum-val" id="s-sub-val">$0.00</span>
-              </div>
-              <div class="sum-row sum-desc" id="s-desc-row" style="display:none;">
-                <span class="sum-label" style="color:#4ade80;">Descuento</span>
-                <span class="sum-val" id="s-desc-val">-$0.00</span>
-              </div>
-              <div class="sum-row sum-total">
-                <span class="sum-label">Total</span>
-                <span class="sum-val" id="s-total-val">$0.00</span>
-              </div>
-            </div>
-            <button class="btn-ok" id="btn-ok" onclick="enviarPedido()">✅ Confirmar pedido</button>
-            <p class="secure-note">🔒 Confirmación segura vía WhatsApp</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
+  </div>
 </main>
 
-<footer>
-  <p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
-</footer>
-
-<script>
-const API="https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
-
-let codigos={},categorias=[],productos=[];
-let cargado=false;
-let ord={cat:'',marca:'',paqNombre:null,monto:0,detalle:'',desc:0,codigo:'SISTEMA'};
-
-// Fallback instantáneo para marcas
-const fbMarcas={
-  Operadora:[
-    {nombre:'Claro',icono:'claro.webp'},{nombre:'Movistar',icono:'movistar.webp'},
-    {nombre:'CNT',icono:'cnt.webp'},{nombre:'Tuenti',icono:'tuenti.webp'},
-    {nombre:'Aki Móvil',icono:'akimovil (1).webp'},{nombre:'Maxi Plus',icono:'maxiplus.webp'}
-  ],
-  SubCategoria:[{nombre:'Free Fire',icono:'freefireid.webp'}]
-};
-
-// Carga silenciosa en background
-Promise.all([
-  fetch(API+'?accion=getCodigos').then(r=>r.json()).catch(()=>({codigos:{}})),
-  fetch(API+'?accion=getProductos').then(r=>r.json()).catch(()=>({productos:[]})),
-  fetch(API+'?accion=getCategorias').then(r=>r.json()).catch(()=>({categorias:[]}))
-]).then(([rc,rp,rcat])=>{
-  codigos=rc.codigos||{};
-  productos=rp.productos||[];
-  categorias=(rcat.categorias||[]).filter(c=>c.activo);
-  cargado=true;
-}).catch(()=>{cargado=true;});
-
-// DRAWER
-function openDrawer(){
-  document.getElementById('drawer').classList.add('open');
-  document.getElementById('overlay').classList.add('open');
-}
-function closeDrawer(){
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
-}
-
-// HERO
-let sl=0;
-const hSlides=document.querySelectorAll('.h-slide');
-const hDots=document.querySelectorAll('.h-dot');
-function goSlide(n){
-  hSlides[sl].classList.remove('on');hDots[sl].classList.remove('on');
-  sl=n;hSlides[sl].classList.add('on');hDots[sl].classList.add('on');
-}
-setInterval(()=>goSlide((sl+1)%hSlides.length),4500);
-
-// PASOS
-const allSteps=['s1','s-sub','s-marcas','s-packs','s-co'];
-function hideAll(){allSteps.forEach(id=>document.getElementById(id)?.classList.add('hidden'));}
-function show(id){hideAll();document.getElementById(id)?.classList.remove('hidden');window.scrollTo(0,0);}
-
-function goBack(n){
-  if(n===1) show('s1');
-  else if(n===2){
-    if(ord.cat==='Juegos') showStep('juegos');
-    else showStep('recargas',ord.cat);
-  }
-}
-
-function showSub(){show('s-sub');}
-
-function showStep(tipo,subTipo=''){
-  if(tipo==='juegos'){
-    ord.cat='Juegos';
-    document.getElementById('t-marcas').innerText='Videojuegos';
-    document.getElementById('bb-marcas').onclick=()=>show('s1');
-    show('s-marcas');
-    renderMarcas('SubCategoria');
-  } else {
-    ord.cat=subTipo;
-    document.getElementById('t-marcas').innerText='Elige operadora';
-    document.getElementById('bb-marcas').onclick=()=>show('s-sub');
-    show('s-marcas');
-    renderMarcas('Operadora');
-  }
-}
-
-// MARCAS — instantáneo con fallback
-function renderMarcas(tipo){
-  const grid=document.getElementById('grid-marcas');
-  let marcas=cargado?categorias.filter(c=>c.tipoServicio===tipo&&c.activo):[];
-  if(!marcas.length) marcas=(fbMarcas[tipo]||[]).map(m=>({...m,activo:true}));
-
-  if(!marcas.length){
-    // Todavía cargando — mostrar spinner y reintentar
-    grid.innerHTML='<div class="spinner-wrap" style="grid-column:1/-1;"><div class="spinner"></div><span class="spinner-text">Cargando...</span></div>';
-    setTimeout(()=>renderMarcas(tipo),500);
-    return;
-  }
-
-  grid.innerHTML=marcas.map(m=>`
-    <button class="brand-card" onclick="selMarca('${m.nombre}')">
-      <img src="${m.icono}" alt="${m.nombre}" onerror="this.style.display='none'">
-      <span>${m.nombre}</span>
-    </button>`).join('');
-}
-
-function selMarca(marca){
-  ord.marca=marca;
-  if(ord.cat==='Recargas') irCheckout(marca,false);
-  else mostrarPaquetes(marca);
-}
-
-// PAQUETES con spinner
-function mostrarPaquetes(marca){
-  document.getElementById('t-packs').innerText=marca;
-  document.getElementById('bb-packs').onclick=
-    ord.cat==='Juegos'?()=>showStep('juegos'):()=>showStep('recargas',ord.cat);
-  show('s-packs');
-  const grid=document.getElementById('grid-packs');
-
-  function intentarRender(){
-    if(cargado){
-      renderPaquetes(marca,grid);
-    } else {
-      grid.innerHTML='<div class="spinner-wrap" style="grid-column:1/-1;"><div class="spinner"></div><span class="spinner-text">Cargando paquetes...</span></div>';
-      setTimeout(intentarRender,300);
-    }
-  }
-  intentarRender();
-}
-
-function renderPaquetes(marca,grid){
-  const prods=productos.filter(p=>
-    p.categoria.trim().toLowerCase()===marca.trim().toLowerCase()&&p.activo
-  );
-  if(!prods.length){
-    grid.innerHTML='<p style="text-align:center;color:var(--muted);padding:40px;grid-column:1/-1;">Sin paquetes disponibles</p>';
-    return;
-  }
-  grid.innerHTML='';
-  prods.forEach(p=>{
-    const btn=document.createElement('button');
-    btn.className='pack';
-    const tieneDesc=parseFloat(p.precioNormal)>parseFloat(p.precioDesc);
-    // Emoji según tipo
-    const ico=p.subTipo==='Diamantes'?'💎':p.subTipo==='Paquete'?'📦':'💳';
-    btn.innerHTML=`
-      <div class="pack-ico">${ico}</div>
-      <div class="pack-name">${p.nombre}</div>
-      <div class="pack-desc">${p.descripcion.length>60?p.descripcion.substring(0,60)+'...':p.descripcion}</div>
-      ${tieneDesc?`<div class="pack-old">$${parseFloat(p.precioNormal).toFixed(2)}</div>`:'<div style="margin-top:6px;"></div>'}
-      <div class="pack-price">$${parseFloat(p.precioDesc).toFixed(2)}</div>`;
-    btn.addEventListener('click',()=>{
-      ord.paqNombre=p.nombre;ord.monto=parseFloat(p.precioDesc);ord.detalle=p.descripcion;
-      irCheckout(marca,true);
-    });
-    grid.appendChild(btn);
-  });
-}
-
-// CHECKOUT
-function irCheckout(marca,desdePaquete){
-  ord.marca=marca;ord.desc=0;ord.codigo='SISTEMA';
-  const pi=document.getElementById('promo-in');
-  const pm=document.getElementById('promo-msg');
-  if(pi)pi.value='';
-  if(pm){pm.innerText='';pm.classList.add('hidden');}
-
-  document.getElementById('co-brand').innerText=marca;
-  document.getElementById('co-detail').innerText=desdePaquete?ord.detalle:ord.cat;
-
-  const bb=document.getElementById('bb-co');
-  bb.onclick=desdePaquete?()=>mostrarPaquetes(marca):()=>goBack(2);
-  if(!desdePaquete){ord.paqNombre=null;ord.monto=0;}
-
-  const isRec=ord.cat==='Recargas'||ord.cat==='Paquetes';
-  const isJuego=ord.cat==='Juegos';
-
-  // Paso 1 — título dinámico
-  document.getElementById('co-step1-title').innerText=isRec?'Ingresa tu número':'Ingresa tu ID de jugador';
-
-  // Cupón
-  document.getElementById('co-cupon').classList.toggle('hidden',!isJuego);
-
-  // Step 2 badge
-  const step2=document.querySelector('.step-box:nth-child(2) .step-num');
-  if(step2) step2.style.background=isJuego?'var(--or)':'#475569';
-
-  document.getElementById('co-fields').innerHTML=`
-    <label class="field-label">${isRec?'Número de celular':'ID de jugador'}</label>
-    <input type="${isRec?'tel':'text'}" id="f-id" class="field-input" placeholder="${isRec?'09xxxxxxxx':'Ej: 123456789'}">
-    ${!desdePaquete?`<div style="margin-top:12px;">
-      <label class="field-label">${isRec?'Monto ($)':'Cantidad ($)'}</label>
-      <input type="number" id="f-monto" min="0.01" step="0.01" oninput="actualizarResumen()" class="field-input" placeholder="0.00">
-    </div>`:''}`;
-
-  show('s-co');
-  actualizarResumen();
-}
-
-function aplicarCodigo(){
-  const input=document.getElementById('promo-in').value.toUpperCase().trim();
-  const msg=document.getElementById('promo-msg');
-  msg.classList.remove('hidden');
-  if(codigos[input]!==undefined){
-    ord.desc=Number(codigos[input]);ord.codigo=input;
-    msg.innerText='✅ Código '+input+' — $'+ord.desc.toFixed(2)+' de descuento';
-    msg.style.color='#4ade80';
-  } else {
-    ord.desc=0;ord.codigo='SISTEMA';
-    msg.innerText='❌ Código no válido';
-    msg.style.color='#f87171';
-  }
-  actualizarResumen();
-}
-
-function actualizarResumen(){
-  const fm=document.getElementById('f-monto');
-  let sub=ord.paqNombre?ord.monto:(parseFloat(fm?.value)||0);
-  let tot=Math.max(sub-ord.desc,0);
-  document.getElementById('s-sub-val').innerText='$'+sub.toFixed(2);
-  document.getElementById('s-desc-val').innerText='-$'+ord.desc.toFixed(2);
-  document.getElementById('s-total-val').innerText='$'+tot.toFixed(2);
-  document.getElementById('s-desc-row').style.display=ord.desc>0?'flex':'none';
-}
-
-function enviarPedido(){
-  const fi=document.getElementById('f-id');
-  const fm=document.getElementById('f-monto');
-  const id=fi?fi.value.trim():'';
-  const sub=ord.paqNombre?ord.monto:(parseFloat(fm?.value)||0);
-  const tot=Math.max(sub-ord.desc,0);
-  const isRec=ord.cat==='Recargas'||ord.cat==='Paquetes';
-  if(!id){alert('Por favor ingresa tu número o ID.');fi?.focus();return;}
-  if(isRec&&!/^09\d{8}$/.test(id)){alert('Número inválido — debe empezar con 09 y tener 10 dígitos.');fi?.focus();return;}
-  if(sub<=0){alert('Por favor ingresa un monto mayor a $0.00.');fm?.focus();return;}
-  const btn=document.getElementById('btn-ok');
-  btn.disabled=true;btn.innerText='⏳ Enviando...';
-  const datos={fecha:new Date().toLocaleString(),cliente:id,servicio:ord.cat,marca:ord.marca,
-    monto:sub.toFixed(2),codigo:ord.codigo,descuento:ord.desc.toFixed(2),total:tot.toFixed(2),estado:'PENDIENTE'};
-  const ifr=document.createElement('iframe');ifr.style.display='none';
-  ifr.src=API+'?datos='+encodeURIComponent(JSON.stringify(datos));
-  document.body.appendChild(ifr);
-  setTimeout(()=>{try{document.body.removeChild(ifr);}catch(e){}},5000);
-  setTimeout(()=>{btn.disabled=false;btn.innerText='✅ Confirmar pedido';},3000);
-  const det=ord.detalle?'\n*Paquete:* '+ord.paqNombre+'\n*Detalle:* '+ord.detalle:'';
-  const msg='¡Hola Rexpres Play! 🚀\n\n*Servicio:* '+ord.cat+det+
-    '\n*Marca:* '+ord.marca+'\n*Número/ID:* '+id+
-    '\n*Subtotal:* $'+sub.toFixed(2)+'\n*Código:* '+ord.codigo+
-    '\n*Total Final:* $'+tot.toFixed(2);
-  window.open('https://wa.me/593992225484?text='+encodeURIComponent(msg));
-}
-</script>
+<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<script src="rexpres.js"></script>
+<script>initSlider();</script>
 </body>
 </html>
