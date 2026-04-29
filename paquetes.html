@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paquetes — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+</head>
+<body>
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
+    <div class="di-sep">Acceso</div>
+    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
+    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+  </div>
+  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main>
+  <a class="back-btn" id="back-link" href="recargas.html">← Regresar</a>
+  <h2 class="pg-title" id="pg-title">Paquetes</h2>
+  <div id="grid" class="packs-grid">
+    <div class="spinner-wrap" style="grid-column:1/-1;">
+      <div class="spinner"></div>
+      <span class="spinner-txt">Cargando paquetes...</span>
+    </div>
+  </div>
+</main>
+
+<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<script src="rexpres.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const cat   = params.get('cat')   || 'Paquetes';
+const marca = params.get('marca') || '';
+
+// Guardar para el checkout
+guardar('cat', cat);
+guardar('marca', marca);
+
+// Back link dinámico
+const backLink = document.getElementById('back-link');
+if (cat === 'Juegos') backLink.href = 'juegos.html';
+else backLink.href = 'operadoras.html?tipo=' + encodeURIComponent(cat);
+
+document.getElementById('pg-title').innerText = marca;
+
+function renderPaquetes(productos) {
+  const grid = document.getElementById('grid');
+  const prods = productos.filter(p =>
+    p.categoria.trim().toLowerCase() === marca.trim().toLowerCase() && p.activo
+  );
+  if (!prods.length) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px;grid-column:1/-1;">Sin paquetes disponibles</p>';
+    return;
+  }
+  grid.innerHTML = '';
+  prods.forEach(p => {
+    const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
+    const ico = p.subTipo === 'Diamantes' ? '💎' : p.subTipo === 'Paquete' ? '📦' : '💳';
+    const url = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}&paq=${encodeURIComponent(p.nombre)}&precio=${p.precioDesc}&detalle=${encodeURIComponent(p.descripcion)}`;
+    const div = document.createElement('a');
+    div.className = 'pack';
+    div.href = url;
+    div.innerHTML = `
+      <div class="pack-ico">${ico}</div>
+      <div class="pack-name">${p.nombre}</div>
+      <div class="pack-desc">${p.descripcion.length > 60 ? p.descripcion.substring(0,60)+'...' : p.descripcion}</div>
+      ${tieneDesc ? `<div class="pack-old">$${parseFloat(p.precioNormal).toFixed(2)}</div>` : '<div style="margin-top:4px;"></div>'}
+      <div class="pack-price">$${parseFloat(p.precioDesc).toFixed(2)}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+// Cargar paquetes desde Sheets
+fetch(API + '?accion=getProductos&categoria=' + encodeURIComponent(marca))
+  .then(r => r.json())
+  .then(d => renderPaquetes(d.productos || []))
+  .catch(() => {
+    document.getElementById('grid').innerHTML =
+      '<p style="text-align:center;color:var(--muted);padding:40px;grid-column:1/-1;">Error al cargar. Intenta de nuevo.</p>';
+  });
+</script>
+</body>
+</html>
