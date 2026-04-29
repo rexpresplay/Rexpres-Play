@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmar pedido — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+</head>
+<body>
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
+    <div class="di-sep">Acceso</div>
+    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
+    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+  </div>
+  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main style="display:flex;justify-content:center;">
+  <div class="checkout">
+    <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
+    <div class="co-brand" id="co-brand"></div>
+    <div class="co-detail" id="co-detail"></div>
+
+    <!-- PASO 1 -->
+    <div class="step-box">
+      <div class="step-box-head">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-box-title" id="step1-title">Ingresa tu número</div>
+          <div class="step-sub-label">Datos del pedido</div>
+        </div>
+      </div>
+      <div class="step-box-body">
+        <label class="field-label" id="field-label-id">Número de celular</label>
+        <input type="tel" id="f-id" class="field-input" placeholder="09xxxxxxxx">
+        <div id="monto-wrap" style="margin-top:12px;display:none;">
+          <label class="field-label">Monto ($)</label>
+          <input type="number" id="f-monto" min="0.01" step="0.01" oninput="actualizarResumen()" class="field-input" placeholder="0.00">
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2 — CUPÓN (solo juegos) -->
+    <div id="cupon-wrap" style="display:none;">
+      <div class="cupon-box">
+        <p class="cupon-label">🏷️ Código de descuento</p>
+        <div class="cupon-row">
+          <input type="text" id="promo-in" class="cupon-input" placeholder="Tu código aquí">
+          <button class="cupon-btn" onclick="aplicarCodigo()">Aplicar</button>
+        </div>
+        <p id="promo-msg" class="cupon-msg" style="display:none;"></p>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="step-box">
+      <div class="step-box-head">
+        <div class="step-num" style="background:#3b82f6;">3</div>
+        <div>
+          <div class="step-box-title">Confirmar pedido</div>
+          <div class="step-sub-label">Precio final incluido</div>
+        </div>
+      </div>
+      <div class="step-box-body">
+        <div class="summary">
+          <div class="sum-row">
+            <span class="sum-label">Subtotal</span>
+            <span class="sum-val" id="s-sub">$0.00</span>
+          </div>
+          <div class="sum-row sum-desc" id="s-desc-row" style="display:none;">
+            <span class="sum-label" style="color:#4ade80;">Descuento</span>
+            <span class="sum-val" id="s-desc">-$0.00</span>
+          </div>
+          <div class="sum-row sum-total">
+            <span class="sum-label">Total</span>
+            <span class="sum-val" id="s-total">$0.00</span>
+          </div>
+        </div>
+        <button class="btn-ok" id="btn-ok" onclick="enviar()">✅ Confirmar pedido</button>
+        <p class="secure-note">🔒 Confirmación segura vía WhatsApp</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<script src="rexpres.js"></script>
+<script>
+const params  = new URLSearchParams(location.search);
+const cat     = params.get('cat')    || '';
+const marca   = params.get('marca')  || '';
+const paq     = params.get('paq')    || '';
+const precio  = parseFloat(params.get('precio') || '0');
+const detalle = params.get('detalle') || '';
+
+const isRec   = cat === 'Recargas' || cat === 'Paquetes';
+const isJuego = cat === 'Juegos';
+const desdePaquete = !!paq;
+
+let descuento = 0;
+let codigoUsado = 'SISTEMA';
+let codigos = {};
+
+// Back link
+const backLink = document.getElementById('back-link');
+if (desdePaquete) backLink.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
+else if (isRec) backLink.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
+else backLink.href = 'juegos.html';
+
+// Llenar datos
+document.getElementById('co-brand').innerText = marca;
+document.getElementById('co-detail').innerText = desdePaquete ? detalle : cat;
+
+if (isRec) {
+  document.getElementById('step1-title').innerText = 'Ingresa tu número de celular';
+  document.getElementById('field-label-id').innerText = 'Número de celular';
+  document.getElementById('f-id').type = 'tel';
+  document.getElementById('f-id').placeholder = '09xxxxxxxx';
+} else {
+  document.getElementById('step1-title').innerText = 'Ingresa tu ID de jugador';
+  document.getElementById('field-label-id').innerText = 'ID de jugador';
+  document.getElementById('f-id').type = 'text';
+  document.getElementById('f-id').placeholder = 'Ej: 123456789';
+}
+
+// Mostrar campo monto si no viene de paquete
+if (!desdePaquete) document.getElementById('monto-wrap').style.display = 'block';
+
+// Mostrar cupón solo en juegos
+if (isJuego) document.getElementById('cupon-wrap').style.display = 'block';
+
+// Cargar códigos en background
+fetch(API + '?accion=getCodigos')
+  .then(r => r.json())
+  .then(d => { codigos = d.codigos || {}; })
+  .catch(() => {});
+
+actualizarResumen();
+
+function actualizarResumen() {
+  const fm = document.getElementById('f-monto');
+  const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
+  const tot = Math.max(sub - descuento, 0);
+  document.getElementById('s-sub').innerText   = '$' + sub.toFixed(2);
+  document.getElementById('s-desc').innerText  = '-$' + descuento.toFixed(2);
+  document.getElementById('s-total').innerText = '$' + tot.toFixed(2);
+  document.getElementById('s-desc-row').style.display = descuento > 0 ? 'flex' : 'none';
+}
+
+function aplicarCodigo() {
+  const input = document.getElementById('promo-in').value.toUpperCase().trim();
+  const msg   = document.getElementById('promo-msg');
+  msg.style.display = 'block';
+  if (codigos[input] !== undefined) {
+    descuento    = Number(codigos[input]);
+    codigoUsado  = input;
+    msg.innerText  = '✅ Código ' + input + ' — $' + descuento.toFixed(2) + ' de descuento';
+    msg.style.color = '#4ade80';
+  } else {
+    descuento = 0; codigoUsado = 'SISTEMA';
+    msg.innerText  = '❌ Código no válido';
+    msg.style.color = '#f87171';
+  }
+  actualizarResumen();
+}
+
+function enviar() {
+  const fi  = document.getElementById('f-id');
+  const fm  = document.getElementById('f-monto');
+  const id  = fi ? fi.value.trim() : '';
+  const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
+  const tot = Math.max(sub - descuento, 0);
+
+  if (!id) { alert('Por favor ingresa tu número o ID.'); fi?.focus(); return; }
+  if (isRec && !/^09\d{8}$/.test(id)) { alert('Número inválido — debe empezar con 09 y tener 10 dígitos.'); fi?.focus(); return; }
+  if (sub <= 0) { alert('Por favor ingresa un monto mayor a $0.00.'); fm?.focus(); return; }
+
+  const btn = document.getElementById('btn-ok');
+  btn.disabled = true; btn.innerText = '⏳ Enviando...';
+
+  const datos = {
+    fecha: new Date().toLocaleString(), cliente: id,
+    servicio: cat, marca: marca,
+    monto: sub.toFixed(2), codigo: codigoUsado,
+    descuento: descuento.toFixed(2), total: tot.toFixed(2), estado: 'PENDIENTE'
+  };
+
+  const ifr = document.createElement('iframe');
+  ifr.style.display = 'none';
+  ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
+  document.body.appendChild(ifr);
+  setTimeout(() => { try { document.body.removeChild(ifr); } catch(e) {} }, 5000);
+  setTimeout(() => { btn.disabled = false; btn.innerText = '✅ Confirmar pedido'; }, 3000);
+
+  const det = paq ? '\n*Paquete:* ' + paq + '\n*Detalle:* ' + detalle : '';
+  const msg = '¡Hola Rexpres Play! 🚀\n\n*Servicio:* ' + cat + det +
+    '\n*Marca:* ' + marca + '\n*Número/ID:* ' + id +
+    '\n*Subtotal:* $' + sub.toFixed(2) + '\n*Código:* ' + codigoUsado +
+    '\n*Total Final:* $' + tot.toFixed(2);
+  window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+}
+</script>
+</body>
+</html>
