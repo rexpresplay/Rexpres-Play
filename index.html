@@ -5,8 +5,144 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rexpres Play</title>
 <link rel="stylesheet" href="rexpres.css">
+<style>
+/* Layout que ocupa toda la altura */
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+main { flex: 1; }
+
+/* Modal de login */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.85); z-index: 300;
+  align-items: center; justify-content: center; padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: #131320; border: 1px solid #21213a;
+  border-radius: 20px; padding: 28px; width: 100%; max-width: 340px;
+}
+.modal-title { font-size: 16px; font-weight: 800; color: white; margin-bottom: 4px; }
+.modal-sub { font-size: 11px; color: #64748b; font-weight: 600; margin-bottom: 20px; }
+.login-option {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; background: #1a1a28; border: 1px solid #21213a;
+  border-radius: 14px; cursor: pointer; margin-bottom: 10px;
+  transition: border-color .2s; text-decoration: none;
+}
+.login-option:hover { border-color: #f7941d; }
+.login-option:last-of-type { margin-bottom: 0; }
+.lo-left { display: flex; align-items: center; gap: 12px; }
+.lo-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.lo-name { font-size: 13px; font-weight: 800; color: white; }
+.lo-desc { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 1px; }
+.lo-arrow { color: #64748b; font-size: 18px; }
+.modal-cancel { width: 100%; background: none; border: 1px solid #21213a; border-radius: 12px; padding: 12px; color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 14px; transition: color .2s; }
+.modal-cancel:hover { color: white; }
+
+/* Categorías — sin hueco en desktop */
+.cats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+@media (min-width: 600px) {
+  .cats-grid { gap: 16px; }
+}
+.cat-card {
+  position: relative; border-radius: 16px; overflow: hidden;
+  cursor: pointer; transition: transform .2s;
+  aspect-ratio: 1 / 1.1;
+  text-decoration: none; display: block;
+}
+@media (min-width: 600px) {
+  .cat-card { aspect-ratio: 4 / 3; }
+}
+.cat-card:hover { transform: translateY(-3px); }
+.cat-card:active { transform: scale(.97); }
+.cat-bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.cat-ov { position: absolute; inset: 0; }
+.cat-blue .cat-ov { background: linear-gradient(170deg, rgba(0,20,100,.92) 0%, rgba(0,40,160,.6) 100%); }
+.cat-orange .cat-ov { background: linear-gradient(170deg, rgba(140,60,0,.95) 0%, rgba(247,148,29,.55) 100%); }
+.cat-body { position: absolute; inset: 0; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; }
+.cat-ico { font-size: 28px; margin-bottom: 6px; }
+.cat-name { font-size: 15px; font-weight: 800; color: white; line-height: 1.2; }
+.cat-sub { font-size: 10px; color: rgba(255,255,255,.6); font-weight: 600; margin-top: 2px; }
+.cat-badge {
+  display: inline-block; background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.2); padding: 3px 10px;
+  border-radius: 20px; font-size: 9px; font-weight: 800; color: white;
+  margin-top: 8px; text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* Features compactas */
+.features-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-bottom: 0;
+}
+.feat-item {
+  background: #131320; border: 1px solid #21213a; border-radius: 14px;
+  padding: 16px 12px; display: flex; flex-direction: column;
+  align-items: center; text-align: center; gap: 7px;
+}
+.feat-ico { font-size: 22px; }
+.feat-title { font-size: 11px; font-weight: 800; color: white; line-height: 1.2; }
+.feat-desc { font-size: 10px; color: #64748b; line-height: 1.4; }
+
+/* Título una línea */
+.sec-title-inline {
+  font-size: clamp(20px, 5vw, 30px);
+  font-weight: 800; color: white; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 18px;
+}
+
+/* Menú item sin emoji, limpio */
+.di-clean {
+  display: block; width: 100%; padding: 14px 20px;
+  background: none; border: none; border-bottom: 1px solid #21213a;
+  color: #94a3b8; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+  transition: background .15s, color .15s; text-align: left;
+  text-decoration: none;
+}
+.di-clean:last-child { border-bottom: none; }
+.di-clean:hover { background: rgba(255,255,255,.04); color: white; }
+</style>
 </head>
 <body>
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal-box">
+    <p class="modal-title">Iniciar sesión</p>
+    <p class="modal-sub">Selecciona cómo deseas acceder</p>
+    <a class="login-option" href="admin.html">
+      <div class="lo-left">
+        <div class="lo-icon" style="background:rgba(0,30,133,.3);">🛡️</div>
+        <div>
+          <div class="lo-name">Administrador</div>
+          <div class="lo-desc">Panel de control completo</div>
+        </div>
+      </div>
+      <span class="lo-arrow">›</span>
+    </a>
+    <a class="login-option" href="afiliado.html">
+      <div class="lo-left">
+        <div class="lo-icon" style="background:rgba(247,148,29,.15);">🤝</div>
+        <div>
+          <div class="lo-name">Afiliado</div>
+          <div class="lo-desc">Ver mis comisiones y pedidos</div>
+        </div>
+      </div>
+      <span class="lo-arrow">›</span>
+    </a>
+    <button class="modal-cancel" onclick="cerrarLogin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- DRAWER -->
 <div class="drawer-overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -14,16 +150,15 @@
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-nav">
-    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
-    <div class="di-sep">Acceso</div>
-    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
-    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+    <a class="di-clean" href="index.html">Tienda</a>
+    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
   </div>
   <div class="drawer-foot">
-    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p>
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
   </div>
 </div>
 
+<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
     <div style="display:flex;align-items:center;gap:14px;">
@@ -37,69 +172,95 @@
 </header>
 
 <main>
-  <div class="hero">
-    <div class="h-slide on" style="background-image:url('banner1.png');"></div>
-    <div class="h-slide" style="background-image:url('banner2.png');"></div>
-    <div class="h-ov"></div>
-    <div class="h-dots">
-      <div class="h-dot on" onclick="_goSlide(0)"></div>
-      <div class="h-dot" onclick="_goSlide(1)"></div>
-    </div>
-  </div>
+  <div style="max-width:900px;margin:0 auto;padding:20px 16px 32px;">
 
-  <p class="sec-label">¿Qué deseas hacer hoy?</p>
-  <h2 class="sec-title">Selecciona<br>un servicio</h2>
-
-  <div class="cats">
-    <a class="cat cat-blue" href="recargas.html">
-      <div class="cat-bg" style="background-image:url('banner1.png');filter:brightness(.25);"></div>
-      <div class="cat-ov"></div>
-      <div class="cat-body">
-        <div class="cat-ico">📱</div>
-        <div class="cat-name">Recargas Móviles</div>
-        <div class="cat-sub">Saldo · Paquetes</div>
-        <span class="cat-badge">6 operadoras →</span>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="h-slide on" style="background-image:url('banner1.png');"></div>
+      <div class="h-slide" style="background-image:url('banner2.png');"></div>
+      <div class="h-ov"></div>
+      <div class="h-dots">
+        <div class="h-dot on" onclick="_goSlide(0)"></div>
+        <div class="h-dot" onclick="_goSlide(1)"></div>
       </div>
-    </a>
-    <a class="cat cat-orange" href="juegos.html">
-      <div class="cat-bg" style="background-image:url('freefireid.webp');filter:brightness(.2);"></div>
-      <div class="cat-ov"></div>
-      <div class="cat-body">
-        <div class="cat-ico">🎮</div>
-        <div class="cat-name">Videojuegos</div>
-        <div class="cat-sub">Diamantes · Gemas</div>
-        <span class="cat-badge">Ver juegos →</span>
-      </div>
-    </a>
-  </div>
+    </div>
 
-  <p class="sec-label" style="text-align:center;margin-bottom:14px;">¿Por qué elegirnos?</p>
-  <div class="features">
-    <div class="feat">
-      <div class="feat-ico">🛡️</div>
-      <div class="feat-title">Atención personalizada</div>
-      <div class="feat-desc">Respondemos cada pedido directamente contigo</div>
+    <!-- TÍTULO — una línea -->
+    <p class="sec-label">¿Qué deseas hacer hoy?</p>
+    <h2 class="sec-title-inline">Selecciona un servicio</h2>
+
+    <!-- CATEGORÍAS ajustadas -->
+    <div class="cats-grid">
+      <a class="cat-card cat-blue" href="recargas.html">
+        <div class="cat-bg" style="background-image:url('banner1.png');filter:brightness(.25);"></div>
+        <div class="cat-ov"></div>
+        <div class="cat-body">
+          <div class="cat-ico">📱</div>
+          <div class="cat-name">Recargas Móviles</div>
+          <div class="cat-sub">Saldo · Paquetes</div>
+          <span class="cat-badge">6 operadoras →</span>
+        </div>
+      </a>
+      <a class="cat-card cat-orange" href="juegos.html">
+        <div class="cat-bg" style="background-image:url('freefireid.webp');filter:brightness(.2);"></div>
+        <div class="cat-ov"></div>
+        <div class="cat-body">
+          <div class="cat-ico">🎮</div>
+          <div class="cat-name">Videojuegos</div>
+          <div class="cat-sub">Diamantes · Gemas</div>
+          <span class="cat-badge">Ver juegos →</span>
+        </div>
+      </a>
     </div>
-    <div class="feat">
-      <div class="feat-ico">⚡</div>
-      <div class="feat-title">Entrega inmediata</div>
-      <div class="feat-desc">Tu recarga aplicada en minutos, sin esperas</div>
+
+    <!-- FEATURES -->
+    <p class="sec-label" style="text-align:center;margin-bottom:12px;">¿Por qué elegirnos?</p>
+    <div class="features-grid">
+      <div class="feat-item">
+        <div class="feat-ico">🛡️</div>
+        <div class="feat-title">Atención personalizada</div>
+        <div class="feat-desc">Respondemos cada pedido directamente contigo</div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-ico">⚡</div>
+        <div class="feat-title">Entrega inmediata</div>
+        <div class="feat-desc">Tu recarga aplicada en minutos, sin esperas</div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-ico">🔒</div>
+        <div class="feat-title">Pago seguro</div>
+        <div class="feat-desc">Confirmación vía WhatsApp antes de procesar</div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-ico">💰</div>
+        <div class="feat-title">Mejores precios</div>
+        <div class="feat-desc">Las tarifas más competitivas del mercado</div>
+      </div>
     </div>
-    <div class="feat">
-      <div class="feat-ico">🔒</div>
-      <div class="feat-title">Pago seguro</div>
-      <div class="feat-desc">Confirmación vía WhatsApp antes de procesar</div>
-    </div>
-    <div class="feat">
-      <div class="feat-ico">💰</div>
-      <div class="feat-title">Mejores precios</div>
-      <div class="feat-desc">Las tarifas más competitivas del mercado</div>
-    </div>
+
   </div>
 </main>
 
-<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<!-- FOOTER pegado al pie siempre -->
+<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
+  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+</footer>
+
 <script src="rexpres.js"></script>
-<script>initSlider();</script>
+<script>
+initSlider();
+
+function abrirLogin() {
+  document.getElementById('modal-login').classList.add('open');
+  closeDrawer();
+}
+function cerrarLogin() {
+  document.getElementById('modal-login').classList.remove('open');
+}
+// Cerrar modal al hacer clic fuera
+document.getElementById('modal-login').addEventListener('click', function(e) {
+  if (e.target === this) cerrarLogin();
+});
+</script>
 </body>
 </html>
