@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operadoras — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+</head>
+<body>
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
+    <div class="di-sep">Acceso</div>
+    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
+    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+  </div>
+  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main>
+  <a class="back-btn" href="recargas.html">← Recargas</a>
+  <h2 class="pg-title" id="pg-title">Elige tu operadora</h2>
+  <div id="grid" class="brands-grid">
+    <div class="spinner-wrap" style="grid-column:1/-1;">
+      <div class="spinner"></div>
+      <span class="spinner-txt">Cargando operadoras...</span>
+    </div>
+  </div>
+</main>
+
+<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<script src="rexpres.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const tipo = params.get('tipo') || 'Recargas';
+
+// Guardar tipo en sesión para el checkout
+guardar('cat', tipo);
+
+if (tipo === 'Paquetes') {
+  document.getElementById('pg-title').innerText = 'Elige operadora — Paquetes';
+}
+
+// Fallback instantáneo
+const fallback = [
+  {nombre:'Claro',icono:'claro.webp'},
+  {nombre:'Movistar',icono:'movistar.webp'},
+  {nombre:'CNT',icono:'cnt.webp'},
+  {nombre:'Tuenti',icono:'tuenti.webp'},
+  {nombre:'Aki Móvil',icono:'akimovil (1).webp'},
+  {nombre:'Maxi Plus',icono:'maxiplus.webp'}
+];
+
+function renderMarcas(marcas) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = marcas.map(m => `
+    <a class="brand-card" href="${tipo==='Recargas'?'checkout.html?cat=Recargas&marca='+encodeURIComponent(m.nombre):'paquetes.html?cat=Paquetes&marca='+encodeURIComponent(m.nombre)}">
+      <img src="${m.icono}" alt="${m.nombre}" onerror="this.style.display='none'">
+      <span>${m.nombre}</span>
+    </a>`).join('');
+}
+
+// Mostrar fallback inmediato
+renderMarcas(fallback);
+
+// Intentar cargar desde Sheets para actualizar con datos dinámicos
+fetch(API + '?accion=getCategorias')
+  .then(r => r.json())
+  .then(d => {
+    const cats = (d.categorias || []).filter(c => c.activo && c.tipoServicio === 'Operadora');
+    if (cats.length) renderMarcas(cats.map(c => ({nombre:c.nombre, icono:c.icono})));
+  })
+  .catch(() => {});
+</script>
+</body>
+</html>
