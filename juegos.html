@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Videojuegos — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+</head>
+<body>
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
+    <div class="di-sep">Acceso</div>
+    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
+    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+  </div>
+  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main>
+  <a class="back-btn" href="index.html">← Inicio</a>
+  <h2 class="pg-title">Videojuegos</h2>
+  <div id="grid" class="brands-grid">
+    <div class="spinner-wrap" style="grid-column:1/-1;">
+      <div class="spinner"></div>
+      <span class="spinner-txt">Cargando juegos...</span>
+    </div>
+  </div>
+</main>
+
+<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<script src="rexpres.js"></script>
+<script>
+// Fallback instantáneo con los juegos que ya existen
+const fallback = [
+  {nombre:'Free Fire', icono:'freefireid.webp'},
+  {nombre:'Blood Strike', icono:'bloodstrike.webp'},
+];
+
+function renderJuegos(juegos) {
+  const grid = document.getElementById('grid');
+  if (!juegos.length) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px;grid-column:1/-1;">Sin juegos disponibles</p>';
+    return;
+  }
+  grid.innerHTML = juegos.map(j => `
+    <a class="brand-card" href="paquetes.html?cat=Juegos&marca=${encodeURIComponent(j.nombre)}">
+      <img src="${j.icono}" alt="${j.nombre}" onerror="this.style.fontSize='32px';this.outerHTML='<span style=\'font-size:32px;\'>🎮</span>'">
+      <span>${j.nombre}</span>
+    </a>`).join('');
+}
+
+// Mostrar fallback de inmediato
+renderJuegos(fallback);
+
+// Cargar desde Sheets para obtener todos los juegos actualizados
+fetch(API + '?accion=getCategorias')
+  .then(r => r.json())
+  .then(d => {
+    const juegos = (d.categorias || []).filter(c => c.activo && c.tipoServicio === 'SubCategoria');
+    if (juegos.length) {
+      renderJuegos(juegos.map(j => ({nombre:j.nombre, icono:j.icono})));
+    }
+  })
+  .catch(() => {});
+</script>
+</body>
+</html>
