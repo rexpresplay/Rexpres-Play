@@ -5,8 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Videojuegos — Rexpres Play</title>
 <link rel="stylesheet" href="rexpres.css">
+<style>
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+main { flex: 1; }
+
+/* Grid 2 columnas en móvil, más en desktop */
+.games-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (min-width: 600px) {
+  .games-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+@media (min-width: 900px) {
+  .games-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Card de juego — imagen grande y clara */
+.game-card {
+  background: #131320;
+  border: 1px solid #21213a;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.game-card:hover { border-color: #f7941d; transform: translateY(-2px); }
+.game-card:active { transform: scale(.97); }
+
+/* Imagen ocupa todo el ancho de la card sin recortar ni distorsionar */
+.game-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: #1a1a28;
+  padding: 16px;
+}
+
+.game-card span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 8px;
+  text-align: center;
+}
+</style>
 </head>
 <body>
+
+<!-- MODAL LOGIN -->
+<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
+    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
+    <a href="admin.html" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:#1a1a28;border:1px solid #21213a;border-radius:14px;margin-bottom:10px;text-decoration:none;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div>
+      </div>
+      <span style="color:#64748b;font-size:18px;">›</span>
+    </a>
+    <a href="afiliado.html" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:#1a1a28;border:1px solid #21213a;border-radius:14px;text-decoration:none;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div>
+      </div>
+      <span style="color:#64748b;font-size:18px;">›</span>
+    </a>
+    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+  </div>
+</div>
+
+<!-- DRAWER -->
 <div class="drawer-overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -14,14 +93,15 @@
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-nav">
-    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
-    <div class="di-sep">Acceso</div>
-    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
-    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+    <a class="di" href="index.html">Tienda</a>
+    <button class="di" onclick="abrirLogin()" style="border:none;cursor:pointer;">Iniciar sesión</button>
   </div>
-  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+  <div class="drawer-foot">
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+  </div>
 </div>
 
+<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
     <div style="display:flex;align-items:center;gap:14px;">
@@ -35,51 +115,71 @@
 </header>
 
 <main>
-  <a class="back-btn" href="index.html">← Inicio</a>
-  <h2 class="pg-title">Videojuegos</h2>
-  <div id="grid" class="brands-grid">
-    <div class="spinner-wrap" style="grid-column:1/-1;">
-      <div class="spinner"></div>
-      <span class="spinner-txt">Cargando juegos...</span>
+  <div style="max-width:900px;margin:0 auto;padding:20px 16px 32px;">
+    <a class="back-btn" href="index.html">← Inicio</a>
+    <h2 class="pg-title">Videojuegos</h2>
+
+    <!-- ✅ 3 juegos fijos con sus imágenes correctas — se muestran al instante -->
+    <div id="grid" class="games-grid">
+      <a class="game-card" href="paquetes.html?cat=Juegos&marca=Free%20Fire">
+        <img src="freefire.png" alt="Free Fire">
+        <span>Free Fire</span>
+      </a>
+      <a class="game-card" href="paquetes.html?cat=Juegos&marca=Mobile%20Legends">
+        <img src="mobilee.png" alt="Mobile Legends">
+        <span>Mobile Legends</span>
+      </a>
+      <a class="game-card" href="paquetes.html?cat=Juegos&marca=Blood%20Strike">
+        <img src="blood.png" alt="Blood Strike">
+        <span>Blood Strike</span>
+      </a>
     </div>
+
+    <!-- Los demás juegos del Sheets se agregan aquí dinámicamente -->
+    <div id="grid-extra" style="margin-top:14px;"></div>
   </div>
 </main>
 
-<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
+  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+</footer>
+
 <script src="rexpres.js"></script>
 <script>
-// Fallback instantáneo con los juegos que ya existen
-const fallback = [
-  {nombre:'Free Fire', icono:'freefireid.webp'},
-  {nombre:'Blood Strike', icono:'bloodstrike.webp'},
-];
+// Juegos fijos que ya están en el HTML arriba
+const juegosFijos = ['Free Fire', 'Mobile Legends', 'Blood Strike'];
 
-function renderJuegos(juegos) {
-  const grid = document.getElementById('grid');
-  if (!juegos.length) {
-    grid.innerHTML = '<p style="text-align:center;color:var(--muted);padding:40px;grid-column:1/-1;">Sin juegos disponibles</p>';
-    return;
-  }
-  grid.innerHTML = juegos.map(j => `
-    <a class="brand-card" href="paquetes.html?cat=Juegos&marca=${encodeURIComponent(j.nombre)}">
-      <img src="${j.icono}" alt="${j.nombre}" onerror="this.style.fontSize='32px';this.outerHTML='<span style=\'font-size:32px;\'>🎮</span>'">
-      <span>${j.nombre}</span>
-    </a>`).join('');
-}
-
-// Mostrar fallback de inmediato
-renderJuegos(fallback);
-
-// Cargar desde Sheets para obtener todos los juegos actualizados
+// Cargar desde Sheets en background para agregar juegos adicionales
 fetch(API + '?accion=getCategorias')
   .then(r => r.json())
   .then(d => {
-    const juegos = (d.categorias || []).filter(c => c.activo && c.tipoServicio === 'SubCategoria');
-    if (juegos.length) {
-      renderJuegos(juegos.map(j => ({nombre:j.nombre, icono:j.icono})));
-    }
+    const todos = (d.categorias || []).filter(c => c.activo && c.tipoServicio === 'SubCategoria');
+    // Solo mostrar los que NO están ya fijos arriba
+    const extras = todos.filter(j =>
+      !juegosFijos.some(f => f.toLowerCase() === j.nombre.toLowerCase())
+    );
+    if (!extras.length) return;
+
+    const gridExtra = document.getElementById('grid-extra');
+    gridExtra.className = 'games-grid';
+    gridExtra.innerHTML = extras.map(j => `
+      <a class="game-card" href="paquetes.html?cat=Juegos&marca=${encodeURIComponent(j.nombre)}">
+        <img src="${j.icono}" alt="${j.nombre}" onerror="this.style.padding='24px'">
+        <span>${j.nombre}</span>
+      </a>`).join('');
   })
   .catch(() => {});
+
+function abrirLogin() {
+  document.getElementById('modal-login').style.display = 'flex';
+  closeDrawer();
+}
+function cerrarLogin() {
+  document.getElementById('modal-login').style.display = 'none';
+}
+document.getElementById('modal-login').addEventListener('click', function(e) {
+  if (e.target === this) cerrarLogin();
+});
 </script>
 </body>
 </html>
