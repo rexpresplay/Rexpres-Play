@@ -5,8 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operadoras — Rexpres Play</title>
 <link rel="stylesheet" href="rexpres.css">
+<style>
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+main { flex: 1; }
+
+/* Grid 2 columnas en móvil, más en desktop */
+.ops-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (min-width: 600px) {
+  .ops-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+@media (min-width: 900px) {
+  .ops-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Card de operadora — imagen grande y clara */
+.op-card {
+  background: #131320;
+  border: 1px solid #21213a;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.op-card:hover { border-color: #f7941d; transform: translateY(-2px); }
+.op-card:active { transform: scale(.97); }
+
+/* Imagen ocupa todo el ancho de la card sin recortar */
+.op-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: #1a1a28;
+  padding: 16px;
+}
+
+.op-card span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 8px;
+  text-align: center;
+}
+</style>
 </head>
 <body>
+
+<!-- MODAL LOGIN -->
+<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
+    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
+    <a href="admin.html" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:#1a1a28;border:1px solid #21213a;border-radius:14px;margin-bottom:10px;text-decoration:none;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div>
+      </div>
+      <span style="color:#64748b;font-size:18px;">›</span>
+    </a>
+    <a href="afiliado.html" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:#1a1a28;border:1px solid #21213a;border-radius:14px;text-decoration:none;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div>
+      </div>
+      <span style="color:#64748b;font-size:18px;">›</span>
+    </a>
+    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+  </div>
+</div>
+
+<!-- DRAWER -->
 <div class="drawer-overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -14,14 +93,15 @@
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-nav">
-    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
-    <div class="di-sep">Acceso</div>
-    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
-    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+    <a class="di" href="index.html">Tienda</a>
+    <button class="di" onclick="abrirLogin()" style="border:none;cursor:pointer;">Iniciar sesión</button>
   </div>
-  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+  <div class="drawer-foot">
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+  </div>
 </div>
 
+<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
     <div style="display:flex;align-items:center;gap:14px;">
@@ -35,52 +115,59 @@
 </header>
 
 <main>
-  <a class="back-btn" href="recargas.html">← Recargas</a>
-  <h2 class="pg-title" id="pg-title">Elige tu operadora</h2>
-  <div id="grid" class="brands-grid">
-    <div class="spinner-wrap" style="grid-column:1/-1;">
-      <div class="spinner"></div>
-      <span class="spinner-txt">Cargando operadoras...</span>
+  <div style="max-width:900px;margin:0 auto;padding:20px 16px 32px;">
+    <a class="back-btn" href="recargas.html">← Recargas</a>
+    <h2 class="pg-title" id="pg-title">Elige tu operadora</h2>
+    <div id="grid" class="ops-grid">
+      <div class="spinner-wrap" style="grid-column:1/-1;">
+        <div class="spinner"></div>
+        <span class="spinner-txt">Cargando operadoras...</span>
+      </div>
     </div>
   </div>
 </main>
 
-<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
+  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+</footer>
+
 <script src="rexpres.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const tipo = params.get('tipo') || 'Recargas';
-
-// Guardar tipo en sesión para el checkout
 guardar('cat', tipo);
 
 if (tipo === 'Paquetes') {
   document.getElementById('pg-title').innerText = 'Elige operadora — Paquetes';
 }
 
-// Fallback instantáneo
+// Fallback instantáneo — se muestra de inmediato sin esperar al Sheets
 const fallback = [
-  {nombre:'Claro',icono:'claro.webp'},
-  {nombre:'Movistar',icono:'movistar.webp'},
-  {nombre:'CNT',icono:'cnt.webp'},
-  {nombre:'Tuenti',icono:'tuenti.webp'},
-  {nombre:'Aki Móvil',icono:'akimovil (1).webp'},
-  {nombre:'Maxi Plus',icono:'maxiplus.webp'}
+  {nombre:'Claro',       icono:'claro.webp'},
+  {nombre:'Movistar',    icono:'movistar.webp'},
+  {nombre:'CNT',         icono:'cnt.webp'},
+  {nombre:'Tuenti',      icono:'tuenti.webp'},
+  {nombre:'Aki Móvil',   icono:'akimovil (1).webp'},
+  {nombre:'Maxi Plus',   icono:'maxiplus.webp'}
 ];
 
 function renderMarcas(marcas) {
   const grid = document.getElementById('grid');
+  const destino = tipo === 'Recargas'
+    ? m => `checkout.html?cat=Recargas&marca=${encodeURIComponent(m.nombre)}`
+    : m => `paquetes.html?cat=Paquetes&marca=${encodeURIComponent(m.nombre)}`;
+
   grid.innerHTML = marcas.map(m => `
-    <a class="brand-card" href="${tipo==='Recargas'?'checkout.html?cat=Recargas&marca='+encodeURIComponent(m.nombre):'paquetes.html?cat=Paquetes&marca='+encodeURIComponent(m.nombre)}">
-      <img src="${m.icono}" alt="${m.nombre}" onerror="this.style.display='none'">
+    <a class="op-card" href="${destino(m)}">
+      <img src="${m.icono}" alt="${m.nombre}">
       <span>${m.nombre}</span>
     </a>`).join('');
 }
 
-// Mostrar fallback inmediato
+// Mostrar fallback al instante
 renderMarcas(fallback);
 
-// Intentar cargar desde Sheets para actualizar con datos dinámicos
+// Actualizar silenciosamente desde Sheets si hay nuevas operadoras
 fetch(API + '?accion=getCategorias')
   .then(r => r.json())
   .then(d => {
@@ -88,6 +175,17 @@ fetch(API + '?accion=getCategorias')
     if (cats.length) renderMarcas(cats.map(c => ({nombre:c.nombre, icono:c.icono})));
   })
   .catch(() => {});
+
+function abrirLogin() {
+  document.getElementById('modal-login').style.display = 'flex';
+  closeDrawer();
+}
+function cerrarLogin() {
+  document.getElementById('modal-login').style.display = 'none';
+}
+document.getElementById('modal-login').addEventListener('click', function(e) {
+  if (e.target === this) cerrarLogin();
+});
 </script>
 </body>
 </html>
