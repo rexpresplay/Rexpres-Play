@@ -10,45 +10,48 @@ html, body { height: 100%; margin: 0; }
 body { display: flex; flex-direction: column; }
 main { flex: 1; }
 
+/* Grid fijo — 2 columnas siempre en móvil */
 .ops-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  align-items: start; /* ✅ evita que las cards se estiren entre sí */
 }
-@media (min-width: 600px) { .ops-grid { grid-template-columns: repeat(3,1fr); gap: 16px; } }
+@media (min-width: 600px) { .ops-grid { grid-template-columns: repeat(3,1fr); } }
 @media (min-width: 900px) { .ops-grid { grid-template-columns: repeat(4,1fr); } }
 
-/* ✅ Sin transform para evitar que las cards se muevan entre sí */
+/* Card — SIN transform, SIN translateY, nada que mueva */
 .op-card {
   background: #131320;
   border: 2px solid #21213a;
   border-radius: 16px;
   overflow: hidden;
-  cursor: pointer;
-  /* Solo cambia el borde al hacer hover — sin transform que mueva otras cards */
-  transition: border-color .2s, box-shadow .2s;
   text-decoration: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
+  cursor: pointer;
+  /* ✅ Solo cambia borde y sombra — NUNCA posición */
+  transition: border-color .2s, box-shadow .2s;
+  /* ✅ Altura fija igual para todas */
+  height: 100%;
 }
 .op-card:hover {
   border-color: #f7941d;
-  box-shadow: 0 8px 24px rgba(247,148,29,.2);
+  box-shadow: 0 0 0 1px rgba(247,148,29,.3);
 }
-.op-card:active { opacity: .85; }
+.op-card:active { opacity: .8; }
 
-/* Imagen ocupa todo el ancho, sin recortar */
-.op-card img {
+/* Imagen — ancho completo, sin recorte */
+.op-card .op-img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1; /* ✅ cuadrado fijo — todas igual */
   display: block;
   object-fit: contain;
   background: #1a1a28;
   padding: 18px;
 }
 
-.op-card span {
+.op-card .op-name {
+  display: block;
   font-size: 11px;
   font-weight: 700;
   color: #94a3b8;
@@ -56,8 +59,10 @@ main { flex: 1; }
   letter-spacing: 1px;
   padding: 10px 8px;
   text-align: center;
+  border-top: 1px solid #21213a;
 }
 
+/* Drawer/login */
 .di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
 .di-clean:last-child { border-bottom: none; }
 .di-clean:hover { background: rgba(255,255,255,.04); color: white; }
@@ -124,12 +129,7 @@ main { flex: 1; }
   <div style="max-width:960px;margin:0 auto;padding:20px 16px 32px;">
     <a class="back-btn" href="recargas.html">← Recargas</a>
     <h2 class="pg-title" id="pg-title">Elige tu operadora</h2>
-    <div id="grid" class="ops-grid">
-      <div class="spinner-wrap" style="grid-column:1/-1;">
-        <div class="spinner"></div>
-        <span class="spinner-txt">Cargando operadoras...</span>
-      </div>
-    </div>
+    <div id="grid" class="ops-grid"></div>
   </div>
 </main>
 
@@ -143,10 +143,9 @@ const params = new URLSearchParams(location.search);
 const tipo   = params.get('tipo') || 'Recargas';
 guardar('cat', tipo);
 
-if (tipo === 'Paquetes') {
-  document.getElementById('pg-title').innerText = 'Elige operadora — Paquetes';
-}
+if (tipo === 'Paquetes') document.getElementById('pg-title').innerText = 'Elige operadora — Paquetes';
 
+// Fallback instantáneo
 const fallback = [
   {nombre:'Claro',     icono:'claro.webp'},
   {nombre:'Movistar',  icono:'movistar.webp'},
@@ -158,25 +157,26 @@ const fallback = [
 
 function renderMarcas(marcas) {
   const grid = document.getElementById('grid');
-  const destino = m => tipo === 'Recargas'
+  const href = m => tipo === 'Recargas'
     ? `checkout.html?cat=Recargas&marca=${encodeURIComponent(m.nombre)}`
     : `paquetes.html?cat=Paquetes&marca=${encodeURIComponent(m.nombre)}`;
 
+  // ✅ Construir con innerHTML de una vez — sin reflows parciales
   grid.innerHTML = marcas.map(m => `
-    <a class="op-card" href="${destino(m)}">
-      <img src="${m.icono}" alt="${m.nombre}" onerror="this.style.padding='30px'">
-      <span>${m.nombre}</span>
+    <a class="op-card" href="${href(m)}">
+      <img class="op-img" src="${m.icono}" alt="${m.nombre}" onerror="this.style.opacity='.3'">
+      <span class="op-name">${m.nombre}</span>
     </a>`).join('');
 }
 
-// Mostrar fallback instantáneo
+// Mostrar fallback de inmediato
 renderMarcas(fallback);
 
-// Actualizar desde Sheets en background
+// Actualizar silenciosamente desde Sheets
 fetch(API + '?accion=getCategorias')
   .then(r => r.json())
   .then(d => {
-    const cats = (d.categorias || []).filter(c => c.activo && c.tipoServicio === 'Operadora');
+    const cats = (d.categorias||[]).filter(c => c.activo && c.tipoServicio === 'Operadora');
     if (cats.length) renderMarcas(cats.map(c => ({nombre:c.nombre, icono:c.icono})));
   })
   .catch(() => {});
