@@ -10,31 +10,72 @@ html, body { height: 100%; margin: 0; }
 body { display: flex; flex-direction: column; }
 main { flex: 1; }
 
+/* ✅ Grid que ocupa todo el ancho disponible */
 .packs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  max-width: 900px;
-  margin: 0 auto;
+  width: 100%;
 }
-@media (min-width: 600px)  { .packs-grid { grid-template-columns: repeat(3,1fr); gap: 14px; } }
-@media (min-width: 900px)  { .packs-grid { grid-template-columns: repeat(4,1fr); gap: 16px; } }
+@media (min-width: 500px)  { .packs-grid { grid-template-columns: repeat(3,1fr); gap: 14px; } }
+@media (min-width: 800px)  { .packs-grid { grid-template-columns: repeat(4,1fr); gap: 16px; } }
+@media (min-width: 1100px) { .packs-grid { grid-template-columns: repeat(5,1fr); } }
 
 .pack {
-  background: #131320; border: 1px solid #21213a; border-radius: 16px;
-  padding: 16px 12px; display: flex; flex-direction: column;
-  align-items: center; cursor: pointer;
-  transition: border-color .2s, transform .2s;
-  text-align: center; gap: 6px; text-decoration: none;
+  background: #131320;
+  border: 1px solid #21213a;
+  border-radius: 16px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+  text-align: center;
+  gap: 6px;
+  text-decoration: none;
+  /* ✅ Sin transform para no mover cards vecinas */
 }
-.pack:hover  { border-color: #f7941d; transform: translateY(-2px); }
-.pack:active { transform: scale(.97); }
-.pack-ico   { font-size: 26px; margin-bottom: 2px; }
+.pack:hover {
+  border-color: #f7941d;
+  box-shadow: 0 0 0 1px rgba(247,148,29,.25);
+}
+.pack:active { opacity: .85; }
+
+.pack-ico   { font-size: 28px; margin-bottom: 2px; }
 .pack-name  { font-size: 12px; font-weight: 800; color: white; line-height: 1.3; }
 .pack-desc  { font-size: 10px; color: #64748b; line-height: 1.4; }
 .pack-old   { font-size: 10px; color: #334155; text-decoration: line-through; font-weight: 700; margin-top: 4px; }
-.pack-price { font-size: 18px; font-weight: 900; color: #f7941d; }
+.pack-price { font-size: 18px; font-weight: 900; color: #f7941d; margin-top: 2px; }
 
+/* ✅ Spinner grande que ocupa toda la pantalla disponible */
+.spinner-full {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 18px;
+}
+.spinner-big {
+  width: 56px;
+  height: 56px;
+  border: 4px solid #21213a;
+  border-top-color: #f7941d;
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner-big-txt {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Drawer/login */
 .di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
 .di-clean:last-child { border-bottom: none; }
 .di-clean:hover { background: rgba(255,255,255,.04); color: white; }
@@ -98,14 +139,14 @@ main { flex: 1; }
 </header>
 
 <main>
-  <div style="max-width:960px;margin:0 auto;padding:20px 16px 32px;">
+  <div style="max-width:1100px;margin:0 auto;padding:20px 16px 32px;">
     <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
     <h2 class="pg-title" id="pg-title">Paquetes</h2>
-
+    <!-- ✅ Spinner mostrado desde el HTML, sin esperar JS -->
     <div id="grid" class="packs-grid">
-      <div class="spinner-wrap" style="grid-column:1/-1;">
-        <div class="spinner"></div>
-        <span class="spinner-txt">Cargando paquetes...</span>
+      <div class="spinner-full">
+        <div class="spinner-big"></div>
+        <span class="spinner-big-txt">Cargando paquetes...</span>
       </div>
     </div>
   </div>
@@ -118,63 +159,66 @@ main { flex: 1; }
 <script src="rexpres.js"></script>
 <script>
 const params  = new URLSearchParams(location.search);
-const cat     = params.get('cat')    || 'Paquetes';
-const marca   = params.get('marca')  || '';
+const cat     = params.get('cat')   || 'Paquetes';
+const marca   = params.get('marca') || '';
 
-guardar('cat', cat);
-guardar('marca', marca);
+guardar('cat', cat); guardar('marca', marca);
 
-// Back link según categoría
-const backLink = document.getElementById('back-link');
-if (cat === 'Juegos') backLink.href = 'juegos.html';
-else backLink.href = 'operadoras.html?tipo=' + encodeURIComponent(cat);
+// Back link
+const bl = document.getElementById('back-link');
+bl.href = cat === 'Juegos' ? 'juegos.html' : `operadoras.html?tipo=${encodeURIComponent(cat)}`;
 
 document.getElementById('pg-title').innerText = marca;
 
-// ✅ Icono dinámico según juego y tipo de paquete
-function getIcono(marca, subTipo) {
-  const m = marca.toLowerCase();
-  if (m.includes('blood')) return '🪙';          // Blood Strike — moneda/gold
-  if (m.includes('mobile') || m.includes('legends')) return '💎'; // ML — diamante
-  if (subTipo === 'Diamantes') return '💎';       // Free Fire y otros — diamante
+// Icono dinámico según juego
+function getIcono(marcaNom, subTipo) {
+  const m = marcaNom.toLowerCase();
+  if (m.includes('blood'))   return '🪙';
+  if (m.includes('mobile'))  return '💠';
+  if (subTipo === 'Diamantes') return '💎';
   if (subTipo === 'Paquete')   return '📦';
   if (subTipo === 'Recarga')   return '💳';
   return '🎮';
 }
 
 function renderPaquetes(productos) {
-  const grid = document.getElementById('grid');
+  const grid  = document.getElementById('grid');
   const prods = productos.filter(p =>
     p.categoria.trim().toLowerCase() === marca.trim().toLowerCase() && p.activo
   );
+
   if (!prods.length) {
-    grid.innerHTML = '<p style="text-align:center;color:#64748b;padding:40px;grid-column:1/-1;">Sin paquetes disponibles</p>';
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:60px 0;font-size:14px;">Sin paquetes disponibles</p>';
     return;
   }
+
   grid.innerHTML = '';
   prods.forEach(p => {
     const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
-    const ico = getIcono(marca, p.subTipo);
-    const url = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}&paq=${encodeURIComponent(p.nombre)}&precio=${p.precioDesc}&detalle=${encodeURIComponent(p.descripcion)}`;
+    const ico  = getIcono(marca, p.subTipo);
+    const desc = p.descripcion.length > 60 ? p.descripcion.substring(0,60)+'...' : p.descripcion;
+    const url  = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}&paq=${encodeURIComponent(p.nombre)}&precio=${p.precioDesc}&detalle=${encodeURIComponent(p.descripcion)}`;
+
     const a = document.createElement('a');
     a.className = 'pack';
     a.href = url;
     a.innerHTML = `
       <div class="pack-ico">${ico}</div>
       <div class="pack-name">${p.nombre}</div>
-      <div class="pack-desc">${p.descripcion.length > 65 ? p.descripcion.substring(0,65)+'...' : p.descripcion}</div>
-      ${tieneDesc ? `<div class="pack-old">$${parseFloat(p.precioNormal).toFixed(2)}</div>` : '<div style="margin-top:4px;"></div>'}
+      <div class="pack-desc">${desc}</div>
+      ${tieneDesc ? `<div class="pack-old">$${parseFloat(p.precioNormal).toFixed(2)}</div>` : ''}
       <div class="pack-price">$${parseFloat(p.precioDesc).toFixed(2)}</div>`;
     grid.appendChild(a);
   });
 }
 
+// Cargar paquetes del Sheets
 fetch(API + '?accion=getProductos&categoria=' + encodeURIComponent(marca))
   .then(r => r.json())
   .then(d => renderPaquetes(d.productos || []))
   .catch(() => {
     document.getElementById('grid').innerHTML =
-      '<p style="text-align:center;color:#64748b;padding:40px;grid-column:1/-1;">Error al cargar. Intenta de nuevo.</p>';
+      '<p style="grid-column:1/-1;text-align:center;color:#64748b;padding:60px 0;">Error al cargar. Intenta de nuevo.</p>';
   });
 
 function abrirLogin()  { document.getElementById('modal-login').style.display='flex'; closeDrawer(); }
