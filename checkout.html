@@ -5,8 +5,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Confirmar pedido — Rexpres Play</title>
 <link rel="stylesheet" href="rexpres.css">
+<style>
+html, body { height: 100%; margin: 0; }
+body { display: flex; flex-direction: column; background: #09090f; }
+main { flex: 1; }
+
+/* HERO DEL SERVICIO */
+.service-hero {
+  width: 100%;
+  padding: 28px 16px 0;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.service-card {
+  background: #131320;
+  border: 1px solid #21213a;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.service-img {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 14px;
+  background: #1a1a28;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid #21213a;
+}
+.service-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+.service-info { flex: 1; min-width: 0; }
+.service-name {
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.service-paq {
+  font-size: 11px;
+  color: #60a5fa;
+  font-weight: 600;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.service-cat {
+  display: inline-block;
+  background: rgba(247,148,29,.15);
+  border: 1px solid rgba(247,148,29,.3);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 800;
+  color: #f7941d;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+/* CONTENEDOR PASOS */
+.steps-wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+}
+
+/* CABECERA DE PASO */
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.step-circle {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 900;
+  color: #000;
+  background: #f7941d;
+}
+.step-circle.blue { background: #3b82f6; color: white; }
+.step-title { font-size: 15px; font-weight: 800; color: white; }
+.step-sub   { font-size: 10px; color: #f7941d; font-weight: 700; margin-top: 2px; }
+
+/* CAJA DE PASO */
+.step-box {
+  background: #131320;
+  border: 1px solid #21213a;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 14px;
+}
+
+/* CAMPOS */
+.field { margin-bottom: 16px; }
+.field:last-child { margin-bottom: 0; }
+.field-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.field-input {
+  width: 100%;
+  background: #0e0e1a;
+  border: 1px solid #21213a;
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: white;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none;
+}
+.field-input:focus {
+  border-color: #f7941d;
+  box-shadow: 0 0 0 3px rgba(247,148,29,.1);
+}
+.field-hint {
+  font-size: 10px;
+  color: #475569;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* CUPÓN */
+.cupon-box {
+  background: rgba(247,148,29,.05);
+  border: 1px solid rgba(247,148,29,.2);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.cupon-label {
+  font-size: 10px; font-weight: 800; color: #f7941d;
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
+}
+.cupon-row { display: flex; gap: 8px; }
+.cupon-input {
+  flex: 1; background: #0e0e1a; border: 1px solid #21213a;
+  border-radius: 10px; padding: 12px 14px; color: white;
+  font-size: 13px; outline: none; text-transform: uppercase;
+  transition: border-color .2s;
+}
+.cupon-input:focus { border-color: #f7941d; }
+.cupon-btn {
+  background: #f7941d; color: #000; font-weight: 900;
+  font-size: 11px; text-transform: uppercase; padding: 0 18px;
+  border-radius: 10px; border: none; cursor: pointer; letter-spacing: 1px;
+  white-space: nowrap;
+}
+.cupon-msg {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px;
+}
+
+/* RESUMEN */
+.summary {
+  background: #0e0e1a;
+  border: 1px solid #21213a;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.sum-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid #21213a;
+}
+.sum-row:last-child { border: none; padding-top: 12px; }
+.sum-label { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.sum-val   { font-size: 13px; font-weight: 800; color: #94a3b8; }
+.sum-total .sum-label { font-size: 14px; color: white; font-weight: 900; }
+.sum-total .sum-val   { font-size: 26px; color: #f7941d; font-weight: 900; }
+.sum-desc  .sum-val   { color: #4ade80; }
+
+/* BTN CONFIRMAR */
+.btn-ok {
+  width: 100%;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: white; font-weight: 900; padding: 17px;
+  border-radius: 14px; font-size: 15px; text-transform: uppercase;
+  letter-spacing: 2px; border: none; cursor: pointer;
+  transition: opacity .2s, transform .2s;
+}
+.btn-ok:hover  { opacity: .9; }
+.btn-ok:active { transform: scale(.98); }
+.btn-ok:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.secure-note {
+  text-align: center; font-size: 10px; color: #334155;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 12px;
+}
+
+/* DRAWER / LOGIN */
+.di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
+.di-clean:last-child { border-bottom: none; }
+.di-clean:hover { background: rgba(255,255,255,.04); color: white; }
+.login-opt { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #1a1a28; border: 1px solid #21213a; border-radius: 14px; margin-bottom: 10px; text-decoration: none; transition: border-color .2s; }
+.login-opt:hover { border-color: #f7941d; }
+.login-opt:last-of-type { margin-bottom: 0; }
+</style>
 </head>
 <body>
+
+<!-- MODAL LOGIN -->
+<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
+    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
+    <a class="login-opt" href="admin.html">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div>
+      </div>
+      <span style="color:#64748b;font-size:20px;">›</span>
+    </a>
+    <a class="login-opt" href="afiliado.html">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div>
+      </div>
+      <span style="color:#64748b;font-size:20px;">›</span>
+    </a>
+    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+  </div>
+</div>
+
+<!-- DRAWER -->
 <div class="drawer-overlay" id="overlay"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-head">
@@ -14,14 +260,15 @@
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="drawer-nav">
-    <a class="di" href="index.html">🏠 &nbsp;Tienda</a>
-    <div class="di-sep">Acceso</div>
-    <a class="di" href="admin.html">🛡️ &nbsp;Administrador</a>
-    <a class="di" href="afiliado.html">🤝 &nbsp;Afiliado</a>
+    <a class="di-clean" href="index.html">Tienda</a>
+    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
   </div>
-  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play</p></div>
+  <div class="drawer-foot">
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+  </div>
 </div>
 
+<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
     <div style="display:flex;align-items:center;gap:14px;">
@@ -34,32 +281,41 @@
   </div>
 </header>
 
-<main style="display:flex;justify-content:center;">
-  <div class="checkout">
-    <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
-    <div class="co-brand" id="co-brand"></div>
-    <div class="co-detail" id="co-detail"></div>
+<main>
 
-    <!-- PASO 1 -->
+  <!-- IMAGEN + NOMBRE DEL SERVICIO -->
+  <div class="service-hero">
+    <a id="back-link" href="index.html" class="back-btn" style="display:inline-flex;margin-bottom:20px;">← Regresar</a>
+    <div class="service-card">
+      <div class="service-img">
+        <img id="svc-img" src="" alt="">
+      </div>
+      <div class="service-info">
+        <div class="service-name" id="svc-name"></div>
+        <div class="service-paq"  id="svc-paq"></div>
+        <span class="service-cat" id="svc-cat"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps-wrap">
+
+    <!-- ① INFORMACIÓN DEL CLIENTE -->
     <div class="step-box">
-      <div class="step-box-head">
-        <div class="step-num">1</div>
+      <div class="step-head">
+        <div class="step-circle">1</div>
         <div>
-          <div class="step-box-title" id="step1-title">Ingresa tu número</div>
-          <div class="step-sub-label">Datos del pedido</div>
+          <div class="step-title">Información del cliente</div>
+          <div class="step-sub">Datos del pedido</div>
         </div>
       </div>
-      <div class="step-box-body">
-        <label class="field-label" id="field-label-id">Número de celular</label>
-        <input type="tel" id="f-id" class="field-input" placeholder="09xxxxxxxx">
-        <div id="monto-wrap" style="margin-top:12px;display:none;">
-          <label class="field-label">Monto ($)</label>
-          <input type="number" id="f-monto" min="0.01" step="0.01" oninput="actualizarResumen()" class="field-input" placeholder="0.00">
-        </div>
+
+      <div id="fields-wrap">
+        <!-- Se llena dinámicamente -->
       </div>
     </div>
 
-    <!-- PASO 2 — CUPÓN (solo juegos) -->
+    <!-- CUPÓN (solo juegos) -->
     <div id="cupon-wrap" style="display:none;">
       <div class="cupon-box">
         <p class="cupon-label">🏷️ Código de descuento</p>
@@ -71,81 +327,111 @@
       </div>
     </div>
 
-    <!-- PASO 3 -->
+    <!-- ② CONFIRMACIÓN DE PEDIDO -->
     <div class="step-box">
-      <div class="step-box-head">
-        <div class="step-num" style="background:#3b82f6;">3</div>
+      <div class="step-head">
+        <div class="step-circle blue">2</div>
         <div>
-          <div class="step-box-title">Confirmar pedido</div>
-          <div class="step-sub-label">Precio final incluido</div>
+          <div class="step-title">Confirmación de pedido</div>
+          <div class="step-sub" style="color:#3b82f6;">Precio final incluido</div>
         </div>
       </div>
-      <div class="step-box-body">
-        <div class="summary">
-          <div class="sum-row">
-            <span class="sum-label">Subtotal</span>
-            <span class="sum-val" id="s-sub">$0.00</span>
-          </div>
-          <div class="sum-row sum-desc" id="s-desc-row" style="display:none;">
-            <span class="sum-label" style="color:#4ade80;">Descuento</span>
-            <span class="sum-val" id="s-desc">-$0.00</span>
-          </div>
-          <div class="sum-row sum-total">
-            <span class="sum-label">Total</span>
-            <span class="sum-val" id="s-total">$0.00</span>
-          </div>
+
+      <div class="summary">
+        <div class="sum-row">
+          <span class="sum-label">Subtotal</span>
+          <span class="sum-val" id="s-sub">$0.00</span>
         </div>
-        <button class="btn-ok" id="btn-ok" onclick="enviar()">✅ Confirmar pedido</button>
-        <p class="secure-note">🔒 Confirmación segura vía WhatsApp</p>
+        <div class="sum-row sum-desc" id="s-desc-row" style="display:none;">
+          <span class="sum-label" style="color:#4ade80;">Descuento</span>
+          <span class="sum-val" id="s-desc">-$0.00</span>
+        </div>
+        <div class="sum-row sum-total">
+          <span class="sum-label">Total a pagar</span>
+          <span class="sum-val" id="s-total">$0.00</span>
+        </div>
       </div>
+
+      <button class="btn-ok" id="btn-ok" onclick="enviar()">
+        ✅ Confirmar pedido por WhatsApp
+      </button>
+      <p class="secure-note">🔒 Tu pedido se confirma de forma segura vía WhatsApp</p>
     </div>
+
   </div>
 </main>
 
-<footer><p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p></footer>
+<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
+  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+</footer>
+
 <script src="rexpres.js"></script>
 <script>
 const params  = new URLSearchParams(location.search);
-const cat     = params.get('cat')    || '';
-const marca   = params.get('marca')  || '';
-const paq     = params.get('paq')    || '';
+const cat     = params.get('cat')     || '';
+const marca   = params.get('marca')   || '';
+const paq     = params.get('paq')     || '';
 const precio  = parseFloat(params.get('precio') || '0');
 const detalle = params.get('detalle') || '';
 
-const isRec   = cat === 'Recargas' || cat === 'Paquetes';
-const isJuego = cat === 'Juegos';
+const isRec        = cat === 'Recargas' || cat === 'Paquetes';
+const isJuego      = cat === 'Juegos';
 const desdePaquete = !!paq;
 
-let descuento = 0;
-let codigoUsado = 'SISTEMA';
-let codigos = {};
+let descuento = 0, codigoUsado = 'SISTEMA', codigos = {};
 
-// Back link
+// ── BACK LINK ──────────────────────────────────
 const backLink = document.getElementById('back-link');
 if (desdePaquete) backLink.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
-else if (isRec) backLink.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
-else backLink.href = 'juegos.html';
+else if (isRec)   backLink.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
+else              backLink.href = 'juegos.html';
 
-// Llenar datos
-document.getElementById('co-brand').innerText = marca;
-document.getElementById('co-detail').innerText = desdePaquete ? detalle : cat;
-
-if (isRec) {
-  document.getElementById('step1-title').innerText = 'Ingresa tu número de celular';
-  document.getElementById('field-label-id').innerText = 'Número de celular';
-  document.getElementById('f-id').type = 'tel';
-  document.getElementById('f-id').placeholder = '09xxxxxxxx';
+// ── IMAGEN DEL SERVICIO ────────────────────────
+// Mapa de imágenes por nombre de operadora/juego
+const imgMap = {
+  'claro':       'claro.webp',
+  'movistar':    'movistar.webp',
+  'cnt':         'cnt.webp',
+  'tuenti':      'tuenti.webp',
+  'aki móvil':   'akimovil (1).webp',
+  'maxi plus':   'maxiplus.webp',
+  'free fire':   'freefire.webp',
+  'mobile legends': 'mobilee.webp',
+  'blood strike':   'blood.webp'
+};
+const key = marca.toLowerCase().trim();
+const imgSrc = imgMap[key] || '';
+const imgEl = document.getElementById('svc-img');
+if (imgSrc) {
+  imgEl.src = imgSrc;
+  imgEl.alt = marca;
 } else {
-  document.getElementById('step1-title').innerText = 'Ingresa tu ID de jugador';
-  document.getElementById('field-label-id').innerText = 'ID de jugador';
-  document.getElementById('f-id').type = 'text';
-  document.getElementById('f-id').placeholder = 'Ej: 123456789';
+  // Si no hay imagen conocida, mostrar emoji según categoría
+  imgEl.parentElement.innerHTML = `<span style="font-size:36px;">${isJuego?'🎮':'📱'}</span>`;
 }
 
-// Mostrar campo monto si no viene de paquete
-if (!desdePaquete) document.getElementById('monto-wrap').style.display = 'block';
+// ── TEXTOS DEL SERVICIO ────────────────────────
+document.getElementById('svc-name').innerText = marca;
+document.getElementById('svc-paq').innerText  = desdePaquete ? paq + (detalle ? ' · ' + detalle.substring(0,60) + (detalle.length>60?'...':'') : '') : '';
+document.getElementById('svc-cat').innerText  = cat;
 
-// Mostrar cupón solo en juegos
+// ── CAMPOS DEL FORMULARIO ──────────────────────
+const fieldsWrap = document.getElementById('fields-wrap');
+fieldsWrap.innerHTML = `
+  <div class="field">
+    <label class="field-label">${isRec ? 'Número de celular' : 'ID de jugador'}</label>
+    <input type="${isRec ? 'tel' : 'text'}" id="f-id" class="field-input"
+      placeholder="${isRec ? '09xxxxxxxx' : 'Ej: 123456789'}"
+      inputmode="${isRec ? 'tel' : 'numeric'}">
+    <p class="field-hint">${isRec ? 'Debe empezar con 09 y tener 10 dígitos' : 'Solo números, entre 6 y 15 dígitos'}</p>
+  </div>
+  ${!desdePaquete ? `<div class="field">
+    <label class="field-label">${isRec ? 'Monto a recargar ($)' : 'Cantidad ($)'}</label>
+    <input type="number" id="f-monto" class="field-input" min="0.01" step="0.01"
+      oninput="actualizarResumen()" placeholder="0.00" inputmode="decimal">
+  </div>` : ''}`;
+
+// Cupón solo en juegos
 if (isJuego) document.getElementById('cupon-wrap').style.display = 'block';
 
 // Cargar códigos en background
@@ -156,8 +442,9 @@ fetch(API + '?accion=getCodigos')
 
 actualizarResumen();
 
+// ── RESUMEN ────────────────────────────────────
 function actualizarResumen() {
-  const fm = document.getElementById('f-monto');
+  const fm  = document.getElementById('f-monto');
   const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
   const tot = Math.max(sub - descuento, 0);
   document.getElementById('s-sub').innerText   = '$' + sub.toFixed(2);
@@ -166,23 +453,25 @@ function actualizarResumen() {
   document.getElementById('s-desc-row').style.display = descuento > 0 ? 'flex' : 'none';
 }
 
+// ── CUPÓN ──────────────────────────────────────
 function aplicarCodigo() {
   const input = document.getElementById('promo-in').value.toUpperCase().trim();
   const msg   = document.getElementById('promo-msg');
   msg.style.display = 'block';
   if (codigos[input] !== undefined) {
-    descuento    = Number(codigos[input]);
-    codigoUsado  = input;
-    msg.innerText  = '✅ Código ' + input + ' — $' + descuento.toFixed(2) + ' de descuento';
+    descuento   = Number(codigos[input]);
+    codigoUsado = input;
+    msg.innerText   = '✅ Código ' + input + ' — $' + descuento.toFixed(2) + ' de descuento';
     msg.style.color = '#4ade80';
   } else {
     descuento = 0; codigoUsado = 'SISTEMA';
-    msg.innerText  = '❌ Código no válido';
+    msg.innerText   = '❌ Código no válido';
     msg.style.color = '#f87171';
   }
   actualizarResumen();
 }
 
+// ── ENVIAR ─────────────────────────────────────
 function enviar() {
   const fi  = document.getElementById('f-id');
   const fm  = document.getElementById('f-monto');
@@ -190,27 +479,42 @@ function enviar() {
   const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
   const tot = Math.max(sub - descuento, 0);
 
-  if (!id) { alert('Por favor ingresa tu número o ID.'); fi?.focus(); return; }
-  if (isRec && !/^09\d{8}$/.test(id)) { alert('Número inválido — debe empezar con 09 y tener 10 dígitos.'); fi?.focus(); return; }
-  if (sub <= 0) { alert('Por favor ingresa un monto mayor a $0.00.'); fm?.focus(); return; }
+  if (!id) {
+    alert('Por favor ingresa tu número de celular o ID de jugador.');
+    fi?.focus(); return;
+  }
+  if (isRec && !/^09\d{8}$/.test(id)) {
+    alert('Número inválido — debe empezar con 09 y tener 10 dígitos.');
+    fi?.focus(); return;
+  }
+  if (isJuego && (id.length < 6 || id.length > 15 || isNaN(Number(id)))) {
+    alert('ID inválido — debe tener entre 6 y 15 dígitos numéricos.');
+    fi?.focus(); return;
+  }
+  if (sub <= 0) {
+    alert('Por favor ingresa un monto mayor a $0.00.');
+    fm?.focus(); return;
+  }
 
   const btn = document.getElementById('btn-ok');
-  btn.disabled = true; btn.innerText = '⏳ Enviando...';
+  btn.disabled = true;
+  btn.innerText = '⏳ Procesando...';
 
+  // Guardar en Sheets
   const datos = {
     fecha: new Date().toLocaleString(), cliente: id,
     servicio: cat, marca: marca,
     monto: sub.toFixed(2), codigo: codigoUsado,
     descuento: descuento.toFixed(2), total: tot.toFixed(2), estado: 'PENDIENTE'
   };
-
   const ifr = document.createElement('iframe');
   ifr.style.display = 'none';
   ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
   document.body.appendChild(ifr);
   setTimeout(() => { try { document.body.removeChild(ifr); } catch(e) {} }, 5000);
-  setTimeout(() => { btn.disabled = false; btn.innerText = '✅ Confirmar pedido'; }, 3000);
+  setTimeout(() => { btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp'; }, 3000);
 
+  // WhatsApp
   const det = paq ? '\n*Paquete:* ' + paq + '\n*Detalle:* ' + detalle : '';
   const msg = '¡Hola Rexpres Play! 🚀\n\n*Servicio:* ' + cat + det +
     '\n*Marca:* ' + marca + '\n*Número/ID:* ' + id +
@@ -218,6 +522,13 @@ function enviar() {
     '\n*Total Final:* $' + tot.toFixed(2);
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
 }
+
+// ── DRAWER / LOGIN ──────────────────────────────
+function abrirLogin()  { document.getElementById('modal-login').style.display = 'flex'; closeDrawer(); }
+function cerrarLogin() { document.getElementById('modal-login').style.display = 'none'; }
+document.getElementById('modal-login').addEventListener('click', function(e) {
+  if (e.target === this) cerrarLogin();
+});
 </script>
 </body>
 </html>
