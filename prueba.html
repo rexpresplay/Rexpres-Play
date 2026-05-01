@@ -3,269 +3,515 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cómo ser Afiliado - Rexpres Play</title>
-<link rel="stylesheet" href="rexpres.css">
+<title>Programa Afiliados - Rexpres Play</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-html, body { height: 100%; margin: 0; }
-body { display: flex; flex-direction: column; }
-main { flex: 1; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { 
+  font-family: 'Inter', sans-serif; 
+  background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 50%, #16213e 100%);
+  color: white; overflow-x: hidden;
+  min-height: 100vh;
+}
 
-/* ICONOS SVG PERSONALIZADOS */
-.ico-registro { width: 36px; height: 36px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-link { width: 36px; height: 36px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-share { width: 36px; height: 36px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-money { width: 36px; height: 36px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9zM12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-fast { width: 44px; height: 44px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M21 3.01H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-1.99-2-1.99zM11 16H7.5l3.5-4.5V16zM19 16h-5v-1.5h5V16zm0-4.5h-5V9h5v2.5z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-stats { width: 44px; height: 44px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 12H7v-4h4v4zm5 0h-4V9h4v6zm4-8H5V5h15v2z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-card { width: 44px; height: 44px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>') no-repeat center; mask-size: contain; }
-.ico-support { width: 44px; height: 44px; background: linear-gradient(135deg, #f7941d, #ff9f40); mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9zM12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 10c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg>') no-repeat center; mask-size: contain; }
+/* PARTICULAS */
+#particles { 
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+  z-index: 1; pointer-events: none;
+}
+.particle { 
+  position: absolute; width: 3px; height: 3px; 
+  background: radial-gradient(circle, #f7941d 0%, transparent 70%);
+  border-radius: 50%; animation: float 25s infinite linear;
+}
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
 
-/* HERO COMPACTO */
-.hero-afiliado { background: linear-gradient(135deg, #0e0e1a 0%, #1a1a28 100%); position: relative; padding: 40px 0; }
-.hero-badge { display: inline-block; background: linear-gradient(135deg, #f7941d, #ff9f40); color: #0e0e1a; font-size: 10px; font-weight: 800; padding: 5px 14px; border-radius: 18px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(247,148,29,.3); }
-.hero-title { font-size: clamp(24px,5vw,36px); font-weight: 800; color: white; margin: 0 0 12px; line-height: 1.2; }
-.hero-subtitle { font-size: 14px; color: #94a3b8; margin: 0 0 20px; max-width: 500px; }
-.earn-preview { background: rgba(19,19,32,.9); border: 1px solid #21213a; border-radius: 16px; padding: 20px; max-width: 320px; margin: 0 auto; backdrop-filter: blur(10px); }
-.earn-amount { font-size: clamp(28px,6vw,40px); font-weight: 900; color: #f7941d; margin: 0; }
-.earn-label { font-size: 11px; color: #64748b; margin: 4px 0 0; letter-spacing: 0.5px; }
+/* CONTAINER */
+.container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
 
-/* SECCIONES COMPACTAS */
-.section { padding: 32px 0; }
-.inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-@media (min-width: 600px) { .inner { padding: 0 24px; } }
-@media (min-width: 900px) { .inner { padding: 0 40px; } }
+/* HEADER */
+header { 
+  position: fixed; z-index: 1000; width: 100%; 
+  backdrop-filter: blur(25px); background: rgba(10,10,20,.95);
+  border-bottom: 1px solid rgba(247,148,29,.3);
+}
+.header-content { 
+  display: flex; justify-content: space-between; align-items: center; 
+  height: 80px; padding: 0 2rem;
+}
+.logo { 
+  font-size: 1.8rem; font-weight: 900; 
+  background: linear-gradient(135deg, #f7941d, #ff9f40);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.cta-header { 
+  padding: 12px 28px; background: linear-gradient(135deg, #f7941d, #ff9f40);
+  color: #0a0a14; font-weight: 700; border-radius: 50px; 
+  text-decoration: none; font-size: 0.95rem; letter-spacing: 1px;
+  transition: all .3s; box-shadow: 0 8px 25px rgba(247,148,29,.4);
+}
+.cta-header:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(247,148,29,.6); }
 
-.sec-label { font-size: 10px; font-weight: 700; color: #f7941d; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-.sec-title { font-size: clamp(20px,4vw,28px); font-weight: 800; color: white; margin-bottom: 20px; }
+/* HERO */
+.hero { 
+  padding: 120px 0 80px; text-align: center; position: relative; 
+  background: radial-gradient(ellipse at center, rgba(247,148,29,.1) 0%, transparent 70%);
+}
+.hero h1 { 
+  font-size: clamp(3.5rem, 8vw, 6.5rem); font-weight: 900; margin-bottom: 1rem;
+  background: linear-gradient(135deg, #f7941d 0%, #ff9f40 30%, white 70%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+.hero-subtitle { 
+  font-size: clamp(1.3rem, 3vw, 2rem); color: rgba(255,255,255,.9);
+  margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;
+}
+.hero-stats { 
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 2rem; margin-bottom: 4rem;
+}
+.stat-card { 
+  background: rgba(20,20,40,.8); backdrop-filter: blur(20px); 
+  border: 1px solid rgba(247,148,29,.3); border-radius: 24px; 
+  padding: 2rem 1.5rem; transition: all .4s;
+}
+.stat-card:hover { border-color: #f7941d; transform: translateY(-8px); }
+.stat-number { 
+  font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; 
+  background: linear-gradient(135deg, #f7941d, #00d4ff); 
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 1rem; color: rgba(255,255,255,.7); margin-top: 0.5rem; }
 
-/* PASOS COMPACTOS */
-.steps-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
-@media (min-width: 600px) { .steps-grid { grid-template-columns: repeat(2,1fr); gap: 20px; } }
-@media (min-width: 1000px) { .steps-grid { grid-template-columns: repeat(4,1fr); } }
-.step-card { background: rgba(19,19,32,.7); border: 1px solid #21213a; border-radius: 16px; padding: 24px 16px; text-align: center; transition: all .3s; }
-.step-card:hover { border-color: #f7941d; transform: translateY(-4px); }
-.step-num { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f7941d, #ff9f40); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #0e0e1a; margin: 0 auto 12px; }
-.step-title { font-size: 14px; font-weight: 800; color: white; margin-bottom: 6px; }
-.step-desc { font-size: 12px; color: #94a3b8; }
+/* HOW IT WORKS */
+.how { padding: 80px 0; }
+.section-title { 
+  text-align: center; font-size: clamp(2.5rem, 6vw, 4rem); 
+  font-weight: 900; margin-bottom: 4rem;
+  background: linear-gradient(135deg, white 0%, #f0f0ff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.steps-grid { 
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  gap: 2rem;
+}
+.step-card { 
+  text-align: center; padding: 2.5rem 2rem; position: relative;
+  transition: all .4s;
+}
+.step-number { 
+  width: 64px; height: 64px; border-radius: 20px; 
+  background: linear-gradient(135deg, #f7941d, #ff9f40); 
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; font-weight: 900; color: #0a0a14; 
+  margin: 0 auto 1.5rem;
+}
+.step-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+.step-desc { color: rgba(255,255,255,.8); font-size: 1rem; }
 
-/* CALCULADORA COMPACTA */
-.calc-container { background: linear-gradient(135deg, #131320 0%, #1a1a28 100%); border: 1px solid #21213a; border-radius: 20px; padding: 28px 20px; max-width: 400px; margin: 24px auto 0; }
-.calc-input { width: 100%; padding: 14px 16px; border: 2px solid #21213a; border-radius: 12px; background: #0e0e1a; color: white; font-size: 20px; font-weight: 700; text-align: center; }
-.calc-input:focus { border-color: #f7941d; outline: none; }
-.calc-result { margin-top: 20px; padding: 20px; background: rgba(247,148,29,.08); border-radius: 14px; border: 1px solid rgba(247,148,29,.2); }
-.result-ganancia { font-size: 28px; font-weight: 900; color: #f7941d; margin: 0; }
-.result-label { font-size: 12px; color: #94a3b8; margin: 6px 0 0; }
+/* CALCULATOR */
+.calculator { 
+  padding: 80px 0; background: rgba(15,15,35,.7); 
+  border-top: 1px solid rgba(247,148,29,.2);
+}
+.calc-container { 
+  background: rgba(20,20,40,.95); backdrop-filter: blur(30px); 
+  border-radius: 32px; border: 1px solid rgba(247,148,29,.4);
+  padding: 4rem 3rem; text-align: center; max-width: 600px; margin: 0 auto;
+  box-shadow: 0 40px 100px rgba(0,0,0,.5);
+}
+.calc-title { 
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; margin-bottom: 2rem;
+  background: linear-gradient(135deg, #f7941d, white); -webkit-background-clip: text;
+}
+.calc-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+.calc-input { 
+  background: rgba(10,10,20,.8); border: 2px solid rgba(247,148,29,.3); 
+  border-radius: 16px; padding: 1.5rem; font-size: 1.5rem; 
+  color: white; text-align: center; font-weight: 700; transition: all .3s;
+}
+.calc-input:focus { outline: none; border-color: #f7941d; box-shadow: 0 0 20px rgba(247,148,29,.3); }
+.calc-result { 
+  background: linear-gradient(135deg, rgba(247,148,29,.15), rgba(0,212,255,.1));
+  border: 2px solid rgba(247,148,29,.4); border-radius: 20px; 
+  padding: 2.5rem; margin-top: 2rem;
+}
+.result-title { font-size: 1.2rem; color: rgba(255,255,255,.8); margin-bottom: 1rem; }
+.result-amount { 
+  font-size: clamp(3rem, 8vw, 5rem); font-weight: 900; 
+  background: linear-gradient(135deg, #f7941d, #00d4ff); -webkit-background-clip: text;
+}
 
-/* BENEFICIOS COMPACTOS */
-.benefits-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
-@media (min-width: 700px) { .benefits-grid { grid-template-columns: repeat(2,1fr); gap: 20px; } }
-.benefit-card { display: flex; gap: 12px; padding: 20px 16px; background: rgba(19,19,32,.6); border: 1px solid #21213a; border-radius: 14px; }
-.benefit-card:hover { border-color: #f7941d; }
-.benefit-text h4 { font-size: 14px; font-weight: 800; color: white; margin: 0 0 4px; }
-.benefit-text p { font-size: 12px; color: #94a3b8; margin: 0; }
+/* PLANS */
+.plans { padding: 80px 0; }
+.plans-grid { 
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 2rem; margin-top: 4rem;
+}
+.plan-card { 
+  background: rgba(20,20,40,.9); border: 2px solid rgba(247,148,29,.2); 
+  border-radius: 24px; padding: 3rem 2rem; text-align: center; 
+  transition: all .4s; position: relative; overflow: hidden;
+}
+.plan-card.featured { border-color: #f7941d; transform: scale(1.05); }
+.plan-badge { 
+  position: absolute; top: 20px; right: 20px; background: linear-gradient(135deg, #f7941d, #ff9f40);
+  color: #0a0a14; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem;
+  font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+}
+.plan-price { 
+  font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; margin: 1.5rem 0;
+  background: linear-gradient(135deg, #f7941d, white); -webkit-background-clip: text;
+}
+.plan-list { list-style: none; margin: 2rem 0; }
+.plan-list li { padding: 0.8rem 0; color: rgba(255,255,255,.8); border-bottom: 1px solid rgba(255,255,255,.1); }
+.plan-cta { 
+  width: 100%; padding: 1.2rem; background: linear-gradient(135deg, #f7941d, #ff9f40);
+  color: #0a0a14; font-weight: 800; border: none; border-radius: 16px;
+  font-size: 1.1rem; cursor: pointer; margin-top: 1.5rem; transition: all .3s;
+}
+.plan-cta:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(247,148,29,.5); }
 
-/* TESTIMONIOS COMPACTOS */
-.testi-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 32px; }
-@media (min-width: 600px) { .testi-grid { grid-template-columns: repeat(2,1fr); } }
-@media (min-width: 900px) { .testi-grid { grid-template-columns: repeat(3,1fr); } }
-.testi-card { background: rgba(19,19,32,.8); border: 1px solid #21213a; border-radius: 16px; padding: 24px 20px; }
-.testi-card::before { content: '⭐⭐⭐⭐⭐'; font-size: 14px; position: absolute; top: 16px; right: 16px; color: #f7941d; }
-.testi-text { font-size: 14px; color: #e2e8f0; line-height: 1.5; margin-bottom: 16px; }
-.testi-author { font-size: 12px; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
-.testi-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #f7941d, #ff9f40); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #0e0e1a; }
+/* TESTIMONIALS */
+.testimonials { 
+  padding: 80px 0; background: rgba(15,15,35,.8); 
+}
+.testi-container { max-width: 1000px; margin: 0 auto; }
+.testi-slider { 
+  display: flex; overflow: hidden; border-radius: 24px; 
+  background: rgba(25,25,55,.9); border: 1px solid rgba(247,148,29,.3);
+}
+.testi-slide { 
+  min-width: 100%; padding: 4rem 3rem; opacity: 0.4; transition: all .6s;
+  text-align: center;
+}
+.testi-slide.active { opacity: 1; transform: scale(1.02); }
+.testi-text { font-size: 1.4rem; font-style: italic; margin-bottom: 2rem; }
+.testi-author { 
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  font-weight: 700; color: #f7941d;
+}
+.testi-avatar { 
+  width: 50px; height: 50px; border-radius: 50%; 
+  background: linear-gradient(135deg, #f7941d, #ff9f40); 
+  display: flex; align-items: center; justify-content: center;
+}
+.slider-dots { display: flex; gap: 12px; justify-content: center; margin-top: 2rem; }
+.slider-dot { 
+  width: 14px; height: 14px; border-radius: 50%; 
+  background: rgba(255,255,255,.3); cursor: pointer; transition: all .3s;
+}
+.slider-dot.active { background: #f7941d; transform: scale(1.4); }
 
-/* FORMULARIO COMPACTO */
-.form-container { background: linear-gradient(135deg, #f7941d, #ff9f40); border-radius: 20px; padding: 32px 24px; max-width: 440px; margin: 32px auto 0; }
-.form-title { font-size: 24px; font-weight: 900; color: #0e0e1a; margin: 0 0 8px; }
-.form-subtitle { font-size: 14px; color: rgba(14,14,26,.95); margin: 0 0 24px; }
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 12px; font-weight: 700; color: #0e0e1a; margin-bottom: 6px; }
-.form-group input, .form-group textarea { width: 100%; padding: 12px 14px; border: 2px solid rgba(14,14,26,.3); border-radius: 10px; background: rgba(255,255,255,.95); font-size: 14px; }
-.cta-btn { width: 100%; background: #0e0e1a; color: #f7941d; border: none; padding: 16px; font-size: 15px; font-weight: 900; border-radius: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
-.cta-btn:hover { background: #0a0a14; transform: translateY(-1px); }
+/* CTA FORM */
+.cta-hero { 
+  padding: 80px 0; background: linear-gradient(135deg, rgba(247,148,29,.15), rgba(0,212,255,.1));
+  text-align: center;
+}
+.form-container { 
+  background: rgba(20,20,40,.98); backdrop-filter: blur(40px); 
+  border-radius: 32px; border: 2px solid rgba(247,148,29,.5);
+  padding: 4rem 3rem; max-width: 600px; margin: 0 auto;
+  box-shadow: 0 50px 120px rgba(0,0,0,.6);
+}
+.form-title { 
+  font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 1.5rem;
+}
+.form-subtitle { font-size: 1.3rem; color: rgba(255,255,255,.9); margin-bottom: 3rem; }
+.form-group { margin-bottom: 2rem; text-align: left; }
+.form-group label { 
+  display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.8rem;
+  color: rgba(255,255,255,.9);
+}
+.form-group input, .form-group textarea { 
+  width: 100%; padding: 1.2rem 1.5rem; border: 2px solid rgba(247,148,29,.3);
+  border-radius: 16px; background: rgba(15,15,35,.8); color: white;
+  font-size: 1rem; font-family: inherit; transition: all .3s;
+}
+.form-group input:focus, .form-group textarea:focus { 
+  outline: none; border-color: #f7941d; box-shadow: 0 0 25px rgba(247,148,29,.3);
+}
+.form-submit { 
+  width: 100%; padding: 1.5rem; background: linear-gradient(135deg, #f7941d, #ff9f40);
+  color: #0a0a14; font-size: 1.2rem; font-weight: 900; border: none;
+  border-radius: 20px; cursor: pointer; text-transform: uppercase;
+  letter-spacing: 1px; transition: all .4s; margin-top: 1rem;
+}
+.form-submit:hover { 
+  transform: translateY(-4px) scale(1.02); 
+  box-shadow: 0 25px 60px rgba(247,148,29,.6);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container { padding: 0 1.5rem; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .calc-inputs { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<!-- PARTICULAS -->
+<div id="particles"></div>
 
-<!-- DRAWER EXACTO DEL ORIGINAL -->
-<div class="drawer-overlay" id="overlay"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-head">
-    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
-  </div>
-  <div class="drawer-nav">
-    <a class="di-clean" href="index.html">Tienda</a>
-    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
-  </div>
-  <div class="drawer-foot">
-    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
-  </div>
-</div>
-
-<!-- HEADER EXACTO -->
-<header class="hdr">
-  <div style="max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <button class="burger" onclick="openDrawer()">
-        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-      </button>
-      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
-    </div>
-    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+<!-- HEADER -->
+<header>
+  <div class="header-content">
+    <div class="logo">Rexpres Play</div>
+    <a href="#form" class="cta-header">¡Únete Gratis!</a>
   </div>
 </header>
 
-<main>
-  <!-- HERO COMPACTO -->
-  <section class="hero-afiliado">
-    <div class="inner">
-      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <div class="hero-badge">Programa de Afiliados</div>
-        <h1 class="hero-title">Gana 1% por cada recarga</h1>
-        <p class="hero-subtitle">Comparte tu código único en juegos y pronósticos. Comisión del <strong>1% automática</strong> por cada transacción.</p>
-        <div class="earn-preview">
-          <div class="earn-amount">$24.50</div>
-          <div class="earn-label">Ganancias este mes • Solo 50 recargas de $5k</div>
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <h1>¡Gana 1% de comisión por cada recarga!</h1>
+    <p class="hero-subtitle">Programa de afiliados más rentable de Ecuador. Comparte tu código en WhatsApp y gana dinero pasivo con recargas de juegos y pronósticos.</p>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-number" data-target="247">$247k</div>
+        <div class="stat-label">Pagado a afiliados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="892">892</div>
+        <div class="stat-label">Afiliados activos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="1500">1.5k</div>
+        <div class="stat-label">Recargas/día</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="1">1%</div>
+        <div class="stat-label">Comisión fija</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how">
+  <div class="container">
+    <h2 class="section-title">¿Cómo funciona?</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3 class="step-title">Regístrate gratis</h3>
+        <p class="step-desc">30 segundos con tu WhatsApp</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3 class="step-title">Obtén tu código</h3>
+        <p class="step-desc">Enlace único para compartir</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3 class="step-title">Comparte en WhatsApp</h3>
+        <p class="step-desc">Tus grupos y contactos</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3 class="step-title">Gana 1% automático</h3>
+        <p class="step-desc">Por cada recarga con tu código</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">5</div>
+        <h3 class="step-title">Cobro cada viernes</h3>
+        <p class="step-desc">Yape, Banco o Efectivo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calculator">
+  <div class="container">
+    <div class="calc-container">
+      <h2 class="calc-title">Calcula tus ganancias (1% comisión)</h2>
+      <div class="calc-inputs">
+        <input type="number" class="calc-input" id="recargas" placeholder="Recargas/mes" min="0" value="100">
+        <input type="number" class="calc-input" id="promedio" placeholder="Valor promedio" min="1" value="5000">
+      </div>
+      <div class="calc-result">
+        <div class="result-title">Ganarías al mes:</div>
+        <div class="result-amount" id="resultado">$0</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section id="planes" class="plans">
+  <div class="container">
+    <h2 class="section-title">Elige tu plan</h2>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-badge">Gratis</div>
+        <h3>Starter</h3>
+        <div class="plan-price">$0<span>/mes</span></div>
+        <ul class="plan-list">
+          <li>✅ Código único</li>
+          <li>✅ 1% comisión</li>
+          <li>✅ Panel estadísticas</li>
+          <li>✅ Pago semanal</li>
+        </ul>
+        <button class="plan-cta">Empezar Gratis</button>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-badge">Más Popular</div>
+        <h3>Pro</h3>
+        <div class="plan-price">$9<span>/mes</span></div>
+        <ul class="plan-list">
+          <li>✅ Todo lo anterior</li>
+          <li>✅ 1.2% comisión</li>
+          <li>✅ Soporte prioritario</li>
+          <li>✅ Materiales promocionales</li>
+          <li>✅ Subcuentas ilimitadas</li>
+        </ul>
+        <button class="plan-cta">Elegir Pro</button>
+      </div>
+      <div class="plan-card">
+        <h3>Enterprise</h3>
+        <div class="plan-price">$49<span>/mes</span></div>
+        <ul class="plan-list">
+          <li>✅ Todo Pro</li>
+          <li>✅ 1.5% comisión</li>
+          <li>✅ API personalizada</li>
+          <li>✅ Manager dedicado</li>
+          <li>✅ Facturación empresarial</li>
+        </ul>
+        <button class="plan-cta">Contactar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testi-container">
+    <h2 class="section-title">Resultados reales</h2>
+    <div class="testi-slider">
+      <div class="testi-slide active">
+        <p class="testi-text">"Empecé con mi grupo de Free Fire (400 miembros) y gano $180 mensuales fácil."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">J</div>
+          <span>Juan P. - Guayaquil</span>
+        </div>
+      </div>
+      <div class="testi-slide">
+        <p class="testi-text">"Mis clientes de pronósticos recargan $20k semanales. Mi 1% son $200 limpios."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <span>Maria G. - Quito</span>
+        </div>
+      </div>
+      <div class="testi-slide">
+        <p class="testi-text">"Pago perfecto cada viernes. Lo mejor es que es 100% pasivo."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">C</div>
+          <span>Carlos R. - Cuenca</span>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- PASOS -->
-  <section class="section">
-    <div class="inner">
-      <p class="sec-label">En 4 pasos</p>
-      <h2 class="sec-title">Cómo funciona</h2>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">1</div>
-          <div class="ico-registro"></div>
-          <div class="step-title">Regístrate</div>
-          <div class="step-desc">30 segundos gratis</div>
-        </div>
-        <div class="step-card">
-          <div class="step-num">2</div>
-          <div class="ico-link"></div>
-          <div class="step-title">Tu código</div>
-          <div class="step-desc">Enlace único tuyo</div>
-        </div>
-        <div class="step-card">
-          <div class="step-num">3</div>
-          <div class="ico-share"></div>
-          <div class="step-title">Comparte</div>
-          <div class="step-desc">WhatsApp, redes</div>
-        </div>
-        <div class="step-card">
-          <div class="step-num">4</div>
-          <div class="ico-money"></div>
-          <div class="step-title">Gana 1%</div>
-          <div class="step-desc">Por cada recarga</div>
-        </div>
-      </div>
+    <div class="slider-dots">
+      <div class="slider-dot active" data-slide="0"></div>
+      <div class="slider-dot" data-slide="1"></div>
+      <div class="slider-dot" data-slide="2"></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CALCULADORA 1% -->
-  <section class="section">
-    <div class="inner">
-      <p class="sec-label" style="text-align: center;">Calculadora</p>
-      <h2 class="sec-title" style="text-align: center;">Tus ganancias reales (1%)</h2>
-      <div class="calc-container">
-        <input type="number" class="calc-input" id="recargas" placeholder="Número de recargas" min="0" value="0">
-        <div class="calc-result">
-          <div class="result-ganancia" id="ganancia">$0</div>
-          <div class="result-label" id="detalle">1% de comisión por recarga</div>
+<!-- CTA FORM -->
+<section id="form" class="cta-hero">
+  <div class="container">
+    <div class="form-container">
+      <h2 class="form-title">¡Únete al programa ahora!</h2>
+      <p class="form-subtitle">Regístrate gratis y empieza a ganar tu 1% hoy mismo</p>
+      <form id="afiliadoForm">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" required>
         </div>
-      </div>
+        <div class="form-group">
+          <label>WhatsApp Ecuador (099...)</label>
+          <input type="tel" placeholder="0991234567" required>
+        </div>
+        <div class="form-group">
+          <label>¿Qué promocionarás?</label>
+          <textarea rows="3" placeholder="Grupos WhatsApp, Instagram, TikTok, etc..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">¡Activar mi cuenta GRATIS!</button>
+      </form>
     </div>
-  </section>
-
-  <!-- BENEFICIOS -->
-  <section class="section">
-    <div class="inner">
-      <p class="sec-label">Beneficios</p>
-      <h2 class="sec-title">Ventajas exclusivas</h2>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="ico-fast"></div>
-          <div class="benefit-text">
-            <h4>1% inmediato</h4>
-            <p>Juegos y pronósticos</p>
-          </div>
-        </div>
-        <div class="benefit-card">
-          <div class="ico-stats"></div>
-          <div class="benefit-text">
-            <h4>Estadísticas</h4>
-            <p>Seguimiento real time</p>
-          </div>
-        </div>
-        <div class="benefit-card">
-          <div class="ico-card"></div>
-          <div class="benefit-text">
-            <h4>Pagos viernes</h4>
-            <p>Yape, Banco, Efectivo</p>
-          </div>
-        </div>
-        <div class="benefit-card">
-          <div class="ico-support"></div>
-          <div class="benefit-text">
-            <h4>Soporte VIP</h4>
-            <p>WhatsApp exclusivo</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FORMULARIO -->
-  <section class="section">
-    <div class="inner">
-      <div class="form-container">
-        <h3 class="form-title">¡Únete gratis!</h3>
-        <p class="form-subtitle">Empieza a ganar 1% hoy mismo</p>
-        <form id="afiliadoForm">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" required>
-          </div>
-          <div class="form-group">
-            <label>WhatsApp</label>
-            <input type="tel" placeholder="0991234567" required>
-          </div>
-          <button type="submit" class="cta-btn">Ser afiliado</button>
-        </form>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer style="text-align:center;padding:16px;border-top:1px solid #21213a;margin-top:auto;">
-  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador</p>
-</footer>
+  </div>
+</section>
 
 <script>
-// Calculadora 1%
-const calcInput = document.getElementById('recargas');
-const gananciaEl = document.getElementById('ganancia');
-calcInput.addEventListener('input', () => {
-  const recargas = parseInt(calcInput.value) || 0;
-  const total = recargas * 50 * 0.01; // $50 promedio x 1%
-  gananciaEl.textContent = `$${total.toFixed(0)}`;
+// PARTICULAS
+function createParticles() {
+  const particles = document.getElementById('particles');
+  for(let i = 0; i < 80; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 25 + 's';
+    particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+    particles.appendChild(particle);
+  }
+}
+
+// CALCULADORA
+const recargasInput = document.getElementById('recargas');
+const promedioInput = document.getElementById('promedio');
+const resultado = document.getElementById('resultado');
+
+function calcular() {
+  const recargas = parseInt(recargasInput.value) || 0;
+  const promedio = parseInt(promedioInput.value) || 0;
+  const comision = recargas * promedio * 0.01;
+  resultado.textContent = '$' + comision.toLocaleString('es-EC');
+}
+recargasInput.addEventListener('input', calcular);
+promedioInput.addEventListener('input', calcular);
+
+// TESTIMONIAL SLIDER
+let currentTesti = 0;
+const testiSlides = document.querySelectorAll('.testi-slide');
+const testiDots = document.querySelectorAll('.slider-dot');
+
+function showTesti(index) {
+  testiSlides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+  testiDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+  currentTesti = index;
+}
+
+testiDots.forEach((dot, index) => {
+  dot.addEventListener('click', () => showTesti(index));
 });
 
-// Form
+setInterval(() => {
+  const next = (currentTesti + 1) % testiSlides.length;
+  showTesti(next);
+}, 5000);
+
+// FORM
 document.getElementById('afiliadoForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  alert('¡Registrado! Te enviaremos tu código por WhatsApp en 1 hora.');
+  alert('¡Perfecto! Te enviaremos tu código de afiliado por WhatsApp en 30 minutos 🚀');
 });
 
-// Drawer functions (del original)
-function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
-function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
-document.getElementById('overlay').addEventListener('click', closeDrawer);
-function abrirLogin() {}
+// INIT
+window.addEventListener('load', () => {
+  createParticles();
+  calcular();
+});
 </script>
 </body>
 </html>
