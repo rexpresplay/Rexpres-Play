@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página Web Increíble</title>
+    <style>
+        /* Estilos CSS integrados para que sea responsive y bonita */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #007BFF;
+        }
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hero img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .contenido {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        @media (max-width: 768px) {
+            footer {
+                position: relative;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>¡Bienvenido a Mi Página Web!</h1>
+        <p>La mejor página del mundo</p>
+    </header>
+    
+    <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+    
+    <main>
+        <section class="hero">
+            <img src="https://via.placeholder.com/800x400/007BFF/FFFFFF?text=¡Hero+Image!" alt="Imagen principal">
+            <h2 id="inicio">Explora nuestro contenido</h2>
+            <p>Esta es una página de ejemplo responsive y moderna. ¡Personalízala como quieras!</p>
+        </section>
+        
+        <section class="contenido">
+            <div class="card">
+                <h3>Servicio 1</h3>
+                <p>Descripción del primer servicio. Agrega tu contenido aquí.</p>
+                <img src="https://via.placeholder.com/250x150/28a745/FFFFFF?text=Servicio+1" alt="Servicio 1">
+            </div>
+            <div class="card">
+                <h3>Servicio 2</h3>
+                <p>Descripción del segundo servicio. Todo es editable.</p>
+                <img src="https://via.placeholder.com/250x150/ffc107/000000?text=Servicio+2" alt="Servicio 2">
+            </div>
+            <div class="card">
+                <h3 id="servicios">Servicio 3</h3>
+                <p>¡Tercer servicio increíble! Contacta con nosotros.</p>
+                <img src="https://via.placeholder.com/250x150/dc3545/FFFFFF?text=Servicio+3" alt="Servicio 3">
+            </div>
+        </section>
+        
+        <section id="contacto" style="text-align: center; margin-top: 40px;">
+            <h2>Contacto</h2>
+            <p>Envíanos un email a: ejemplo@email.com</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Mi Página Web. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
