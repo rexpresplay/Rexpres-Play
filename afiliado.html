@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rexpres Play — Afiliado</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#050508;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;}
+input,select{background:#0a0a12;border:1px solid #1e1e30;border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;outline:none;width:100%;transition:border .2s;}
+input:focus,select:focus{border-color:#f7941d;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:#0a0a12;padding:10px 14px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#475569;}
+td{padding:10px 14px;border-bottom:1px solid #1a1a2e;color:#cbd5e1;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;}
+.badge-green{background:rgba(22,163,74,.2);color:#4ade80;}
+.badge-yellow{background:rgba(234,179,8,.2);color:#fbbf24;}
+.badge-red{background:rgba(220,38,38,.2);color:#f87171;}
+.badge-blue{background:rgba(59,130,246,.2);color:#60a5fa;}
+.card{background:#0f0f1a;border:1px solid #1e1e30;border-radius:16px;padding:20px;}
+.stat-card{background:linear-gradient(135deg,#0f0f1a,#1a1a2e);border:1px solid #1e1e30;border-radius:16px;padding:20px;}
+.btn{padding:8px 16px;border-radius:10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;border:none;transition:all .2s;}
+.btn-orange{background:#f7941d;color:#000;}.btn-orange:hover{background:#e8840d;}
+.btn-gray{background:#1e1e30;color:#94a3b8;}.btn-gray:hover{background:#2a2a40;color:#fff;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#0a0a12;}::-webkit-scrollbar-thumb{background:#1e1e30;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ────────────────────────────────── -->
+<div id="login-screen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;">
+  <div style="background:#0f0f1a;border:1px solid #1e1e30;border-radius:24px;padding:40px;width:100%;max-width:380px;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <img src="logo.png" alt="Rexpres Play" style="height:50px;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
+      <p style="color:#f7941d;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:3px;">Panel Afiliado</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <input type="text" id="l-user" placeholder="Usuario afiliado">
+      <input type="password" id="l-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()">
+      <p id="l-error" style="color:#f87171;font-size:11px;font-weight:700;text-transform:uppercase;display:none;">Credenciales incorrectas</p>
+      <button onclick="doLogin()" style="background:#f7941d;color:#000;font-weight:800;padding:14px;border-radius:12px;border:none;cursor:pointer;font-size:13px;text-transform:uppercase;letter-spacing:1px;">Entrar</button>
+      <a href="index.html" style="text-align:center;color:#475569;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-decoration:none;">← Volver a la tienda</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ─────────────────────────────── -->
+<div id="dashboard" style="display:none;">
+
+  <!-- TOPBAR -->
+  <div style="background:#0a0a12;border-bottom:1px solid #1a1a2e;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <img src="logo.png" style="height:34px;">
+      <div>
+        <p style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#f7941d;">Panel Afiliado</p>
+        <p id="afil-name" style="font-size:14px;font-weight:800;color:white;margin-top:1px;"></p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="text-align:right;">
+        <p id="fecha-hoy" style="font-size:11px;color:#64748b;font-weight:700;"></p>
+      </div>
+      <button class="btn btn-gray" onclick="cerrarSesion()">Salir</button>
+    </div>
+  </div>
+
+  <div style="max-width:1000px;margin:0 auto;padding:24px 16px 60px;">
+
+    <!-- STATS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px;">
+      <div class="stat-card">
+        <p style="color:#64748b;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">Mi código</p>
+        <p id="stat-codigo" style="font-size:22px;font-weight:900;color:#f7941d;margin-top:8px;letter-spacing:2px;">—</p>
+      </div>
+      <div class="stat-card">
+        <p style="color:#64748b;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">Transacciones hoy</p>
+        <p id="stat-hoy" style="font-size:28px;font-weight:900;color:#60a5fa;margin-top:8px;">0</p>
+      </div>
+      <div class="stat-card">
+        <p style="color:#64748b;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">Total transacciones</p>
+        <p id="stat-total-count" style="font-size:28px;font-weight:900;color:#a78bfa;margin-top:8px;">0</p>
+      </div>
+      <div class="stat-card">
+        <p style="color:#64748b;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">Comisión total</p>
+        <p id="stat-comision" style="font-size:28px;font-weight:900;color:#4ade80;margin-top:8px;">$0.00</p>
+      </div>
+    </div>
+
+    <!-- FILTROS POR FECHA -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#64748b;margin-bottom:14px;">Filtrar por fecha</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+        <div style="flex:1;min-width:130px;">
+          <label style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Desde</label>
+          <input type="date" id="filtro-ini" style="width:auto;">
+        </div>
+        <div style="flex:1;min-width:130px;">
+          <label style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Hasta</label>
+          <input type="date" id="filtro-fin" style="width:auto;">
+        </div>
+        <button class="btn btn-orange" onclick="aplicarFiltro()">Buscar</button>
+        <button class="btn btn-gray" onclick="limpiarFiltro()">Hoy</button>
+      </div>
+
+      <!-- Resumen del período filtrado -->
+      <div id="resumen-filtro" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid #1a1a2e;">
+        <div style="display:flex;flex-wrap:wrap;gap:16px;">
+          <div>
+            <p style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Transacciones en período</p>
+            <p id="periodo-count" style="font-size:20px;font-weight:900;color:#60a5fa;margin-top:4px;">0</p>
+          </div>
+          <div>
+            <p style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Comisión en período</p>
+            <p id="periodo-comision" style="font-size:20px;font-weight:900;color:#4ade80;margin-top:4px;">$0.00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA DE TRANSACCIONES -->
+    <div class="card" style="overflow-x:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <p style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#64748b;">Mis transacciones</p>
+        <p id="tabla-periodo-label" style="font-size:11px;font-weight:700;color:#f7941d;"></p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Servicio</th>
+            <th>Marca</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Comisión</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body">
+          <tr><td colspan="6" style="text-align:center;color:#475569;padding:40px;">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
+
+let usuarioActual = '';
+let codigoAfiliado = '';
+let todosLosPedidos = [];
+let infoAfiliado = null;
+
+// Fecha de hoy formateada
+function hoy() {
+  return new Date().toISOString().split('T')[0];
+}
+function formatFecha(f) {
+  if (!f) return '';
+  const d = new Date(f + 'T00:00:00');
+  return d.toLocaleDateString('es-EC', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+// ── LOGIN ──────────────────────────────────
+async function doLogin() {
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value.trim();
+  if (!u || !p) return;
+  try {
+    const r = await fetch(`${API}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
+    const d = await r.json();
+    if (d.ok && d.tipo === 'afiliado') {
+      usuarioActual = u;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('afil-name').innerText = u;
+      // Mostrar fecha de hoy
+      document.getElementById('fecha-hoy').innerText = formatFecha(hoy());
+      // Setear filtros con fecha de hoy por defecto
+      document.getElementById('filtro-ini').value = hoy();
+      document.getElementById('filtro-fin').value = hoy();
+      await cargarDatos();
+    } else {
+      document.getElementById('l-error').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('l-error').style.display = 'block';
+  }
+}
+document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function cerrarSesion() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+  todosLosPedidos = [];
+}
+
+// ── CARGAR DATOS ────────────────────────────
+async function cargarDatos() {
+  try {
+    // Cargar info del afiliado para obtener su código
+    const ra = await fetch(`${API}?accion=getAfiliados`);
+    const da = await ra.json();
+    const afils = da.afiliados || [];
+    infoAfiliado = afils.find(a => a.usuario.toLowerCase().trim() === usuarioActual.toLowerCase().trim());
+    if (infoAfiliado) {
+      codigoAfiliado = infoAfiliado.codigo;
+      document.getElementById('stat-codigo').innerText = codigoAfiliado;
+    }
+
+    // Cargar pedidos del afiliado
+    const rp = await fetch(`${API}?accion=getPedidosAfiliado&codigo=${encodeURIComponent(codigoAfiliado)}`);
+    const dp = await rp.json();
+    todosLosPedidos = dp.pedidos || [];
+
+    // Actualizar stats globales
+    const totalComision = parseFloat(dp.totalComision || 0);
+    document.getElementById('stat-total-count').innerText = todosLosPedidos.length;
+    document.getElementById('stat-comision').innerText = '$' + totalComision.toFixed(2);
+
+    // Filtrar por hoy por defecto
+    aplicarFiltro();
+
+  } catch(e) {
+    document.getElementById('tabla-body').innerHTML =
+      '<tr><td colspan="6" style="text-align:center;color:#475569;padding:40px;">Error al cargar datos</td></tr>';
+  }
+}
+
+// ── FILTRAR POR FECHA ───────────────────────
+function aplicarFiltro() {
+  const ini = document.getElementById('filtro-ini').value;
+  const fin = document.getElementById('filtro-fin').value;
+
+  let filtrados = [...todosLosPedidos];
+
+  if (ini) {
+    filtrados = filtrados.filter(p => {
+      const fp = extraerFecha(p.fecha);
+      return fp >= ini;
+    });
+  }
+  if (fin) {
+    filtrados = filtrados.filter(p => {
+      const fp = extraerFecha(p.fecha);
+      return fp <= fin;
+    });
+  }
+
+  // Stats del período
+  const comisionPeriodo = filtrados.reduce((a, p) => a + parseFloat(p.comision || 0), 0);
+  document.getElementById('periodo-count').innerText = filtrados.length;
+  document.getElementById('periodo-comision').innerText = '$' + comisionPeriodo.toFixed(2);
+
+  // Pedidos de hoy para el stat
+  const pedidosHoy = todosLosPedidos.filter(p => extraerFecha(p.fecha) === hoy());
+  document.getElementById('stat-hoy').innerText = pedidosHoy.length;
+
+  // Label del período
+  const label = ini === fin && ini === hoy()
+    ? 'Mostrando: Hoy'
+    : ini === fin && ini
+    ? `Mostrando: ${formatFecha(ini)}`
+    : ini && fin
+    ? `Mostrando: ${ini} → ${fin}`
+    : 'Todos los registros';
+  document.getElementById('tabla-periodo-label').innerText = label;
+
+  // Mostrar resumen si hay filtro activo
+  document.getElementById('resumen-filtro').style.display = (ini || fin) ? 'block' : 'none';
+
+  renderTabla(filtrados);
+}
+
+function limpiarFiltro() {
+  document.getElementById('filtro-ini').value = hoy();
+  document.getElementById('filtro-fin').value = hoy();
+  aplicarFiltro();
+}
+
+// Extraer YYYY-MM-DD de una fecha en formato local
+function extraerFecha(fechaStr) {
+  if (!fechaStr) return '';
+  // Intentar parsear formato DD/MM/YYYY o MM/DD/YYYY
+  const str = String(fechaStr);
+  // Si contiene / es formato local
+  const partes = str.split(/[\/\s,]/);
+  if (partes.length >= 3) {
+    // Asumir formato como "30/4/2026" o "4/30/2026 18:00:00"
+    // Intentamos con Date.parse primero
+    const d = new Date(fechaStr);
+    if (!isNaN(d.getTime())) {
+      return d.toISOString().split('T')[0];
+    }
+    // Formato DD/MM/YYYY
+    if (partes[0].length <= 2 && partes[1].length <= 2) {
+      const año = partes[2].length === 4 ? partes[2] : '20' + partes[2];
+      const mes = partes[1].padStart(2,'0');
+      const dia = partes[0].padStart(2,'0');
+      return `${año}-${mes}-${dia}`;
+    }
+  }
+  const d2 = new Date(fechaStr);
+  return isNaN(d2.getTime()) ? '' : d2.toISOString().split('T')[0];
+}
+
+// ── RENDER TABLA ────────────────────────────
+function renderTabla(pedidos) {
+  const tbody = document.getElementById('tabla-body');
+  if (!pedidos.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#475569;padding:40px;">Sin transacciones en este período</td></tr>';
+    return;
+  }
+  tbody.innerHTML = pedidos.map(p => `
+    <tr>
+      <td style="white-space:nowrap;color:#94a3b8;">${p.fecha}</td>
+      <td><span class="badge badge-blue">${p.servicio || '—'}</span></td>
+      <td style="font-weight:700;">${p.marca || '—'}</td>
+      <td style="font-weight:800;color:#e2e8f0;">$${parseFloat(p.total||0).toFixed(2)}</td>
+      <td>${badgeEstado(p.estado)}</td>
+      <td style="font-weight:900;color:#4ade80;">$${parseFloat(p.comision||0).toFixed(2)}</td>
+    </tr>`).join('');
+}
+
+function badgeEstado(e) {
+  const map = { PENDIENTE:'badge-yellow', COMPLETADO:'badge-green', CANCELADO:'badge-red' };
+  return `<span class="badge ${map[String(e).toUpperCase()]||'badge-blue'}">${e||'—'}</span>`;
+}
+</script>
+</body>
+</html>
