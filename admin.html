@@ -281,7 +281,7 @@
         <div class="card" style="overflow-x:auto;">
           <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Lista de afiliados</h3>
           <table>
-            <thead><tr><th>Código</th><th>Usuario</th><th>Comisión</th><th>Valor</th><th>Categorías</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Código</th><th>Usuario</th><th>Comisiones por categoría</th><th>Acciones</th></tr></thead>
             <tbody id="tabla-afiliados"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
@@ -377,21 +377,48 @@
   </div>
 </div>
 
-<!-- Modal Afiliado -->
+<!-- Modal Afiliado — multi-comisión por categoría -->
 <div class="modal-bg" id="modal-afiliado">
-  <div class="modal">
+  <div class="modal" style="max-width:580px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;" id="modal-afil-title">Afiliado</h3>
       <button onclick="cerrarModal('modal-afiliado')" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer; line-height:1;">✕</button>
     </div>
-    <div style="display:flex; flex-direction:column; gap:12px;">
+    <div style="display:flex; flex-direction:column; gap:14px;">
       <input type="hidden" id="afil-codigo-orig">
-      <div><label class="lbl">Código afiliado</label><input type="text" id="afil-codigo" placeholder="Ej: ISAA" style="text-transform:uppercase;"></div>
-      <div><label class="lbl">Usuario</label><input type="text" id="afil-usuario" placeholder="Usuario del afiliado"></div>
-      <div><label class="lbl">Tipo comisión</label>
-        <select id="afil-tipo"><option value="porcentaje">Porcentaje (%)</option><option value="fijo">Valor fijo ($)</option></select></div>
-      <div><label class="lbl">Valor comisión</label><input type="number" id="afil-valor" step="0.01" placeholder="Ej: 5 (%) o 0.50 ($)"></div>
-      <div><label class="lbl">Categorías activas (separadas por coma)</label><input type="text" id="afil-cats" placeholder="Free Fire,Roblox"></div>
+
+      <!-- Datos básicos -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div><label class="lbl">Código afiliado</label><input type="text" id="afil-codigo" placeholder="Ej: ISAA" style="text-transform:uppercase;"></div>
+        <div><label class="lbl">Usuario</label><input type="text" id="afil-usuario" placeholder="Nombre del afiliado"></div>
+      </div>
+
+      <!-- Sección de comisiones -->
+      <div style="background:#070710; border:1px solid #1e1e30; border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <p style="margin:0; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#f7941d;">💰 Comisiones por categoría</p>
+          <button class="btn btn-green" style="font-size:10px; padding:6px 12px;" onclick="agregarFilaComision()">+ Añadir comisión</button>
+        </div>
+
+        <!-- Encabezado tabla comisiones -->
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 36px; gap:6px; margin-bottom:6px; padding:0 4px;">
+          <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#475569;">Categoría</span>
+          <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#475569;">Tipo</span>
+          <span style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#475569;">Valor</span>
+          <span></span>
+        </div>
+
+        <!-- Filas dinámicas -->
+        <div id="afil-comisiones-lista" style="display:flex; flex-direction:column; gap:6px;">
+          <!-- Se genera con JS -->
+        </div>
+
+        <p style="margin:10px 0 0; font-size:10px; color:#475569; line-height:1.5;">
+          ℹ️ Si una categoría no tiene comisión asignada, no generará ganancias para el afiliado.<br>
+          Puedes poner <b>TODAS</b> en categoría para aplicar a cualquier venta.
+        </p>
+      </div>
+
       <button class="btn btn-orange" style="padding:14px;" onclick="guardarAfiliado()">💾 Guardar afiliado</button>
     </div>
   </div>
@@ -1011,44 +1038,103 @@ async function cargarAfiliados() {
 
 function renderAfiliados() {
   const tbody = document.getElementById('tabla-afiliados');
-  if(!afiladosData.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Sin afiliados</td></tr>'; return; }
-  tbody.innerHTML = afiladosData.map(a => `
-    <tr>
+  if(!afiladosData.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#475569; padding:40px;">Sin afiliados</td></tr>'; return; }
+  tbody.innerHTML = afiladosData.map(a => {
+    // comisiones puede ser array (nuevo formato) o legado (string/objeto)
+    const comisiones = parsearComisiones(a);
+    const comBadges = comisiones.length
+      ? comisiones.map(c => {
+          const val = c.tipo === 'porcentaje' ? c.valor + '%' : '$' + parseFloat(c.valor||0).toFixed(2);
+          return `<span style="display:inline-flex; gap:4px; align-items:center; background:#0a0a12; border:1px solid #1e1e30; border-radius:8px; padding:3px 8px; font-size:10px; font-weight:700; white-space:nowrap;">
+            <span style="color:#94a3b8;">${c.categoria}</span>
+            <span style="color:#f7941d;">${val}</span>
+            <span style="color:#475569; font-size:9px;">${c.tipo==='porcentaje'?'%':'$fijo'}</span>
+          </span>`;
+        }).join('')
+      : '<span style="color:#475569; font-size:11px;">Sin comisiones</span>';
+
+    return `<tr>
       <td style="font-family:monospace; font-weight:800; color:#f7941d;">${a.codigo}</td>
       <td>${a.usuario||''}</td>
-      <td>${a.comisionTipo||''}</td>
-      <td style="color:#4ade80; font-weight:800;">${a.comisionTipo==='porcentaje' ? (a.comisionValor+'%') : '$'+parseFloat(a.comisionValor||0).toFixed(2)}</td>
-      <td style="color:#94a3b8; font-size:11px; max-width:150px; word-break:break-word;">${a.categorias||'Todas'}</td>
-      <td style="display:flex; gap:6px;">
-        <button class="btn btn-gray" onclick='editarAfiliado(${JSON.stringify(a)})' title="Editar">✏️</button>
+      <td style="max-width:280px;"><div style="display:flex; flex-wrap:wrap; gap:4px;">${comBadges}</div></td>
+      <td style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn btn-gray" onclick='editarAfiliado(${JSON.stringify(a)})' title="Editar">✏️ Editar</button>
         <button class="btn btn-red" onclick="eliminarAfiliado('${a.codigo}')" title="Eliminar">🗑️</button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 }
 
-/* Calcular ganancias de afiliados cruzando con pedidos */
+/* Normaliza comisiones al nuevo formato array [{categoria, tipo, valor}] */
+function parsearComisiones(a) {
+  // Nuevo formato: a.comisiones es JSON array
+  if(Array.isArray(a.comisiones)) return a.comisiones;
+  if(typeof a.comisiones === 'string' && a.comisiones.startsWith('[')) {
+    try { return JSON.parse(a.comisiones); } catch(e) {}
+  }
+  // Formato legado: campos sueltos comisionTipo / comisionValor / categorias
+  if(a.comisionTipo && a.comisionValor) {
+    const cats = (a.categorias || 'TODAS').split(',').map(c => c.trim()).filter(Boolean);
+    return cats.map(cat => ({ categoria: cat, tipo: a.comisionTipo, valor: a.comisionValor }));
+  }
+  return [];
+}
+
+/* Calcular ganancias de afiliados — soporta multi-comisión por categoría */
 function calcularGananciasAfiliados() {
   const tbody = document.getElementById('tabla-ganancias');
   if(!afiladosData.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#475569; padding:20px;">Sin afiliados registrados</td></tr>'; return; }
 
   tbody.innerHTML = afiladosData.map(a => {
-    // Pedidos donde el código del afiliado fue usado
+    const comisiones = parsearComisiones(a);
+    // Pedidos de este afiliado (código usado en la compra, no cancelado)
     const ventasAfil = pedidosData.filter(p =>
       String(p.codigo||'').toUpperCase() === String(a.codigo||'').toUpperCase() &&
       p.estado !== 'CANCELADO'
     );
-    let ganancia = 0;
+
+    let gananciaTotal = 0;
+    const detalle = {};  // { categoria: { ventas, ganancia } }
+
     ventasAfil.forEach(p => {
-      const total = parseFloat(p.total||0);
-      if(a.comisionTipo === 'porcentaje') ganancia += total * (parseFloat(a.comisionValor||0)/100);
-      else ganancia += parseFloat(a.comisionValor||0);
+      const marcaPedido = String(p.marca||'').trim();
+      const total       = parseFloat(p.total||0);
+
+      // Buscar comisión aplicable: primero por categoría exacta, luego TODAS
+      const com = comisiones.find(c => c.categoria.toUpperCase() === marcaPedido.toUpperCase())
+               || comisiones.find(c => c.categoria.toUpperCase() === 'TODAS');
+
+      if(!com) return; // Sin comisión para esta categoría → no genera ganancia
+
+      const ganPedido = com.tipo === 'porcentaje'
+        ? total * (parseFloat(com.valor||0) / 100)
+        : parseFloat(com.valor||0);
+
+      gananciaTotal += ganPedido;
+      const key = com.categoria;
+      if(!detalle[key]) detalle[key] = { ventas:0, ganancia:0 };
+      detalle[key].ventas++;
+      detalle[key].ganancia += ganPedido;
     });
+
+    const detalleHtml = Object.entries(detalle).map(([cat, d]) =>
+      `<span style="font-size:10px; background:#0a0a12; border:1px solid #1e1e30; border-radius:6px; padding:2px 7px; color:#94a3b8; white-space:nowrap;">
+        ${cat}: <b style="color:#4ade80;">$${d.ganancia.toFixed(2)}</b> (${d.ventas}v)
+      </span>`
+    ).join('');
+
     return `<tr>
-      <td style="font-weight:800; color:#f7941d;">${a.codigo} <span style="color:#94a3b8; font-size:10px; font-weight:400;">(${a.usuario})</span></td>
-      <td>${ventasAfil.length} ventas</td>
-      <td style="font-weight:900; color:#4ade80; font-size:16px;">$${ganancia.toFixed(2)}</td>
+      <td style="font-weight:800; color:#f7941d;">
+        ${a.codigo}
+        <span style="color:#94a3b8; font-size:10px; font-weight:400; display:block;">${a.usuario}</span>
+      </td>
+      <td>${ventasAfil.length} ventas<br><div style="display:flex; flex-wrap:wrap; gap:3px; margin-top:4px;">${detalleHtml||'—'}</div></td>
+      <td style="font-weight:900; color:#4ade80; font-size:18px; white-space:nowrap;">$${gananciaTotal.toFixed(2)}</td>
       <td>
-        <button class="btn btn-red" style="font-size:10px;" onclick="resetearGanancias('${a.codigo}','${a.usuario}', ${ganancia.toFixed(2)})" title="Pagar y resetear">💸 Pagado / Resetear</button>
+        <button class="btn btn-red" style="font-size:10px; white-space:nowrap;"
+          onclick="resetearGanancias('${a.codigo}','${a.usuario}', ${gananciaTotal.toFixed(2)})">
+          💸 Pagar y resetear
+        </button>
       </td>
     </tr>`;
   }).join('');
@@ -1066,10 +1152,75 @@ async function resetearGanancias(codigo, usuario, monto) {
   }
 }
 
+/* ── Opciones de categoría para el select del modal ── */
+function getCatOpciones() {
+  // Categorías cargadas + opción especial TODAS
+  const cats = ['TODAS', ...categoriasData.map(c => c.nombre).filter(Boolean)];
+  return [...new Set(cats)].map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+/* ── Agrega una fila nueva de comisión ── */
+function agregarFilaComision(cat = '', tipo = 'porcentaje', valor = '') {
+  const lista = document.getElementById('afil-comisiones-lista');
+  const id    = 'com-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+
+  const fila = document.createElement('div');
+  fila.id = id;
+  fila.style.cssText = 'display:grid; grid-template-columns:2fr 1fr 1fr 36px; gap:6px; align-items:center;';
+  fila.innerHTML = `
+    <!-- Categoría -->
+    <select style="font-size:12px; padding:8px 10px;">
+      ${getCatOpciones()}
+    </select>
+    <!-- Tipo -->
+    <select style="font-size:12px; padding:8px 10px;" onchange="actualizarPlaceholderValor(this)">
+      <option value="porcentaje" ${tipo==='porcentaje'?'selected':''}>% Porcentaje</option>
+      <option value="fijo"       ${tipo==='fijo'?'selected':''}>$ Fijo</option>
+    </select>
+    <!-- Valor -->
+    <input type="number" step="0.01" min="0" placeholder="${tipo==='porcentaje'?'Ej: 5':'Ej: 0.50'}"
+      value="${valor}" style="font-size:12px; padding:8px 10px;">
+    <!-- Quitar -->
+    <button onclick="quitarFilaComision('${id}')"
+      style="background:#dc2626; border:none; border-radius:8px; color:#fff; font-size:14px; cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">✕</button>`;
+
+  // Setear categoría si viene valor
+  if(cat) fila.querySelector('select').value = cat;
+  lista.appendChild(fila);
+}
+
+function actualizarPlaceholderValor(sel) {
+  const input = sel.parentElement.querySelector('input[type=number]');
+  input.placeholder = sel.value === 'porcentaje' ? 'Ej: 5' : 'Ej: 0.50';
+}
+
+function quitarFilaComision(id) {
+  document.getElementById(id)?.remove();
+}
+
+/* ── Leer todas las filas de comisión del modal ── */
+function leerComisiones() {
+  const lista  = document.getElementById('afil-comisiones-lista');
+  const filas  = lista.children;
+  const result = [];
+  for(const fila of filas) {
+    const [selCat, selTipo, inputVal] = fila.querySelectorAll('select, input[type=number]');
+    const cat   = selCat?.value?.trim();
+    const tipo  = selTipo?.value;
+    const valor = parseFloat(inputVal?.value);
+    if(cat && tipo && !isNaN(valor) && valor >= 0) {
+      result.push({ categoria: cat, tipo, valor });
+    }
+  }
+  return result;
+}
+
 function abrirModalAfiliado() {
   document.getElementById('afil-codigo-orig').value = '';
-  ['afil-codigo','afil-usuario','afil-valor','afil-cats'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('afil-tipo').value = 'porcentaje';
+  document.getElementById('afil-codigo').value      = '';
+  document.getElementById('afil-usuario').value     = '';
+  document.getElementById('afil-comisiones-lista').innerHTML = '';
+  agregarFilaComision(); // Inicia con una fila vacía
   document.getElementById('modal-afil-title').innerText = 'Agregar Afiliado';
   document.getElementById('modal-afiliado').classList.add('open');
 }
@@ -1077,27 +1228,51 @@ function abrirModalAfiliado() {
 function editarAfiliado(a) {
   document.getElementById('afil-codigo-orig').value = a.codigo;
   document.getElementById('afil-codigo').value      = a.codigo;
-  document.getElementById('afil-usuario').value     = a.usuario||'';
-  document.getElementById('afil-tipo').value        = a.comisionTipo||'porcentaje';
-  document.getElementById('afil-valor').value       = a.comisionValor||'';
-  document.getElementById('afil-cats').value        = a.categorias||'';
+  document.getElementById('afil-usuario').value     = a.usuario || '';
+  document.getElementById('afil-comisiones-lista').innerHTML = '';
+
+  // Cargar comisiones existentes
+  const comisiones = parsearComisiones(a);
+  if(comisiones.length) {
+    comisiones.forEach(c => agregarFilaComision(c.categoria, c.tipo, c.valor));
+  } else {
+    agregarFilaComision(); // Al menos una fila vacía
+  }
+
   document.getElementById('modal-afil-title').innerText = 'Editar Afiliado';
   document.getElementById('modal-afiliado').classList.add('open');
 }
 
 async function guardarAfiliado() {
+  const codigo   = document.getElementById('afil-codigo').value.toUpperCase().trim();
+  const usuario  = document.getElementById('afil-usuario').value.trim();
+  const codigoOr = document.getElementById('afil-codigo-orig').value;
+
+  if(!codigo || !usuario) { toast('Completa código y usuario', 'err'); return; }
+
+  const comisiones = leerComisiones();
+  if(!comisiones.length) { toast('Añade al menos una comisión', 'err'); return; }
+
   const datos = {
-    codigo:       document.getElementById('afil-codigo').value.toUpperCase().trim(),
-    codigoOrig:   document.getElementById('afil-codigo-orig').value,
-    usuario:      document.getElementById('afil-usuario').value.trim(),
-    comisionTipo: document.getElementById('afil-tipo').value,
-    comisionValor:document.getElementById('afil-valor').value,
-    categorias:   document.getElementById('afil-cats').value.trim()
+    codigo,
+    codigoOrig: codigoOr,
+    usuario,
+    comisiones,                              // Array nuevo formato
+    // Compatibilidad legado (primer registro como campo suelto)
+    comisionTipo:  comisiones[0].tipo,
+    comisionValor: comisiones[0].valor,
+    categorias:    comisiones.map(c => c.categoria).join(',')
   };
-  if(!datos.codigo || !datos.usuario) { toast('Completa código y usuario', 'err'); return; }
+
   const ok = await apiPost({ accion:'guardarAfiliado', datos });
-  if(ok) { toast('Afiliado guardado'); cerrarModal('modal-afiliado'); await cargarAfiliados(); calcularGananciasAfiliados(); }
-  else toast('Error al guardar', 'err');
+  if(ok) {
+    toast('Afiliado guardado correctamente');
+    cerrarModal('modal-afiliado');
+    await cargarAfiliados();
+    calcularGananciasAfiliados();
+  } else {
+    toast('Error al guardar. Revisa tu Apps Script.', 'err');
+  }
 }
 
 async function eliminarAfiliado(codigo) {
