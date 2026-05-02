@@ -10,29 +10,6 @@ html, body { height: 100%; margin: 0; }
 body { display: flex; flex-direction: column; }
 main { flex: 1; }
 
-/* HERO — imagen completa sin recortes, se adapta al tamaño real de la imagen */
-.hero-wrap {
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  background: #0e0e1a;
-}
-.hero-wrap img.hero-img {
-  width: 100%;
-  height: auto;        /* altura proporcional a la imagen — sin recorte */
-  display: block;
-  object-fit: contain; /* imagen completa visible siempre */
-}
-/* Overlay solo en los slides no activos para la transición */
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 1.1s ease;
-}
-.hero-slide.on { opacity: 1; }
-
-/* Contenedor de slides — altura igual al primer img */
 .hero-inner {
   position: relative;
   width: 100%;
@@ -43,7 +20,6 @@ main { flex: 1; }
   height: auto;
   display: block;
 }
-/* Slides adicionales encima del primero */
 .hero-inner .slide-extra {
   position: absolute;
   inset: 0;
@@ -69,18 +45,213 @@ main { flex: 1; }
 }
 .h-dot.on { width: 20px; background: #f7941d; }
 
-/* Contenido interior */
-.inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-@media (min-width: 600px)  { .inner { padding: 0 24px; } }
-@media (min-width: 900px)  { .inner { padding: 0 40px; } }
+.inner { max-width: 480px; margin: 0 auto; padding: 0 14px; }
+@media (min-width: 600px)  { .inner { max-width: 700px; padding: 0 20px; } }
+@media (min-width: 900px)  { .inner { max-width: 1200px; padding: 0 40px; } }
 
-.section { padding: 28px 0; }
+.section { padding: 16px 0 24px; }
 
-/* CATEGORÍAS */
+/* ══════════════════════════════
+   SECCIÓN NOVEDADES
+══════════════════════════════ */
+.novedades-section {
+  padding: 14px 0 0;
+}
+
+.novedades-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.novedades-label::before {
+  content: '';
+  display: block;
+  width: 4px; height: 18px;
+  background: linear-gradient(180deg, #f7941d, #ff5c00);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.novedades-label span {
+  font-size: 11px;
+  font-weight: 900;
+  color: #f7941d;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Scroll horizontal en móvil, grid en desktop */
+.novedades-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.novedades-scroll::-webkit-scrollbar { display: none; }
+@media (min-width: 700px) {
+  .novedades-scroll {
+    overflow-x: visible;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* TARJETA NOVEDAD */
+.nov-card {
+  position: relative;
+  min-width: calc(100% - 0px);
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0d0d1c 0%, #141020 60%, #1a0d00 100%);
+  border: 1px solid rgba(247,148,29,.25);
+  padding: 0;
+  text-decoration: none;
+  display: block;
+  transition: transform .22s, box-shadow .22s, border-color .22s;
+}
+@media (min-width: 700px) {
+  .nov-card { min-width: unset; border-radius: 18px; }
+}
+.nov-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(247,148,29,.22);
+  border-color: rgba(247,148,29,.6);
+}
+.nov-card:active { transform: scale(.97); }
+
+/* Brillo decorativo */
+.nov-glow {
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(247,148,29,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.nov-glow-2 {
+  position: absolute;
+  bottom: -30px; left: -30px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,92,0,.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Banda superior "NUEVO" */
+.nov-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(247,148,29,.12);
+}
+.nov-badge-new {
+  background: linear-gradient(90deg, #f7941d, #ff5c00);
+  color: #000;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  animation: nov-pulse 2.5s ease-in-out infinite;
+}
+@keyframes nov-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(247,148,29,.5); }
+  50%       { box-shadow: 0 0 0 5px rgba(247,148,29,0); }
+}
+.nov-category {
+  font-size: 9px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Cuerpo de la tarjeta */
+.nov-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.nov-icon {
+  width: 46px; height: 46px;
+  min-width: 46px;
+  border-radius: 13px;
+  background: rgba(247,148,29,.13);
+  border: 1px solid rgba(247,148,29,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.nov-text { flex: 1; min-width: 0; }
+.nov-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: white;
+  line-height: 1.3;
+  margin-bottom: 5px;
+}
+.nov-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+/* Pie de tarjeta */
+.nov-footer {
+  padding: 0 16px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nov-meta {
+  font-size: 10px;
+  color: #475569;
+  font-weight: 600;
+}
+.nov-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(90deg, #f7941d, #ff5c00);
+  color: #000;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 14px;
+  border-radius: 50px;
+  transition: opacity .2s, transform .2s;
+}
+.nov-card:hover .nov-btn {
+  opacity: .9;
+  transform: scale(1.04);
+}
+
+/* Divisor elegante entre secciones */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(247,148,29,.2) 30%, rgba(247,148,29,.2) 70%, transparent);
+  margin: 14px 0 12px;
+}
+
+/* ══════════════════════════════
+   RESTO (sin cambios)
+══════════════════════════════ */
 .cats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px; margin-bottom: 28px;
+  gap: 10px; margin-bottom: 20px;
 }
 @media (min-width: 600px) { .cats-grid { gap: 20px; } }
 @media (min-width: 900px) { .cats-grid { gap: 24px; } }
@@ -113,7 +284,6 @@ main { flex: 1; }
   color: white; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;
 }
 
-/* FEATURES */
 .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (min-width: 700px) { .features-grid { grid-template-columns: repeat(4,1fr); gap: 14px; } }
 .feat-item {
@@ -125,7 +295,6 @@ main { flex: 1; }
 .feat-title { font-size: 11px; font-weight: 800; color: white; line-height: 1.3; }
 .feat-desc  { font-size: 10px; color: #64748b; line-height: 1.4; }
 
-/* MODAL */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 300; align-items: center; justify-content: center; padding: 16px; }
 .modal-overlay.open { display: flex; }
 .modal-box { background: #131320; border: 1px solid #21213a; border-radius: 20px; padding: 28px; width: 100%; max-width: 340px; }
@@ -133,12 +302,10 @@ main { flex: 1; }
 .login-opt:hover { border-color: #f7941d; }
 .login-opt:last-of-type { margin-bottom: 0; }
 
-/* DRAWER */
 .di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
 .di-clean:last-child { border-bottom: none; }
 .di-clean:hover { background: rgba(255,255,255,.04); color: white; }
 
-/* BOTÓN FLOTANTE WHATSAPP */
 .wa-float {
   position: fixed;
   bottom: 24px; right: 20px;
@@ -155,7 +322,6 @@ main { flex: 1; }
 .wa-float:active { transform: scale(.95); }
 .wa-float svg { width: 30px; height: 30px; fill: white; }
 
-/* CUADRO COMUNIDAD */
 .comunidad-box {
   background: linear-gradient(135deg, #0d1f12 0%, #0f2318 100%);
   border: 1px solid #1a3a22;
@@ -214,8 +380,8 @@ main { flex: 1; }
 .comunidad-btn:hover { background: #1fb857; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,.5); }
 .comunidad-btn:active { transform: scale(.97); }
 
-.sec-label { font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
-.sec-title { font-size: clamp(20px,4vw,32px); font-weight: 800; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 18px; }
+.sec-label { font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
+.sec-title { font-size: clamp(18px,4vw,28px); font-weight: 800; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 12px; }
 </style>
 </head>
 <body>
@@ -274,11 +440,9 @@ main { flex: 1; }
 
 <main>
 
-  <!-- HERO — imagen completa sin recorte, ancho 100% -->
+  <!-- HERO -->
   <div class="hero-inner">
-    <!-- Imagen base siempre visible (banner1) -->
     <img id="hero-base" src="banner1.webp" alt="Rexpres Play banner">
-    <!-- banner2 encima con fade -->
     <div class="slide-extra" id="slide-2">
       <img src="banner2.webp" alt="Rexpres Play banner 2">
     </div>
@@ -287,10 +451,60 @@ main { flex: 1; }
       <div class="h-dot"     onclick="goSlide(1)" id="dot-1"></div>
     </div>
   </div>
-  
-  <!-- CONTENIDO -->
+
+  <!-- ══ NOVEDADES ══ -->
+  <div class="novedades-section">
+    <div class="inner">
+
+      <!-- Label con acento naranja -->
+      <div class="novedades-label">
+        <span>Novedades</span>
+      </div>
+
+      <!-- Scroll horizontal en móvil / grid en desktop -->
+      <div class="novedades-scroll">
+
+        <!-- Tarjeta: Programa de Afiliados -->
+        <a class="nov-card" href="afiliadopro.html">
+          <div class="nov-glow"></div>
+          <div class="nov-glow-2"></div>
+
+          <div class="nov-ribbon">
+            <span class="nov-badge-new">Nuevo</span>
+            <span class="nov-category">Programa de afiliados</span>
+          </div>
+
+          <div class="nov-body">
+            <div class="nov-icon">💸</div>
+            <div class="nov-text">
+              <div class="nov-title">Gana comisiones por cada venta que generes</div>
+              <div class="nov-desc">Hasta 10% de comisión · Pagos cada viernes · Sin límite de ganancias</div>
+            </div>
+          </div>
+
+          <div class="nov-footer">
+            <span class="nov-meta">Disponible ahora</span>
+            <span class="nov-btn">
+              Ver más
+              <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:#000;"><path d="M9 18l6-6-6-6"/></svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- (Aquí puedes agregar más tarjetas de novedades en el futuro) -->
+
+      </div>
+
+    </div>
+  </div>
+  <!-- ══ FIN NOVEDADES ══ -->
+
+  <!-- CONTENIDO PRINCIPAL -->
   <div class="section">
     <div class="inner">
+
+      <div class="section-divider"></div>
+
       <p class="sec-label">¿Qué deseas hacer hoy?</p>
       <h2 class="sec-title">Selecciona un servicio</h2>
 
@@ -329,7 +543,7 @@ main { flex: 1; }
       <div class="comunidad-box">
         <div class="comunidad-icon">📢</div>
         <h3 class="comunidad-title">¡Únete a nuestra comunidad!</h3>
-        <p class="comunidad-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos especiales y dinamicas con premios para nuestra comunidad.</p>
+        <p class="comunidad-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos especiales y dinamicas con premios para nuestra comunidad gamer.</p>
         <a class="comunidad-btn" href="https://whatsapp.com/channel/0029Vb8DjsKHQbS2yeezJu1C" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:white;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Unirse al canal
@@ -351,7 +565,6 @@ main { flex: 1; }
 
 <script src="rexpres.js"></script>
 <script>
-// Slider simple para 2 banners
 let cur = 0;
 const slides  = [null, document.getElementById('slide-2')];
 const dots    = [document.getElementById('dot-0'), document.getElementById('dot-1')];
@@ -359,20 +572,16 @@ const base    = document.getElementById('hero-base');
 const banners = ['banner1.webp', 'banner2.webp'];
 
 function goSlide(n) {
-  // Actualizar imagen base
   base.src = banners[n];
-  // Ocultar slide extra siempre (solo se usa para la transición)
   slides[1].classList.remove('on');
   dots[cur].classList.remove('on');
   cur = n;
   dots[cur].classList.add('on');
 }
 
-// Fade entre banners
 let slideIdx = 0;
 setInterval(() => {
   slideIdx = (slideIdx + 1) % 2;
-  // Mostrar slide extra encima mientras se carga
   if (slideIdx === 1) {
     slides[1].classList.add('on');
   } else {
