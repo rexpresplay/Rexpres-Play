@@ -10,7 +10,6 @@ html, body { height: 100%; margin: 0; }
 body { display: flex; flex-direction: column; background: #09090f; }
 main { flex: 1; }
 
-/* SERVICE HERO */
 .service-card {
   background: #131320; border: 1px solid #21213a; border-radius: 20px;
   padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
@@ -25,7 +24,6 @@ main { flex: 1; }
 .service-paq  { font-size: 11px; color: #60a5fa; font-weight: 600; margin-top: 4px; line-height: 1.4; }
 .service-cat  { display: inline-block; background: rgba(247,148,29,.15); border: 1px solid rgba(247,148,29,.3); padding: 3px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; color: #f7941d; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
 
-/* STEP BOX */
 .step-box { background: #131320; border: 1px solid #21213a; border-radius: 18px; margin-bottom: 14px; overflow: hidden; }
 .step-head { padding: 16px 18px; display: flex; align-items: center; gap: 14px; }
 .step-circle { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: #000; background: #f7941d; }
@@ -35,7 +33,6 @@ main { flex: 1; }
 .step-subtitle { font-size: 10px; color: #f7941d; font-weight: 700; margin-top: 2px; }
 .step-body { padding: 0 18px 20px; }
 
-/* FIELDS */
 .field { margin-bottom: 14px; }
 .field:last-child { margin-bottom: 0; }
 .field-label { display: block; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
@@ -43,7 +40,6 @@ main { flex: 1; }
 .field-input:focus { border-color: #f7941d; box-shadow: 0 0 0 3px rgba(247,148,29,.1); }
 .field-hint { font-size: 10px; color: #475569; margin-top: 6px; font-weight: 600; }
 
-/* MÉTODO DE PAGO */
 .metodos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .metodo-btn {
   background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px;
@@ -57,7 +53,6 @@ main { flex: 1; }
 .metodo-name { font-size: 12px; font-weight: 800; color: white; }
 .metodo-desc { font-size: 10px; color: #64748b; }
 
-/* BANCOS */
 .bancos-wrap { display: none; }
 .bancos-wrap.show { display: block; }
 .bancos-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
@@ -68,13 +63,10 @@ main { flex: 1; }
 }
 .banco-btn:hover { border-color: rgba(247,148,29,.4); }
 .banco-btn.selected { border-color: #f7941d; background: rgba(247,148,29,.06); }
-.banco-logo { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .banco-name { font-size: 14px; font-weight: 800; color: white; }
-.banco-sub  { font-size: 11px; color: #64748b; margin-top: 2px; }
 .banco-check { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #21213a; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all .2s; }
 .banco-btn.selected .banco-check { background: #f7941d; border-color: #f7941d; color: #000; }
 
-/* CUPÓN */
 .cupon-box { background: rgba(247,148,29,.05); border: 1px solid rgba(247,148,29,.2); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
 .cupon-label { font-size: 10px; font-weight: 800; color: #f7941d; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
 .cupon-row { display: flex; gap: 8px; }
@@ -83,7 +75,6 @@ main { flex: 1; }
 .cupon-btn-apply { background: #f7941d; color: #000; font-weight: 900; font-size: 11px; text-transform: uppercase; padding: 0 18px; border-radius: 10px; border: none; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
 .cupon-ok { font-size: 11px; font-weight: 800; color: #4ade80; margin-top: 8px; display: none; }
 
-/* RESUMEN */
 .summary { background: #0e0e1a; border: 1px solid #21213a; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
 .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #21213a; }
 .sum-row:last-child { border: none; padding-top: 12px; }
@@ -93,7 +84,6 @@ main { flex: 1; }
 .sum-total .sum-val   { font-size: 26px; color: #f7941d; font-weight: 900; }
 .sum-desc  .sum-val   { color: #4ade80; }
 
-/* AVISO VERIFICAR */
 .aviso-verificar {
   background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.2);
   border-radius: 12px; padding: 12px 16px; margin-bottom: 14px;
@@ -102,14 +92,12 @@ main { flex: 1; }
 .aviso-verificar span { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 .aviso-verificar p { font-size: 11px; color: #fbbf24; font-weight: 700; line-height: 1.5; }
 
-/* BTN */
 .btn-ok { width: 100%; background: linear-gradient(135deg,#16a34a,#22c55e); color: white; font-weight: 900; padding: 17px; border-radius: 14px; font-size: 15px; text-transform: uppercase; letter-spacing: 2px; border: none; cursor: pointer; transition: opacity .2s, transform .2s; }
 .btn-ok:hover  { opacity: .9; }
 .btn-ok:active { transform: scale(.98); }
 .btn-ok:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 .secure-note { text-align: center; font-size: 10px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 12px; }
 
-/* DRAWER */
 .di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
 .di-clean:last-child { border-bottom: none; }
 .di-clean:hover { background: rgba(255,255,255,.04); color: white; }
@@ -156,7 +144,6 @@ main { flex: 1; }
 <main style="padding:20px 16px 40px;">
   <div style="max-width:480px;margin:0 auto;">
 
-    <!-- BACK + SERVICE CARD -->
     <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
     <div class="service-card">
       <div class="service-img"><img id="svc-img" src="" alt=""></div>
@@ -218,27 +205,15 @@ main { flex: 1; }
           <p style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Selecciona el banco</p>
           <div class="bancos-grid">
             <div class="banco-btn" id="banco-pichincha" onclick="selBanco('Banco Pichincha')">
-              <div class="banco-logo" style="background:#fff1e6;">🟠</div>
-              <div>
-                <div class="banco-name">Banco Pichincha</div>
-                <div class="banco-sub">Cuenta de ahorros</div>
-              </div>
+              <div class="banco-name">Banco Pichincha</div>
               <div class="banco-check">✓</div>
             </div>
             <div class="banco-btn" id="banco-produbanco" onclick="selBanco('Produbanco')">
-              <div class="banco-logo" style="background:#e6f0ff;">🔵</div>
-              <div>
-                <div class="banco-name">Produbanco</div>
-                <div class="banco-sub">Cuenta corriente / ahorros</div>
-              </div>
+              <div class="banco-name">Produbanco</div>
               <div class="banco-check">✓</div>
             </div>
             <div class="banco-btn" id="banco-guayaquil" onclick="selBanco('Banco Guayaquil')">
-              <div class="banco-logo" style="background:#e6ffe6;">bcoguayaquil.webp</div>
-              <div>
-                <div class="banco-name">Banco Guayaquil</div>
-                <div class="banco-sub"></div>
-              </div>
+              <div class="banco-name">Banco Guayaquil</div>
               <div class="banco-check">✓</div>
             </div>
           </div>
@@ -254,7 +229,6 @@ main { flex: 1; }
           <input type="text" id="promo-in" class="cupon-input" placeholder="Tu código aquí">
           <button class="cupon-btn-apply" onclick="aplicarCodigo()">Aplicar</button>
         </div>
-        <!-- ✅ Solo mensaje de éxito, sin mostrar el valor -->
         <p id="promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
         <p id="promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
       </div>
@@ -285,7 +259,6 @@ main { flex: 1; }
           </div>
         </div>
 
-        <!-- ✅ AVISO VERIFICAR -->
         <div class="aviso-verificar">
           <span>⚠️</span>
           <p>Por favor verifica que toda la información proporcionada esté correcta antes de confirmar tu pedido.</p>
@@ -315,20 +288,17 @@ const detalle = params.get('detalle') || '';
 const isRec        = cat === 'Recargas' || cat === 'Paquetes';
 const isJuego      = cat === 'Juegos';
 const desdePaquete = !!paq;
-// ✅ Solo recargas simples de saldo muestran el campo de monto
 const esSoloRecarga = cat === 'Recargas';
 
 let descuento = 0, codigoUsado = 'SISTEMA', codigos = {};
 let metodoSeleccionado = '';
 let bancoSeleccionado  = '';
 
-// BACK LINK
 const bl = document.getElementById('back-link');
 if (desdePaquete)    bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
 else if (isRec)      bl.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
 else                 bl.href = 'juegos.html';
 
-// IMAGEN DEL SERVICIO
 const imgMap = {
   'claro':'claro.webp','movistar':'movistar.webp','cnt':'cnt.webp','tuenti':'tuenti.webp',
   'aki móvil':'akimovil (1).webp','maxi plus':'maxiplus.webp',
@@ -339,12 +309,10 @@ const imgSrc = imgMap[marca.toLowerCase().trim()] || '';
 if (imgSrc) { imgEl.src = imgSrc; imgEl.alt = marca; }
 else imgEl.parentElement.innerHTML = `<span style="font-size:36px;">${isJuego?'🎮':'📱'}</span>`;
 
-// TEXTOS SERVICIO
 document.getElementById('svc-name').innerText = marca;
 document.getElementById('svc-paq').innerText  = desdePaquete ? (paq + (detalle ? ' · ' + detalle.substring(0,60) + (detalle.length>60?'...':'') : '')) : '';
 document.getElementById('svc-cat').innerText  = cat;
 
-// CAMPOS DINÁMICOS
 if (isRec) {
   document.getElementById('label-id').innerText = 'Número de celular';
   document.getElementById('hint-id').innerText  = 'Debe empezar con 09 y tener 10 dígitos';
@@ -357,31 +325,25 @@ if (isRec) {
   document.getElementById('f-id').placeholder   = 'Ej: 123456789';
 }
 
-// ✅ Mostrar campo monto SOLO en recargas simples (no paquetes, no juegos)
 if (esSoloRecarga && !desdePaquete) {
   document.getElementById('monto-field').style.display = 'block';
 }
 
-// Cupón solo en juegos
 if (isJuego) document.getElementById('cupon-wrap').style.display = 'block';
 
-// Cargar códigos
 fetch(API + '?accion=getCodigos').then(r=>r.json()).then(d=>{ codigos = d.codigos||{}; }).catch(()=>{});
 
 actualizarResumen();
 
-// MÉTODO DE PAGO
 function selMetodo(m) {
   metodoSeleccionado = m;
   document.getElementById('m-transferencia').classList.toggle('selected', m==='transferencia');
   document.getElementById('m-deposito').classList.toggle('selected', m==='deposito');
   document.getElementById('bancos-wrap').classList.add('show');
-  // Reset banco
   bancoSeleccionado = '';
   document.querySelectorAll('.banco-btn').forEach(b => b.classList.remove('selected'));
 }
 
-// BANCO
 function selBanco(banco) {
   bancoSeleccionado = banco;
   document.querySelectorAll('.banco-btn').forEach(b => b.classList.remove('selected'));
@@ -389,7 +351,6 @@ function selBanco(banco) {
   if (ids[banco]) document.getElementById(ids[banco]).classList.add('selected');
 }
 
-// CUPÓN
 function aplicarCodigo() {
   const input = document.getElementById('promo-in').value.toUpperCase().trim();
   const ok  = document.getElementById('promo-ok');
@@ -397,7 +358,6 @@ function aplicarCodigo() {
   if (codigos[input] !== undefined) {
     descuento   = Number(codigos[input]);
     codigoUsado = input;
-    // ✅ Solo mensaje simple, sin mostrar el valor
     ok.style.display  = 'block';
     err.style.display = 'none';
   } else {
@@ -408,7 +368,6 @@ function aplicarCodigo() {
   actualizarResumen();
 }
 
-// RESUMEN
 function actualizarResumen() {
   const fm  = document.getElementById('f-monto');
   const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
@@ -419,7 +378,6 @@ function actualizarResumen() {
   document.getElementById('s-desc-row').style.display = descuento > 0 ? 'flex' : 'none';
 }
 
-// ENVIAR
 function enviar() {
   const fi  = document.getElementById('f-id');
   const fm  = document.getElementById('f-monto');
@@ -427,7 +385,6 @@ function enviar() {
   const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
   const tot = Math.max(sub - descuento, 0);
 
-  // Validaciones
   if (!id) { alert('Por favor ingresa tu número de celular o ID de jugador.'); fi?.focus(); return; }
   if (isRec && !/^09\d{8}$/.test(id)) { alert('Número inválido — debe empezar con 09 y tener 10 dígitos.'); fi?.focus(); return; }
   if (isJuego && (id.length < 6 || id.length > 15 || isNaN(Number(id)))) { alert('ID inválido — debe tener entre 6 y 15 dígitos.'); fi?.focus(); return; }
@@ -439,7 +396,6 @@ function enviar() {
   const btn = document.getElementById('btn-ok');
   btn.disabled = true; btn.innerText = '⏳ Procesando...';
 
-  // Guardar en Sheets
   const datos = {
     fecha: new Date().toLocaleString(), cliente: id, servicio: cat, marca: marca,
     monto: sub.toFixed(2), codigo: codigoUsado,
@@ -451,7 +407,6 @@ function enviar() {
   setTimeout(()=>{ try{document.body.removeChild(ifr);}catch(e){} }, 5000);
   setTimeout(()=>{ btn.disabled=false; btn.innerText='✅ Confirmar pedido por WhatsApp'; }, 3000);
 
-  // ✅ Mensaje WhatsApp con "Detalle del pedido:"
   const det = paq ? `\n*Paquete:* ${paq}\n*Detalle:* ${detalle}` : '';
   const msg =
     `¡Hola Rexpres Play! 🚀\n\n` +
