@@ -3,198 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Afiliados — Rexpres Play</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Programa de Afiliados — Rexpres Play</title>
 <style>
-:root{--bg:#07071a;--card:#0f0f2a;--border:rgba(255,255,255,.08);--orange:#f7941d;--gold:#ffd166;--teal:#06d6a0;--muted:#64748b;--muted2:#94a3b8;--head:'Syne',sans-serif;--body:'DM Sans',sans-serif}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--muted2);font-family:var(--body);font-size:15px;line-height:1.6;overflow-x:hidden}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 80% 10%,rgba(247,148,29,.12) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 10% 80%,rgba(132,94,247,.09) 0%,transparent 60%)}
-.wrap{max-width:1060px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
-section{padding:72px 0;position:relative;z-index:1}
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--or:#f7941d;--bg:#06060a;--card:#0f0f18;--border:#1e1e2e;}
+body{background:var(--bg);color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;overflow-x:hidden;}
+
 /* HEADER */
-header{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,7,26,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 20px;justify-content:space-between}
-.hdr-logo img{height:32px;display:block}
-.hdr-cta{font-family:var(--head);font-weight:700;font-size:12px;background:var(--orange);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:50px;text-decoration:none;white-space:nowrap;box-shadow:0 0 18px rgba(247,148,29,.35);transition:transform .2s,box-shadow .2s}
-.hdr-cta:hover{transform:translateY(-1px);box-shadow:0 4px 22px rgba(247,148,29,.5)}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(6,6,10,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.hdr-max{max-width:1100px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;}
+.btn-join{background:var(--or);color:#000;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;padding:10px 20px;border-radius:50px;text-decoration:none;transition:opacity .2s,transform .2s;}
+.btn-join:hover{opacity:.88;transform:translateY(-1px);}
+
 /* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;padding-top:60px;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(247,148,29,.1);border:1px solid rgba(247,148,29,.28);padding:5px 14px;border-radius:50px;margin-bottom:20px;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:1.5px;text-transform:uppercase;animation:fadeup .6s .1s both}
-.bdot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:ping 1.5s infinite}
-@keyframes ping{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:.4}}
-h1{font-family:var(--head);font-size:clamp(38px,9vw,72px);font-weight:800;color:#fff;line-height:1.05;animation:fadeup .6s .2s both}
-.go{background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-p{font-size:clamp(14px,3.5vw,17px);color:var(--muted2);max-width:480px;margin:18px auto 28px;animation:fadeup .6s .3s both}
-.hero-p strong{color:#fff}
-.btn-main{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--orange),#ff6b2b);color:#fff;font-family:var(--head);font-weight:700;font-size:15px;padding:15px 34px;border-radius:50px;text-decoration:none;box-shadow:0 4px 28px rgba(247,148,29,.4);transition:transform .2s,box-shadow .2s;animation:fadeup .6s .4s both}
-.btn-main:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(247,148,29,.55)}
-.btn-ghost{display:inline-flex;align-items:center;gap:7px;margin-top:14px;color:var(--muted2);font-weight:600;font-size:14px;text-decoration:none;transition:color .2s;animation:fadeup .6s .45s both}
-.btn-ghost:hover{color:#fff}
-.hero-stats{display:flex;justify-content:center;gap:0;margin-top:48px;border:1px solid var(--border);border-radius:20px;overflow:hidden;background:rgba(255,255,255,.03);animation:fadeup .6s .5s both}
-.hstat{flex:1;padding:20px 10px;text-align:center;border-right:1px solid var(--border)}
-.hstat:last-child{border-right:none}
-.hstat-num{font-family:var(--head);font-size:clamp(18px,5vw,30px);font-weight:800;color:#fff;line-height:1}
-.hstat-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
-/* SECTION HEADS */
-.sec-eye{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--orange);margin-bottom:10px}
-.sec-h2{font-family:var(--head);font-size:clamp(26px,5vw,42px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:14px}
-.sec-p{font-size:15px;color:var(--muted2);max-width:540px;margin:0 auto 44px;line-height:1.7}
-.tc{text-align:center}
-/* COMM */
-.comm-hero{background:var(--card);border:1px solid rgba(247,148,29,.25);border-radius:24px;padding:36px 28px;text-align:center;max-width:560px;margin:0 auto;position:relative;overflow:hidden}
-.comm-hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(247,148,29,.12) 0%,transparent 70%);pointer-events:none}
-.comm-pct{font-family:var(--head);font-size:clamp(56px,14vw,96px);font-weight:800;background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.comm-label{font-size:13px;color:var(--muted2);margin-top:6px;font-weight:500}
-.comm-div{width:40px;height:2px;background:rgba(247,148,29,.3);margin:20px auto}
-.comm-note{font-size:14px;color:var(--muted2);line-height:1.7}
-.comm-note strong{color:#fff}
-/* STEPS */
-.steps-list{display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto}
-.step{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 18px;transition:border-color .25s,transform .25s}
-.step:hover{border-color:rgba(247,148,29,.3);transform:translateX(4px)}
-.sn{flex-shrink:0;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:17px;font-weight:800;color:#fff;border:2px solid var(--orange);background:rgba(247,148,29,.08);box-shadow:0 0 14px rgba(247,148,29,.2)}
-.st-title{font-family:var(--head);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px}
-.st-desc{font-size:13px;color:var(--muted2);line-height:1.6}
-.st-tag{display:inline-flex;margin-top:8px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px}
-/* BENEFITS */
-.bene-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(min-width:640px){.bene-grid{grid-template-columns:repeat(3,1fr)}}
-.bene{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 18px;transition:border-color .25s,transform .25s;position:relative;overflow:hidden}
-.bene::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--teal));transform:scaleX(0);transition:transform .3s;transform-origin:left}
-.bene:hover{border-color:rgba(247,148,29,.25);transform:translateY(-4px)}
-.bene:hover::after{transform:scaleX(1)}
-.bene-ico{font-size:28px;margin-bottom:10px}
-.bene-title{font-family:var(--head);font-size:14px;font-weight:700;color:#fff;margin-bottom:5px}
-.bene-desc{font-size:12px;color:var(--muted2);line-height:1.5}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 20px 60px;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(247,148,29,.18) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(0,30,133,.25) 0%,transparent 60%);pointer-events:none;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(247,148,29,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(247,148,29,.04) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;}
+.hero-content{position:relative;z-index:2;max-width:800px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(247,148,29,.12);border:1px solid rgba(247,148,29,.3);padding:8px 18px;border-radius:50px;font-size:12px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:2px;margin-bottom:28px;}
+.hero-title{font-size:clamp(36px,8vw,72px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;}
+.hero-title span{background:linear-gradient(135deg,#f7941d,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:clamp(15px,2.5vw,20px);color:#94a3b8;line-height:1.6;margin-bottom:40px;max-width:580px;margin-left:auto;margin-right:auto;}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--or);color:#000;font-weight:900;font-size:15px;padding:16px 32px;border-radius:50px;text-decoration:none;transition:all .2s;box-shadow:0 8px 32px rgba(247,148,29,.4);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(247,148,29,.55);}
+.btn-secondary{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:white;font-weight:800;font-size:15px;padding:16px 32px;border-radius:50px;text-decoration:none;transition:all .2s;}
+.btn-secondary:hover{background:rgba(255,255,255,.1);}
+/* Contador animado */
+.hero-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:32px;margin-top:60px;padding-top:40px;border-top:1px solid var(--border);}
+.hs{text-align:center;}
+.hs-num{font-size:36px;font-weight:900;color:var(--or);}
+.hs-label{font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-top:4px;}
+
+/* SECCIONES */
+section{padding:80px 20px;}
+.sec-max{max-width:1100px;margin:0 auto;}
+.sec-label{font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:4px;margin-bottom:12px;text-align:center;}
+.sec-title{font-size:clamp(28px,5vw,44px);font-weight:900;color:white;text-align:center;line-height:1.15;letter-spacing:-1px;margin-bottom:16px;}
+.sec-sub{font-size:16px;color:#64748b;text-align:center;max-width:560px;margin:0 auto 60px;line-height:1.6;}
+
+/* CÓMO FUNCIONA */
+.steps{display:grid;grid-template-columns:1fr;gap:20px;}
+@media(min-width:600px){.steps{grid-template-columns:repeat(3,1fr);}}
+.step{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:border-color .2s;}
+.step:hover{border-color:rgba(247,148,29,.4);}
+.step-num{font-size:64px;font-weight:900;color:rgba(247,148,29,.1);position:absolute;top:-10px;right:16px;line-height:1;}
+.step-icon{font-size:36px;margin-bottom:16px;}
+.step-title{font-size:18px;font-weight:800;color:white;margin-bottom:8px;}
+.step-desc{font-size:13px;color:#64748b;line-height:1.6;}
+
+/* COMISIONES */
+.comisiones-wrap{display:grid;grid-template-columns:1fr;gap:14px;}
+@media(min-width:600px){.comisiones-wrap{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:900px){.comisiones-wrap{grid-template-columns:repeat(3,1fr);}}
+.com-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;display:flex;align-items:center;gap:16px;transition:border-color .2s,transform .2s;}
+.com-card:hover{border-color:rgba(247,148,29,.35);transform:translateY(-2px);}
+.com-icon{width:52px;height:52px;min-width:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.com-title{font-size:15px;font-weight:800;color:white;margin-bottom:4px;}
+.com-pct{font-size:22px;font-weight:900;color:var(--or);}
+.com-desc{font-size:11px;color:#64748b;margin-top:3px;}
+
 /* PAGOS */
-.pay-grid{display:grid;grid-template-columns:1fr;gap:36px}
-@media(min-width:720px){.pay-grid{grid-template-columns:1fr 1fr;align-items:center}}
-.pay-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:24px;position:relative;overflow:hidden}
-.pay-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(6,214,160,.5),transparent)}
-.pay-card-title{font-family:var(--head);font-size:13px;font-weight:700;color:#fff;margin-bottom:16px}
-.pay-row{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;margin-bottom:10px}
-.pay-row:last-child{margin-bottom:0}
-.pay-day{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:rgba(6,214,160,.1);border:1px solid rgba(6,214,160,.2);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.pdn{font-size:7px;font-weight:800;color:var(--teal);text-transform:uppercase}
-.pdd{font-family:var(--head);font-size:14px;font-weight:800;color:#fff}
-.pi{flex:1}
-.pi-name{font-size:12px;font-weight:600;color:#fff}
-.pi-meta{font-size:11px;color:var(--muted)}
-.pa{font-family:var(--head);font-size:14px;font-weight:800;color:var(--teal)}
-.pay-feats{display:flex;flex-direction:column;gap:10px}
-.pf{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;transition:border-color .2s}
-.pf:hover{border-color:rgba(6,214,160,.25)}
-.pf-ico{width:36px;height:36px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(6,214,160,.09)}
-.pf-title{font-size:13px;font-weight:700;color:#fff}
-.pf-desc{font-size:12px;color:var(--muted2);margin-top:2px}
+.pago-hero{background:linear-gradient(135deg,#0d1a0d,#0f2318);border:1px solid #1a3a22;border-radius:24px;padding:48px 32px;text-align:center;position:relative;overflow:hidden;}
+.pago-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;border-radius:50%;background:rgba(37,211,102,.07);pointer-events:none;}
+.pago-hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:rgba(37,211,102,.05);pointer-events:none;}
+.pago-icon{font-size:56px;margin-bottom:20px;}
+.pago-title{font-size:clamp(26px,5vw,40px);font-weight:900;color:white;margin-bottom:12px;letter-spacing:-1px;}
+.pago-sub{font-size:16px;color:#94a3b8;max-width:500px;margin:0 auto 32px;line-height:1.6;}
+.pago-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.pago-item{background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);border-radius:16px;padding:18px 24px;text-align:center;min-width:160px;}
+.pago-val{font-size:24px;font-weight:900;color:#4ade80;}
+.pago-lbl{font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+
+/* BENEFICIOS */
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(min-width:700px){.benefits{grid-template-columns:repeat(4,1fr);}}
+.ben{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:border-color .2s;}
+.ben:hover{border-color:rgba(247,148,29,.3);}
+.ben-ico{font-size:28px;margin-bottom:10px;}
+.ben-title{font-size:13px;font-weight:800;color:white;margin-bottom:4px;}
+.ben-desc{font-size:11px;color:#64748b;line-height:1.4;}
+
 /* FAQ */
-.faq-list{display:flex;flex-direction:column;gap:10px;max-width:680px;margin:0 auto}
-.faq{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s}
-.faq.open{border-color:rgba(247,148,29,.28)}
-.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;cursor:pointer;font-weight:600;font-size:14px;color:#fff;user-select:none;gap:12px}
-.faq-icon{font-size:18px;color:var(--orange);flex-shrink:0;transition:transform .3s}
-.faq.open .faq-icon{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;font-size:13px;color:var(--muted2);line-height:1.7;padding:0 20px;transition:max-height .35s ease,padding .3s}
-.faq.open .faq-a{max-height:160px;padding-bottom:18px}
-/* CTA */
-.cta-s{background:linear-gradient(145deg,#0a1200,#050e00);border-top:1px solid rgba(247,148,29,.12);text-align:center}
-.cta-h2{font-family:var(--head);font-size:clamp(30px,6vw,52px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:14px}
-.cta-p{font-size:15px;color:var(--muted2);margin-bottom:30px;max-width:440px;margin-left:auto;margin-right:auto}
-.cta-note{font-size:11px;color:var(--muted);margin-top:16px}
+.faq{display:flex;flex-direction:column;gap:12px;max-width:700px;margin:0 auto;}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.faq-q{padding:18px 20px;font-size:14px;font-weight:800;color:white;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+.faq-q:hover{color:var(--or);}
+.faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;font-size:13px;color:#64748b;line-height:1.6;}
+.faq-item.open .faq-a{max-height:200px;padding:0 20px 18px;}
+.faq-arrow{transition:transform .3s;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+
+/* CTA FINAL */
+.cta-final{background:linear-gradient(135deg,#130a00,#1a1000);border:1px solid rgba(247,148,29,.2);border-radius:28px;padding:60px 32px;text-align:center;position:relative;overflow:hidden;}
+.cta-final::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(247,148,29,.12) 0%,transparent 70%);pointer-events:none;}
+.cta-title{font-size:clamp(28px,5vw,46px);font-weight:900;color:white;letter-spacing:-1px;margin-bottom:14px;position:relative;}
+.cta-title span{color:var(--or);}
+.cta-sub{font-size:16px;color:#94a3b8;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;position:relative;}
+
 /* FOOTER */
-footer{background:var(--bg);border-top:1px solid var(--border);padding:22px 20px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:16px}
-.ft-copy{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1.5px}
-.ft-links{display:flex;gap:18px}
-.ft-links a{font-size:12px;color:var(--muted2);text-decoration:none;font-weight:600;transition:color .2s}
-.ft-links a:hover{color:var(--orange)}
-/* WA */
-.wa{position:fixed;bottom:22px;right:18px;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(37,211,102,.4);z-index:500;text-decoration:none;transition:transform .2s,box-shadow .2s}
-.wa:hover{transform:scale(1.08)}
-.wa svg{width:28px;height:28px;fill:#fff}
-/* ANIM */
-@keyframes fadeup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-@media(max-width:440px){section{padding:56px 0}.hstat-lbl{font-size:8px;letter-spacing:.3px}}
+footer{padding:32px 20px;border-top:1px solid var(--border);text-align:center;}
+footer p{font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;}
+
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:24px;right:20px;width:56px;height:56px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(37,211,102,.45);z-index:500;text-decoration:none;transition:transform .2s;}
+.wa-float:hover{transform:scale(1.08);}
+.wa-float svg{width:30px;height:30px;fill:white;}
 </style>
 </head>
 <body>
 
-<header>
-  <a href="index.html"><img src="logo.png" alt="Rexpres Play"></a>
-  <a class="hdr-cta" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20ser%20afiliado%20de%20Rexpres%20Play" target="_blank">Unirme ahora →</a>
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-max">
+    <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    <a class="btn-join" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20ser%20afiliado%20de%20Rexpres%20Play" target="_blank">Quiero ser afiliado →</a>
+  </div>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="wrap">
-    <div class="hero-badge"><div class="bdot"></div>Programa de Afiliados</div>
-    <h1>Gana dinero<br><span class="go">vendiendo</span><br>lo que ya usas</h1>
-    <p class="hero-p">Comparte tu código, acumula comisiones del <strong>1% al 10%</strong> en cada venta y cobra cada viernes. Sin inversión inicial.</p>
-    <div>
-      <a class="btn-main" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20ser%20afiliado%20de%20Rexpres%20Play" target="_blank">
-        <svg style="width:18px;height:18px;fill:#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Quiero ser afiliado
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>💰</span> Programa de Afiliados
+    </div>
+    <h1 class="hero-title">
+      Gana dinero<br>
+      <span>sin límites</span><br>
+      con Rexpres Play
+    </h1>
+    <p class="hero-sub">Comparte tu código, genera ventas y cobra tus comisiones cada viernes. Sin inversión, sin límite de ganancias.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20ser%20afiliado%20de%20Rexpres%20Play" target="_blank">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#000;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Unirme ahora
       </a>
+      <a class="btn-secondary" href="#como-funciona">Ver cómo funciona ↓</a>
     </div>
-    <div><a class="btn-ghost" href="#comisiones">Ver comisiones ↓</a></div>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-num">10%</div><div class="hstat-lbl">Comisión máx.</div></div>
-      <div class="hstat"><div class="hstat-num">Viernes</div><div class="hstat-lbl">Día de pago</div></div>
-      <div class="hstat"><div class="hstat-num">∞</div><div class="hstat-lbl">Sin límite</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- COMISIONES -->
-<section id="comisiones" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border)">
-  <div class="wrap tc">
-    <div class="sec-eye">Lo que puedes ganar</div>
-    <h2 class="sec-h2">Comisiones reales</h2>
-    <p class="sec-p">Cada vez que alguien use tu código y compre, tú ganas. Así de simple.</p>
-    <div class="comm-hero">
-      <div class="comm-pct">1–10%</div>
-      <div class="comm-label">de comisión por venta</div>
-      <div class="comm-div"></div>
-      <div class="comm-note">
-        El porcentaje varía según el servicio.<br>
-        <strong>Cuantas más ventas, más ganas.</strong><br>
-        Sin techo, sin límites, sin excusas.
-      </div>
+      <div class="hs"><div class="hs-num">1–10%</div><div class="hs-label">Comisión por venta</div></div>
+      <div class="hs"><div class="hs-num">∞</div><div class="hs-label">Sin límite de ganancias</div></div>
+      <div class="hs"><div class="hs-num">Viernes</div><div class="hs-label">Día de pago semanal</div></div>
+      <div class="hs"><div class="hs-num">$0</div><div class="hs-label">Inversión requerida</div></div>
     </div>
   </div>
 </section>
 
 <!-- CÓMO FUNCIONA -->
-<section id="como">
-  <div class="wrap">
-    <div class="tc" style="margin-bottom:36px">
-      <div class="sec-eye">Paso a paso</div>
-      <h2 class="sec-h2">Tan fácil como 1, 2, 3</h2>
+<section id="como-funciona" style="padding:80px 20px;background:#08080f;">
+  <div class="sec-max">
+    <p class="sec-label">Paso a paso</p>
+    <h2 class="sec-title">Así de simple es ganar</h2>
+    <p class="sec-sub">En 3 pasos estás ganando dinero con Rexpres Play desde hoy mismo.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">📩</div>
+        <div class="step-title">Regístrate gratis</div>
+        <div class="step-desc">Escríbenos por WhatsApp y en minutos tendrás tu código personalizado de afiliado activo y listo para usar.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">📣</div>
+        <div class="step-title">Comparte tu código</div>
+        <div class="step-desc">Comparte tu código con amigos, familia, en redes sociales o donde quieras. Cada vez que alguien lo use tú ganas.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">💸</div>
+        <div class="step-title">Cobra cada viernes</div>
+        <div class="step-desc">Acumulás comisiones durante la semana y cada viernes recibes tu pago. Sin mínimos, sin excusas.</div>
+      </div>
     </div>
-    <div class="steps-list">
-      <div class="step">
-        <div class="sn">1</div>
+  </div>
+</section>
+
+<!-- COMISIONES -->
+<section style="padding:80px 20px;">
+  <div class="sec-max">
+    <p class="sec-label">Ganancias reales</p>
+    <h2 class="sec-title">¿Cuánto puedo ganar?</h2>
+    <p class="sec-sub">Las comisiones varían según el servicio. Cuanto más compartes, más ganas.</p>
+    <div class="comisiones-wrap">
+      <div class="com-card">
+        <div class="com-icon" style="background:rgba(247,148,29,.12);">💎</div>
         <div>
-          <div class="st-title">Regístrate gratis</div>
-          <div class="st-desc">Escríbenos por WhatsApp y en minutos tienes tu código personalizado. Sin costo, sin trámites.</div>
-          <span class="st-tag" style="background:rgba(247,148,29,.1);color:var(--orange)">⚡ Solo 5 minutos</span>
+          <div class="com-title">Diamantes Free Fire</div>
+          <div class="com-pct">Hasta 10%</div>
+          <div class="com-desc">Por cada recarga de diamantes</div>
         </div>
       </div>
-      <div class="step">
-        <div class="sn">2</div>
+      <div class="com-card">
+        <div class="com-icon" style="background:rgba(96,165,250,.12);">📱</div>
         <div>
-          <div class="st-title">Comparte tu código</div>
-          <div class="st-desc">Pásalo a amigos, familia o en tus redes. Cada compra con tu código = comisión para ti.</div>
-          <span class="st-tag" style="background:rgba(132,94,247,.1);color:#a78bfa">📲 Fácil de compartir</span>
+          <div class="com-title">Recargas Móviles</div>
+          <div class="com-pct">Hasta 5%</div>
+          <div class="com-desc">Claro, Movistar, CNT y más</div>
         </div>
       </div>
-      <div class="step">
-        <div class="sn">3</div>
+      <div class="com-card">
+        <div class="com-icon" style="background:rgba(167,139,250,.12);">📦</div>
         <div>
-          <div class="st-title">Cobra cada viernes</div>
-          <div class="st-desc">Los pagos son automáticos cada semana. Revisa tu portal y recibe tu dinero sin papeleo.</div>
-          <span class="st-tag" style="background:rgba(6,214,160,.1);color:var(--teal)">💰 Pago garantizado</span>
+          <div class="com-title">Paquetes de Datos</div>
+          <div class="com-pct">Hasta 5%</div>
+          <div class="com-desc">GB, llamadas y más beneficios</div>
+        </div>
+      </div>
+      <div class="com-card">
+        <div class="com-icon" style="background:rgba(52,211,153,.12);">💠</div>
+        <div>
+          <div class="com-title">Mobile Legends</div>
+          <div class="com-pct">Hasta 10%</div>
+          <div class="com-desc">Diamantes y pases de batalla</div>
+        </div>
+      </div>
+      <div class="com-card">
+        <div class="com-icon" style="background:rgba(251,146,60,.12);">🪙</div>
+        <div>
+          <div class="com-title">Blood Strike</div>
+          <div class="com-pct">Hasta 8%</div>
+          <div class="com-desc">Gold y monedas del juego</div>
+        </div>
+      </div>
+      <div class="com-card" style="background:linear-gradient(135deg,#130a00,#1a1200);border-color:rgba(247,148,29,.3);">
+        <div class="com-icon" style="background:rgba(247,148,29,.2);">🚀</div>
+        <div>
+          <div class="com-title">Nuevos servicios</div>
+          <div class="com-pct">Hasta 10%</div>
+          <div class="com-desc">Siempre sumando más categorías</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calculadora rápida visual -->
+    <div style="margin-top:40px;background:#0f0f18;border:1px solid #1e1e2e;border-radius:20px;padding:28px;">
+      <p style="font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;text-align:center;">Ejemplo de ganancias semanales</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
+        <div style="background:#1a1a28;border-radius:14px;padding:18px;text-align:center;">
+          <p style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">5 ventas/semana</p>
+          <p style="font-size:26px;font-weight:900;color:#4ade80;margin:8px 0;">~$2.50</p>
+          <p style="font-size:10px;color:#475569;">promedio estimado</p>
+        </div>
+        <div style="background:#1a1a28;border-radius:14px;padding:18px;text-align:center;">
+          <p style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">20 ventas/semana</p>
+          <p style="font-size:26px;font-weight:900;color:#4ade80;margin:8px 0;">~$10</p>
+          <p style="font-size:10px;color:#475569;">promedio estimado</p>
+        </div>
+        <div style="background:#1a1a28;border-radius:14px;padding:18px;text-align:center;">
+          <p style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;">50 ventas/semana</p>
+          <p style="font-size:26px;font-weight:900;color:#4ade80;margin:8px 0;">~$25</p>
+          <p style="font-size:10px;color:#475569;">promedio estimado</p>
+        </div>
+        <div style="background:linear-gradient(135deg,#0d1f0d,#0f2318);border:1px solid rgba(74,222,128,.2);border-radius:14px;padding:18px;text-align:center;">
+          <p style="font-size:11px;color:#4ade80;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Tú decides</p>
+          <p style="font-size:26px;font-weight:900;color:#4ade80;margin:8px 0;">∞</p>
+          <p style="font-size:10px;color:#64748b;">sin límite de ventas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGOS -->
+<section style="padding:80px 20px;background:#08080f;">
+  <div class="sec-max">
+    <p class="sec-label">Pagos garantizados</p>
+    <h2 class="sec-title">Lo que ganas, lo cobras</h2>
+    <p class="sec-sub">Sin retención, sin trucos. Cada viernes tu dinero llega puntual.</p>
+    <div class="pago-hero">
+      <div class="pago-icon">💵</div>
+      <h3 class="pago-title">Pagos cada viernes</h3>
+      <p class="pago-sub">Acumulás comisiones de lunes a jueves y cada viernes recibes tu pago directo. Sin mínimos de retiro, sin demoras.</p>
+      <div class="pago-grid">
+        <div class="pago-item">
+          <div class="pago-val">Semanal</div>
+          <div class="pago-lbl">Frecuencia de pago</div>
+        </div>
+        <div class="pago-item">
+          <div class="pago-val">Viernes</div>
+          <div class="pago-lbl">Día exacto de cobro</div>
+        </div>
+        <div class="pago-item">
+          <div class="pago-val">$0</div>
+          <div class="pago-lbl">Mínimo de retiro</div>
+        </div>
+        <div class="pago-item">
+          <div class="pago-val">∞</div>
+          <div class="pago-lbl">Máximo de ganancias</div>
         </div>
       </div>
     </div>
@@ -202,116 +299,92 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:22px 20px
 </section>
 
 <!-- BENEFICIOS -->
-<section id="beneficios" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border)">
-  <div class="wrap">
-    <div class="tc" style="margin-bottom:36px">
-      <div class="sec-eye">Por qué elegirnos</div>
-      <h2 class="sec-h2">Todo a tu favor</h2>
-    </div>
-    <div class="bene-grid">
-      <div class="bene"><div class="bene-ico">🚀</div><div class="bene-title">Sin inversión</div><div class="bene-desc">Tu tiempo y tu red son todo lo que necesitas para empezar.</div></div>
-      <div class="bene"><div class="bene-ico">📊</div><div class="bene-title">Portal propio</div><div class="bene-desc">Dashboard con tus ventas y ganancias en tiempo real.</div></div>
-      <div class="bene"><div class="bene-ico">♾️</div><div class="bene-title">Sin techo</div><div class="bene-desc">No existe un límite. Más vendas, más ganas.</div></div>
-      <div class="bene"><div class="bene-ico">📅</div><div class="bene-title">Pago semanal</div><div class="bene-desc">Cada viernes sin excusas. Tu dinero siempre puntual.</div></div>
-      <div class="bene"><div class="bene-ico">🔒</div><div class="bene-title">100% seguro</div><div class="bene-desc">Cada venta y pago queda registrado. Total transparencia.</div></div>
-      <div class="bene"><div class="bene-ico">🏆</div><div class="bene-title">Soporte directo</div><div class="bene-desc">Equipo disponible vía WhatsApp para cualquier duda.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- PAGOS -->
-<section id="pagos">
-  <div class="wrap">
-    <div class="pay-grid">
-      <div class="pay-card">
-        <div class="pay-card-title">Historial de pagos 📋</div>
-        <div class="pay-row">
-          <div class="pay-day"><div class="pdn">VIE</div><div class="pdd">02</div></div>
-          <div class="pi"><div class="pi-name">Semana 18 · 18 ventas</div><div class="pi-meta">código REXP-2947</div></div>
-          <div class="pa">$38.40</div>
-        </div>
-        <div class="pay-row">
-          <div class="pay-day"><div class="pdn">VIE</div><div class="pdd">25</div></div>
-          <div class="pi"><div class="pi-name">Semana 17 · 22 ventas</div><div class="pi-meta">código REXP-2947</div></div>
-          <div class="pa">$51.20</div>
-        </div>
-        <div class="pay-row">
-          <div class="pay-day"><div class="pdn">VIE</div><div class="pdd">18</div></div>
-          <div class="pi"><div class="pi-name">Semana 16 · 15 ventas</div><div class="pi-meta">código REXP-2947</div></div>
-          <div class="pa">$29.75</div>
-        </div>
-      </div>
-      <div>
-        <div class="sec-eye">Cobros puntuales</div>
-        <h2 class="sec-h2" style="text-align:left">Tu dinero, cada viernes</h2>
-        <div class="pay-feats">
-          <div class="pf"><div class="pf-ico">📅</div><div><div class="pf-title">Pago cada viernes</div><div class="pf-desc">Las comisiones de la semana se procesan automáticamente.</div></div></div>
-          <div class="pf"><div class="pf-ico">💳</div><div><div class="pf-title">Múltiples métodos</div><div class="pf-desc">Transferencia, Binance u otros métodos disponibles en Ecuador.</div></div></div>
-          <div class="pf"><div class="pf-ico">🔍</div><div><div class="pf-title">Total transparencia</div><div class="pf-desc">Cada venta y comisión registrada en tu portal personal.</div></div></div>
-        </div>
-      </div>
+<section style="padding:80px 20px;">
+  <div class="sec-max">
+    <p class="sec-label">Ventajas</p>
+    <h2 class="sec-title">Todo a tu favor</h2>
+    <p class="sec-sub">El programa más simple y directo para ganar dinero recomendando recargas.</p>
+    <div class="benefits">
+      <div class="ben"><div class="ben-ico">🆓</div><div class="ben-title">100% gratis</div><div class="ben-desc">Sin costo de inscripción ni mensualidad</div></div>
+      <div class="ben"><div class="ben-ico">📊</div><div class="ben-title">Panel propio</div><div class="ben-desc">Accede a tus estadísticas en tiempo real</div></div>
+      <div class="ben"><div class="ben-ico">🏷️</div><div class="ben-title">Código único</div><div class="ben-desc">Tu código personalizado e intransferible</div></div>
+      <div class="ben"><div class="ben-ico">📱</div><div class="ben-title">Desde el celular</div><div class="ben-desc">Gestiona todo desde tu smartphone</div></div>
+      <div class="ben"><div class="ben-ico">🌎</div><div class="ben-title">Sin restricciones</div><div class="ben-desc">Comparte en cualquier red o plataforma</div></div>
+      <div class="ben"><div class="ben-ico">⚡</div><div class="ben-title">Activación rápida</div><div class="ben-desc">Tu código activo el mismo día</div></div>
+      <div class="ben"><div class="ben-ico">📈</div><div class="ben-title">Crece con nosotros</div><div class="ben-desc">Más productos, más comisiones</div></div>
+      <div class="ben"><div class="ben-ico">🤝</div><div class="ben-title">Soporte directo</div><div class="ben-desc">Atención personalizada para afiliados</div></div>
     </div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section id="faq" style="background:rgba(255,255,255,.02);border-top:1px solid var(--border)">
-  <div class="wrap">
-    <div class="tc" style="margin-bottom:36px">
-      <div class="sec-eye">Preguntas frecuentes</div>
-      <h2 class="sec-h2">¿Tienes dudas?</h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq" onclick="tFaq(this)">
-        <div class="faq-q">¿Necesito pagar para ser afiliado? <span class="faq-icon">+</span></div>
-        <div class="faq-a">No. El programa es completamente gratuito. Solo contáctanos por WhatsApp y en minutos recibes tu código personalizado.</div>
+<section style="padding:80px 20px;background:#08080f;">
+  <div class="sec-max">
+    <p class="sec-label">Preguntas frecuentes</p>
+    <h2 class="sec-title">Todo lo que necesitas saber</h2>
+    <p class="sec-sub" style="margin-bottom:40px;">Resolvemos tus dudas antes de empezar.</p>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cuánto cuesta unirse al programa? <span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Unirse es completamente gratis. No hay costo de inscripción, mensualidad ni ningún pago oculto. Solo te registras y empiezas a ganar.</div>
       </div>
-      <div class="faq" onclick="tFaq(this)">
-        <div class="faq-q">¿El cliente paga más si usa mi código? <span class="faq-icon">+</span></div>
-        <div class="faq-a">No, el precio para el cliente es exactamente el mismo. Tu comisión sale de nuestro margen, no del bolsillo del cliente.</div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona mi código de afiliado? <span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Recibes un código único personalizado. Cuando un cliente lo ingresa al hacer su pedido, la venta se registra a tu nombre y ganas la comisión correspondiente automáticamente.</div>
       </div>
-      <div class="faq" onclick="tFaq(this)">
-        <div class="faq-q">¿Hay un mínimo para cobrar? <span class="faq-icon">+</span></div>
-        <div class="faq-a">Puede existir un monto mínimo semanal. Contáctanos para conocer los detalles. Si no se alcanza, la comisión se acumula para la siguiente semana.</div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cuándo y cómo recibo mis pagos? <span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Los pagos se realizan cada viernes sin excepción. Acumulás tus comisiones de lunes a jueves y el viernes te hacemos el pago directo. No hay mínimo de retiro — lo que ganes, lo cobras.</div>
       </div>
-      <div class="faq" onclick="tFaq(this)">
-        <div class="faq-q">¿Existe un límite máximo de ganancias? <span class="faq-icon">+</span></div>
-        <div class="faq-a">¡Absolutamente no! No hay techo. Cuanto más compartas tu código, más acumulas semana a semana.</div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Hay límite de cuánto puedo ganar? <span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Absolutamente ninguno. No existe tope de ganancias. Cuantas más ventas generes con tu código, más ganas. El límite lo pones tú.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Puedo ver mis ventas y comisiones en tiempo real? <span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Sí. Tienes acceso a un panel personalizado donde puedes ver todas tus transacciones, filtrar por fechas y revisar tus comisiones acumuladas en cualquier momento.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cómo me registro? <span class="faq-arrow">▾</span></div>
+        <div class="faq-a">Es muy simple. Escríbenos por WhatsApp indicando que quieres ser afiliado, y en minutos te activamos tu código personalizado con acceso a tu panel.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-s">
-  <div class="wrap">
-    <div style="font-size:52px;margin-bottom:16px">🚀</div>
-    <h2 class="cta-h2">¿Listo para empezar<br>a <span class="go">ganar?</span></h2>
-    <p class="cta-p">Únete hoy mismo. Es gratis, rápido y sin complicaciones.</p>
-    <a class="btn-main" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20registrarme%20como%20afiliado%20de%20Rexpres%20Play" target="_blank" style="font-size:16px;padding:17px 38px">
-      <svg style="width:20px;height:20px;fill:#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Registrarme — es gratis
-    </a>
-    <p class="cta-note">📅 Pagos cada viernes · 🔐 Sin costo · ♾️ Sin límite de ganancias</p>
+<!-- CTA FINAL -->
+<section style="padding:60px 20px 80px;">
+  <div class="sec-max">
+    <div class="cta-final">
+      <h2 class="cta-title">¿Listo para<br><span>empezar a ganar?</span></h2>
+      <p class="cta-sub">Únete hoy, activa tu código y empieza a cobrar tus comisiones este mismo viernes.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;position:relative;">
+        <a class="btn-primary" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20ser%20afiliado%20de%20Rexpres%20Play" target="_blank" style="font-size:16px;padding:18px 36px;">
+          <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#000;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Quiero ser afiliado
+        </a>
+        <a class="btn-secondary" href="index.html" style="font-size:16px;padding:18px 36px;">Ver la tienda →</a>
+      </div>
+    </div>
   </div>
 </section>
 
 <footer>
-  <span class="ft-copy">© 2026 Rexpres Play · Ecuador</span>
-  <div class="ft-links">
-    <a href="index.html">Tienda</a>
-    <a href="afiliado.html">Mi portal</a>
-    <a href="https://wa.me/593992225484" target="_blank">WhatsApp</a>
-  </div>
+  <p>© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
 </footer>
 
-<a class="wa" href="https://wa.me/593992225484?text=Hola%2C%20quiero%20ser%20afiliado%20de%20Rexpres%20Play" target="_blank">
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/593992225484?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20y%20necesito%20ayuda" target="_blank" title="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
 <script>
-function tFaq(el){const o=el.classList.contains('open');document.querySelectorAll('.faq').forEach(f=>f.classList.remove('open'));if(!o)el.classList.add('open')}
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
 </script>
 </body>
 </html>
