@@ -27,36 +27,56 @@
   input:focus, select:focus, textarea:focus { border-color: #f7941d; }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
   th { background: #0a0a12; padding: 10px 14px; text-align: left; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #475569; }
-  td { padding: 10px 14px; border-bottom: 1px solid #1a1a2e; color: #cbd5e1; }
+  td { padding: 10px 14px; border-bottom: 1px solid #1a1a2e; color: #cbd5e1; vertical-align: middle; }
   tr:hover td { background: rgba(255,255,255,.02); }
   .badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
   .badge-green { background: rgba(22,163,74,.2); color: #4ade80; }
   .badge-yellow { background: rgba(234,179,8,.2); color: #fbbf24; }
   .badge-red { background: rgba(220,38,38,.2); color: #f87171; }
   .badge-blue { background: rgba(59,130,246,.2); color: #60a5fa; }
-  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:200; align-items:center; justify-content:center; padding:1rem; }
+  .badge-purple { background: rgba(139,92,246,.2); color: #a78bfa; }
+  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:200; align-items:center; justify-content:center; padding:1rem; }
   .modal-bg.open { display:flex; }
-  .modal { background:#0f0f1a; border:1px solid #1e1e30; border-radius:20px; padding:28px; width:100%; max-width:480px; max-height:90vh; overflow-y:auto; }
-  .tab-btn { padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; border: none; background: transparent; color: #64748b; transition: all .2s; }
-  .tab-btn.active { background: #1e1e30; color: #fff; }
+  .modal { background:#0f0f1a; border:1px solid #1e1e30; border-radius:20px; padding:28px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; }
+  .toast { position:fixed; bottom:24px; right:24px; background:#0f0f1a; border:1px solid #1e1e30; border-radius:14px; padding:14px 20px; font-size:13px; font-weight:700; z-index:9999; display:none; animation: slideIn .3s ease; }
+  .toast.ok { border-color:#16a34a; color:#4ade80; }
+  .toast.err { border-color:#dc2626; color:#f87171; }
+  @keyframes slideIn { from { transform: translateY(20px); opacity:0; } to { transform: translateY(0); opacity:1; } }
   ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #0a0a12; } ::-webkit-scrollbar-thumb { background: #1e1e30; border-radius: 4px; }
   @media(max-width:768px) { .sidebar { transform: translateX(-240px); } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; } }
+
+  /* Progress bar para stats */
+  .prog-bar { background:#1e1e30; border-radius:20px; height:6px; margin-top:6px; overflow:hidden; }
+  .prog-fill { height:100%; border-radius:20px; transition: width .6s ease; }
+
+  /* Loader */
+  .loader { display:inline-block; width:14px; height:14px; border:2px solid #1e1e30; border-top-color:#f7941d; border-radius:50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Visits card */
+  .visit-big { font-size:52px; font-weight:900; line-height:1; }
 </style>
 </head>
 <body>
 
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
 <!-- LOGIN -->
-<div id="login-screen" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1rem;">
-  <div style="background:#0f0f1a; border:1px solid #1e1e30; border-radius:24px; padding:40px; width:100%; max-width:380px;">
+<div id="login-screen" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1rem; background: radial-gradient(ellipse at 50% 0%, #0d1240 0%, #050508 60%);">
+  <div style="background:#0f0f1a; border:1px solid #1e1e30; border-radius:24px; padding:40px; width:100%; max-width:380px; box-shadow: 0 0 80px rgba(247,148,29,0.08);">
     <div style="text-align:center; margin-bottom:32px;">
-      <img src="logo.png" alt="Rexpres Play" style="height:50px; margin-bottom:16px;">
-      <p style="color:#64748b; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:3px;">Panel Administrador</p>
+      <!-- LOGO CENTRADO -->
+      <div style="display:flex; justify-content:center; margin-bottom:16px;">
+        <img src="logo.png" alt="Rexpres Play" style="height:54px; object-fit:contain;">
+      </div>
+      <p style="color:#64748b; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:3px; margin:0;">Panel Administrador</p>
     </div>
     <div style="display:flex; flex-direction:column; gap:14px;">
       <input type="text" id="l-user" placeholder="Usuario administrador">
       <input type="password" id="l-pass" placeholder="Contraseña">
-      <p id="l-error" style="color:#f87171; font-size:11px; font-weight:700; text-transform:uppercase; display:none;">Credenciales incorrectas</p>
-      <button class="btn btn-primary" style="padding:14px; font-size:13px;" onclick="doLogin()">Entrar</button>
+      <p id="l-error" style="color:#f87171; font-size:11px; font-weight:700; text-transform:uppercase; display:none; margin:0;">❌ Credenciales incorrectas</p>
+      <button class="btn btn-primary" style="padding:14px; font-size:13px;" onclick="doLogin()" id="btn-login">Entrar al panel</button>
       <a href="index.html" style="text-align:center; color:#475569; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; text-decoration:none;">← Volver a la tienda</a>
     </div>
   </div>
@@ -67,13 +87,14 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <div style="padding:20px; border-bottom:1px solid #1a1a2e;">
-      <img src="logo.png" alt="Rexpres Play" style="height:36px;">
-      <p style="color:#475569; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:2px; margin-top:8px;">🛡️ Administrador</p>
+    <div style="padding:20px; border-bottom:1px solid #1a1a2e; display:flex; flex-direction:column; align-items:center; gap:10px;">
+      <img src="logo.png" alt="Rexpres Play" style="height:38px; object-fit:contain;">
+      <p style="color:#475569; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:2px; margin:0;">🛡️ Administrador</p>
     </div>
     <nav style="padding:12px 0;">
       <div class="nav-item active" onclick="showPanel('pedidos')">📋 Pedidos</div>
       <div class="nav-item" onclick="showPanel('estadisticas')">📊 Estadísticas</div>
+      <div class="nav-item" onclick="showPanel('visitas')">👁️ Visitas</div>
       <div class="nav-item" onclick="showPanel('productos')">📦 Productos</div>
       <div class="nav-item" onclick="showPanel('categorias')">🗂️ Categorías</div>
       <div class="nav-item" onclick="showPanel('codigos')">🏷️ Códigos</div>
@@ -99,9 +120,9 @@
 
     <div style="padding:24px;">
 
-      <!-- PANEL PEDIDOS -->
+      <!-- ═══════════════════════════════════════ PANEL PEDIDOS -->
       <div id="panel-pedidos" class="panel active">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:gap;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
           <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Todos los pedidos</h2>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <input type="date" id="filtro-fecha-ini" style="width:auto;" onchange="filtrarPedidos()">
@@ -110,23 +131,35 @@
               <option value="">Todos los servicios</option>
               <option>Recargas</option><option>Paquetes</option><option>Juegos</option>
             </select>
+            <input type="text" id="filtro-producto" placeholder="Buscar producto..." style="width:160px;" oninput="filtrarPedidos()">
             <button class="btn btn-orange" onclick="cargarPedidos()">↻ Actualizar</button>
           </div>
         </div>
         <div class="card" style="overflow-x:auto;">
           <table>
             <thead><tr>
-              <th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Marca</th>
+              <th>Fecha</th><th>Cliente</th><th>Servicio</th><th>Producto / Marca</th>
               <th>Subtotal</th><th>Código</th><th>Total</th><th>Estado</th><th>Acción</th>
             </tr></thead>
-            <tbody id="tabla-pedidos"><tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+            <tbody id="tabla-pedidos"><tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
+        <div id="resumen-pedidos" style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;"></div>
       </div>
 
-      <!-- PANEL ESTADÍSTICAS -->
+      <!-- ═══════════════════════════════════════ PANEL ESTADÍSTICAS -->
       <div id="panel-estadisticas" class="panel">
-        <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin-bottom:20px;">Estadísticas</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Estadísticas de ventas</h2>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="date" id="est-fecha-ini" style="width:auto;" onchange="calcularEstadisticas()">
+            <input type="date" id="est-fecha-fin" style="width:auto;" onchange="calcularEstadisticas()">
+            <select id="est-filtro-prod" style="width:auto;" onchange="calcularEstadisticas()">
+              <option value="">Todos los productos</option>
+            </select>
+            <button class="btn btn-gray" onclick="limpiarFiltrosEst()">✕ Limpiar</button>
+          </div>
+        </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px;">
           <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Total Ventas</p><p id="stat-total" style="font-size:28px; font-weight:900; color:#4ade80; margin:8px 0 0;">$0.00</p></div>
           <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Transacciones</p><p id="stat-count" style="font-size:28px; font-weight:900; color:#60a5fa; margin:8px 0 0;">0</p></div>
@@ -139,83 +172,131 @@
             <div id="stats-servicio"></div>
           </div>
           <div class="card">
-            <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Por Marca / Juego</h3>
+            <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Top Marcas / Juegos</h3>
             <div id="stats-marca"></div>
+          </div>
+          <div class="card">
+            <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Por Producto</h3>
+            <div id="stats-producto"></div>
           </div>
         </div>
       </div>
 
-      <!-- PANEL PRODUCTOS -->
-      <div id="panel-productos" class="panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Productos</h2>
-          <button class="btn btn-orange" onclick="abrirModalProducto()">+ Agregar</button>
+      <!-- ═══════════════════════════════════════ PANEL VISITAS -->
+      <div id="panel-visitas" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Visitas a la tienda</h2>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="date" id="vis-fecha-ini" style="width:auto;" onchange="filtrarVisitas()">
+            <input type="date" id="vis-fecha-fin" style="width:auto;" onchange="filtrarVisitas()">
+            <button class="btn btn-orange" onclick="cargarVisitas()">↻ Actualizar</button>
+          </div>
         </div>
-        <div style="margin-bottom:16px; display:flex; gap:8px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px;">
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Total Visitas</p><p id="vis-total" class="visit-big" style="color:#f7941d; margin:8px 0 0;">0</p></div>
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Hoy</p><p id="vis-hoy" class="visit-big" style="color:#4ade80; margin:8px 0 0;">0</p></div>
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Esta semana</p><p id="vis-semana" class="visit-big" style="color:#60a5fa; margin:8px 0 0;">0</p></div>
+          <div class="stat-card"><p style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:2px;">Este mes</p><p id="vis-mes" class="visit-big" style="color:#a78bfa; margin:8px 0 0;">0</p></div>
+        </div>
+        <div class="card" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Fecha</th><th>Visitas</th><th>Barra</th></tr></thead>
+            <tbody id="tabla-visitas"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+        <p style="color:#475569; font-size:11px; margin-top:12px;">ℹ️ Las visitas se registran automáticamente cuando alguien abre tu tienda. Asegúrate de que tu página index.html envíe un ping a la API al cargar.</p>
+      </div>
+
+      <!-- ═══════════════════════════════════════ PANEL PRODUCTOS -->
+      <div id="panel-productos" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Productos</h2>
+          <button class="btn btn-orange" onclick="abrirModalProducto()">+ Agregar producto</button>
+        </div>
+        <div style="margin-bottom:16px; display:flex; gap:8px; flex-wrap:wrap;">
           <select id="filtro-cat-prod" style="width:auto;" onchange="filtrarTablaProductos()">
             <option value="">Todas las categorías</option>
           </select>
+          <input type="text" id="filtro-nombre-prod" placeholder="Buscar nombre..." style="width:200px;" oninput="filtrarTablaProductos()">
         </div>
         <div class="card" style="overflow-x:auto;">
           <table>
             <thead><tr><th>ID</th><th>Categoría</th><th>Tipo</th><th>Nombre</th><th>P. Normal</th><th>P. Desc.</th><th>Activo</th><th>Acciones</th></tr></thead>
-            <tbody id="tabla-productos"><tr><td colspan="8" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+            <tbody id="tabla-productos"><tr><td colspan="8" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
       </div>
 
-      <!-- PANEL CATEGORÍAS -->
+      <!-- ═══════════════════════════════════════ PANEL CATEGORÍAS -->
       <div id="panel-categorias" class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
           <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Categorías</h2>
-          <button class="btn btn-orange" onclick="abrirModalCategoria()">+ Agregar</button>
+          <button class="btn btn-orange" onclick="abrirModalCategoria()">+ Agregar categoría</button>
         </div>
         <div class="card" style="overflow-x:auto;">
           <table>
             <thead><tr><th>ID</th><th>Nombre</th><th>Tipo</th><th>Tipo Servicio</th><th>Activo</th><th>Acciones</th></tr></thead>
-            <tbody id="tabla-categorias"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+            <tbody id="tabla-categorias"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
       </div>
 
-      <!-- PANEL CÓDIGOS -->
+      <!-- ═══════════════════════════════════════ PANEL CÓDIGOS -->
       <div id="panel-codigos" class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
           <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Códigos de descuento</h2>
-          <button class="btn btn-orange" onclick="abrirModalCodigo()">+ Agregar</button>
+          <button class="btn btn-orange" onclick="abrirModalCodigo()">+ Agregar código</button>
         </div>
         <div class="card" style="overflow-x:auto;">
           <table>
             <thead><tr><th>Código</th><th>Descuento ($)</th><th>Acciones</th></tr></thead>
-            <tbody id="tabla-codigos"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+            <tbody id="tabla-codigos"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
       </div>
 
-      <!-- PANEL AFILIADOS -->
+      <!-- ═══════════════════════════════════════ PANEL AFILIADOS -->
       <div id="panel-afiliados" class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
           <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Afiliados</h2>
-          <button class="btn btn-orange" onclick="abrirModalAfiliado()">+ Agregar</button>
+          <button class="btn btn-orange" onclick="abrirModalAfiliado()">+ Agregar afiliado</button>
         </div>
+
+        <!-- Ganancias de afiliados -->
+        <div class="card" style="margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+            <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#f7941d; margin:0;">💰 Ganancias acumuladas</h3>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-orange" onclick="calcularGananciasAfiliados()">↻ Recalcular</button>
+            </div>
+          </div>
+          <div id="tabla-ganancias-container" style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Afiliado</th><th>Ventas</th><th>Total ganado</th><th>Acciones</th></tr></thead>
+              <tbody id="tabla-ganancias"><tr><td colspan="4" style="text-align:center; color:#475569; padding:20px;">Carga afiliados primero</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
         <div class="card" style="overflow-x:auto;">
+          <h3 style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#64748b; margin-bottom:16px;">Lista de afiliados</h3>
           <table>
             <thead><tr><th>Código</th><th>Usuario</th><th>Comisión</th><th>Valor</th><th>Categorías</th><th>Acciones</th></tr></thead>
-            <tbody id="tabla-afiliados"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+            <tbody id="tabla-afiliados"><tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
       </div>
 
-      <!-- PANEL USUARIOS -->
+      <!-- ═══════════════════════════════════════ PANEL USUARIOS -->
       <div id="panel-usuarios" class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
           <h2 style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:0;">Usuarios</h2>
-          <button class="btn btn-orange" onclick="abrirModalUsuario()">+ Agregar</button>
+          <button class="btn btn-orange" onclick="abrirModalUsuario()">+ Agregar usuario</button>
         </div>
         <div class="card" style="overflow-x:auto;">
           <table>
             <thead><tr><th>Usuario</th><th>Tipo</th><th>Acciones</th></tr></thead>
-            <tbody id="tabla-usuarios"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Cargando...</td></tr></tbody>
+            <tbody id="tabla-usuarios"><tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr></tbody>
           </table>
         </div>
       </div>
@@ -224,29 +305,30 @@
   </div>
 </div>
 
-<!-- MODALES -->
+<!-- ═══════════════════════════════════ MODALES ═══════════════════════════ -->
+
 <!-- Modal Producto -->
 <div class="modal-bg" id="modal-producto">
   <div class="modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;" id="modal-prod-title">Producto</h3>
-      <button onclick="cerrarModal('modal-producto')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+      <button onclick="cerrarModal('modal-producto')" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer; line-height:1;">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <input type="hidden" id="prod-id">
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">ID</label><input type="number" id="prod-id-vis" placeholder="Ej: 2001"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Categoría</label><input type="text" id="prod-cat" placeholder="Ej: Claro, Free Fire"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">SubTipo</label>
-        <select id="prod-subtipo"><option>Paquete</option><option>Recarga</option><option>Diamantes</option></select></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Nombre</label><input type="text" id="prod-nombre" placeholder="Nombre del producto"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Descripción</label><textarea id="prod-desc" rows="3" placeholder="Detalle del producto"></textarea></div>
+      <input type="hidden" id="prod-id-orig">
+      <div><label class="lbl">ID único</label><input type="number" id="prod-id-vis" placeholder="Ej: 2001"></div>
+      <div><label class="lbl">Categoría</label><input type="text" id="prod-cat" placeholder="Ej: Claro, Free Fire"></div>
+      <div><label class="lbl">SubTipo</label>
+        <select id="prod-subtipo"><option>Paquete</option><option>Recarga</option><option>Diamantes</option><option>Monedas</option><option>Gift Card</option></select></div>
+      <div><label class="lbl">Nombre</label><input type="text" id="prod-nombre" placeholder="Nombre del producto"></div>
+      <div><label class="lbl">Descripción</label><textarea id="prod-desc" rows="3" placeholder="Detalle del producto"></textarea></div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Precio Normal</label><input type="number" id="prod-precio" step="0.01" placeholder="0.00"></div>
-        <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Precio Desc.</label><input type="number" id="prod-desc-precio" step="0.01" placeholder="0.00"></div>
+        <div><label class="lbl">Precio Normal ($)</label><input type="number" id="prod-precio" step="0.01" placeholder="0.00"></div>
+        <div><label class="lbl">Precio Descuento ($)</label><input type="number" id="prod-desc-precio" step="0.01" placeholder="0.00"></div>
       </div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Activo</label>
+      <div><label class="lbl">Activo</label>
         <select id="prod-activo"><option value="SI">SI</option><option value="NO">NO</option></select></div>
-      <button class="btn btn-orange" style="padding:14px;" onclick="guardarProducto()">Guardar producto</button>
+      <button class="btn btn-orange" style="padding:14px;" id="btn-guardar-prod" onclick="guardarProducto()">💾 Guardar producto</button>
     </div>
   </div>
 </div>
@@ -255,22 +337,27 @@
 <div class="modal-bg" id="modal-categoria">
   <div class="modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Categoría</h3>
-      <button onclick="cerrarModal('modal-categoria')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;" id="modal-cat-title">Categoría</h3>
+      <button onclick="cerrarModal('modal-categoria')" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer; line-height:1;">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">ID</label><input type="number" id="cat-id" placeholder="Ej: 200"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Nombre</label><input type="text" id="cat-nombre" placeholder="Nombre de la categoría"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo</label>
+      <input type="hidden" id="cat-id-orig">
+      <div><label class="lbl">ID</label><input type="number" id="cat-id" placeholder="Ej: 200"></div>
+      <div><label class="lbl">Nombre</label><input type="text" id="cat-nombre" placeholder="Nombre de la categoría"></div>
+      <div><label class="lbl">Tipo</label>
         <select id="cat-tipo"><option>Recarga</option><option>Juego</option><option>Deporte</option><option>Otro</option></select></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Icono (emoji o imagen)</label><input type="text" id="cat-icono" placeholder="⚽ o imagen.webp"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo Servicio</label>
-        <select id="cat-tiposerv"><option value="Principal">Principal (inicio tienda)</option><option value="Operadora">Operadora (dentro de Recargas)</option><option value="SubCategoria">SubCategoría (dentro de Juegos)</option></select></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Color Fondo</label><input type="text" id="cat-color" placeholder="#001e85"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Descripción</label><input type="text" id="cat-desc" placeholder="Ej: Saldo y Paquetes"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Activo</label>
+      <div><label class="lbl">Icono (emoji o imagen)</label><input type="text" id="cat-icono" placeholder="⚽ o imagen.webp"></div>
+      <div><label class="lbl">Tipo Servicio</label>
+        <select id="cat-tiposerv">
+          <option value="Principal">Principal (inicio tienda)</option>
+          <option value="Operadora">Operadora (dentro de Recargas)</option>
+          <option value="SubCategoria">SubCategoría (dentro de Juegos)</option>
+        </select></div>
+      <div><label class="lbl">Color Fondo</label><input type="text" id="cat-color" placeholder="#001e85"></div>
+      <div><label class="lbl">Descripción</label><input type="text" id="cat-desc" placeholder="Ej: Saldo y Paquetes"></div>
+      <div><label class="lbl">Activo</label>
         <select id="cat-activo"><option value="SI">SI</option><option value="NO">NO</option></select></div>
-      <button class="btn btn-orange" style="padding:14px;" onclick="guardarCategoria()">Guardar categoría</button>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarCategoria()">💾 Guardar categoría</button>
     </div>
   </div>
 </div>
@@ -280,12 +367,12 @@
   <div class="modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Código de descuento</h3>
-      <button onclick="cerrarModal('modal-codigo')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+      <button onclick="cerrarModal('modal-codigo')" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer; line-height:1;">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Código</label><input type="text" id="cod-codigo" placeholder="Ej: PROMO2026" style="text-transform:uppercase;"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Descuento ($)</label><input type="number" id="cod-desc" step="0.01" placeholder="0.50"></div>
-      <button class="btn btn-orange" style="padding:14px;" onclick="guardarCodigo()">Guardar código</button>
+      <div><label class="lbl">Código</label><input type="text" id="cod-codigo" placeholder="Ej: PROMO2026" style="text-transform:uppercase;"></div>
+      <div><label class="lbl">Descuento ($)</label><input type="number" id="cod-desc" step="0.01" placeholder="0.50"></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarCodigo()">💾 Guardar código</button>
     </div>
   </div>
 </div>
@@ -294,17 +381,18 @@
 <div class="modal-bg" id="modal-afiliado">
   <div class="modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Afiliado</h3>
-      <button onclick="cerrarModal('modal-afiliado')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+      <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;" id="modal-afil-title">Afiliado</h3>
+      <button onclick="cerrarModal('modal-afiliado')" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer; line-height:1;">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Código afiliado</label><input type="text" id="afil-codigo" placeholder="Ej: ISAA" style="text-transform:uppercase;"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Usuario</label><input type="text" id="afil-usuario" placeholder="Usuario del afiliado"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo comisión</label>
+      <input type="hidden" id="afil-codigo-orig">
+      <div><label class="lbl">Código afiliado</label><input type="text" id="afil-codigo" placeholder="Ej: ISAA" style="text-transform:uppercase;"></div>
+      <div><label class="lbl">Usuario</label><input type="text" id="afil-usuario" placeholder="Usuario del afiliado"></div>
+      <div><label class="lbl">Tipo comisión</label>
         <select id="afil-tipo"><option value="porcentaje">Porcentaje (%)</option><option value="fijo">Valor fijo ($)</option></select></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Valor comisión</label><input type="number" id="afil-valor" step="0.01" placeholder="Ej: 5 (%) o 0.50 ($)"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Categorías activas (separadas por coma)</label><input type="text" id="afil-cats" placeholder="Free Fire,Roblox"></div>
-      <button class="btn btn-orange" style="padding:14px;" onclick="guardarAfiliado()">Guardar afiliado</button>
+      <div><label class="lbl">Valor comisión</label><input type="number" id="afil-valor" step="0.01" placeholder="Ej: 5 (%) o 0.50 ($)"></div>
+      <div><label class="lbl">Categorías activas (separadas por coma)</label><input type="text" id="afil-cats" placeholder="Free Fire,Roblox"></div>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarAfiliado()">💾 Guardar afiliado</button>
     </div>
   </div>
 </div>
@@ -314,30 +402,80 @@
   <div class="modal">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <h3 style="font-size:14px; font-weight:800; text-transform:uppercase; margin:0;">Usuario</h3>
-      <button onclick="cerrarModal('modal-usuario')" style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer;">✕</button>
+      <button onclick="cerrarModal('modal-usuario')" style="background:none; border:none; color:#64748b; font-size:22px; cursor:pointer; line-height:1;">✕</button>
     </div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Usuario</label><input type="text" id="usu-usuario" placeholder="Nombre de usuario"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Contraseña</label><input type="password" id="usu-pass" placeholder="Contraseña"></div>
-      <div><label style="font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Tipo</label>
+      <div><label class="lbl">Usuario</label><input type="text" id="usu-usuario" placeholder="Nombre de usuario"></div>
+      <div><label class="lbl">Contraseña</label><input type="password" id="usu-pass" placeholder="Contraseña"></div>
+      <div><label class="lbl">Tipo</label>
         <select id="usu-tipo"><option value="admin">Admin</option><option value="afiliado">Afiliado</option></select></div>
-      <button class="btn btn-orange" style="padding:14px;" onclick="guardarUsuario()">Guardar usuario</button>
+      <button class="btn btn-orange" style="padding:14px;" onclick="guardarUsuario()">💾 Guardar usuario</button>
     </div>
   </div>
 </div>
 
-<script>
-const URL = "https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
-let pedidosData = [], productosData = [], codigosData = [], afiladosData = [], categoriasData = [];
+<style>
+  .lbl { font-size:10px; font-weight:800; text-transform:uppercase; color:#64748b; letter-spacing:1px; display:block; margin-bottom:5px; }
+</style>
 
-// ── LOGIN ──────────────────────────────────────
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONFIGURACIÓN — cambia la URL de tu Apps Script aquí
+   ═══════════════════════════════════════════════════════════════ */
+const API_URL = "https://script.google.com/macros/s/AKfycbx_4-k82bMgzjU6aeCYaQWXfb4XxybjDN7WHsPt8uNNpxCgK8Lus1dI0ZjVCrIVHyFiyg/exec";
+
+/* Datos en memoria */
+let pedidosData = [], productosData = [], categoriasData = [], afiladosData = [], visitasData = [];
+
+/* ═══════ TOAST ═══════ */
+function toast(msg, tipo = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = (tipo === 'ok' ? '✅ ' : '❌ ') + msg;
+  t.className = 'toast ' + tipo;
+  t.style.display = 'block';
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => { t.style.display = 'none'; }, 3500);
+}
+
+/* ═══════ API — GET y POST ═══════
+   Google Apps Script requiere que los parámetros vayan en la URL (GET)
+   para acciones de lectura, y como form-urlencoded para escritura.
+   Se usa no-cors + setTimeout para POST porque GAS no envía CORS en POST;
+   la operación igual se ejecuta en el servidor. */
+
+async function apiGet(params) {
+  const qs = new URLSearchParams(params).toString();
+  const r = await fetch(`${API_URL}?${qs}`);
+  return r.json();
+}
+
+async function apiPost(body) {
+  /* GAS con doPost recibe el body como e.postData.contents
+     Enviamos JSON como text/plain para evitar preflight CORS */
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      mode: 'no-cors'   // GAS no devuelve CORS en POST; la escritura igual ocurre
+    });
+    return true;
+  } catch(e) {
+    console.error('apiPost error', e);
+    return false;
+  }
+}
+
+/* ═══════ LOGIN ═══════ */
 async function doLogin() {
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value.trim();
   if(!u || !p) return;
+  const btn = document.getElementById('btn-login');
+  btn.innerHTML = '<span class="loader"></span> Entrando...';
+  btn.disabled = true;
   try {
-    const r = await fetch(`${URL}?accion=login&usuario=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
-    const d = await r.json();
+    const d = await apiGet({ accion:'login', usuario:u, pass:p });
     if(d.ok && d.tipo === 'admin') {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
@@ -345,8 +483,14 @@ async function doLogin() {
       cargarTodo();
     } else {
       document.getElementById('l-error').style.display = 'block';
+      btn.innerHTML = 'Entrar al panel';
+      btn.disabled = false;
     }
-  } catch(e) { document.getElementById('l-error').style.display = 'block'; }
+  } catch(e) {
+    document.getElementById('l-error').style.display = 'block';
+    btn.innerHTML = 'Entrar al panel';
+    btn.disabled = false;
+  }
 }
 document.getElementById('l-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
@@ -357,362 +501,654 @@ function cerrarSesion() {
   document.getElementById('l-pass').value = '';
 }
 
-// ── NAVEGACIÓN ─────────────────────────────────
+/* ═══════ NAVEGACIÓN ═══════ */
 function showPanel(nombre) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('panel-' + nombre).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => { if(n.textContent.toLowerCase().includes(nombre.substring(0,4))) n.classList.add('active'); });
-  const titulos = { pedidos:'Pedidos', estadisticas:'Estadísticas', productos:'Productos', categorias:'Categorías', codigos:'Códigos', afiliados:'Afiliados', usuarios:'Usuarios' };
+  document.getElementById('panel-' + nombre)?.classList.add('active');
+  event?.currentTarget?.classList.add('active');
+
+  // Marcar nav activo por texto
+  document.querySelectorAll('.nav-item').forEach(n => {
+    const txt = n.textContent.toLowerCase().replace(/[^a-záéíóú]/g,'');
+    if(txt.includes(nombre.substring(0,4))) n.classList.add('active');
+  });
+
+  const titulos = { pedidos:'Pedidos', estadisticas:'Estadísticas', visitas:'Visitas', productos:'Productos', categorias:'Categorías', codigos:'Códigos', afiliados:'Afiliados', usuarios:'Usuarios' };
   document.getElementById('panel-title').innerText = titulos[nombre] || nombre;
+
   if(nombre === 'estadisticas') calcularEstadisticas();
+  if(nombre === 'visitas') cargarVisitas();
+  if(nombre === 'afiliados') { cargarAfiliados().then(() => calcularGananciasAfiliados()); }
 }
 
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   const main = document.getElementById('main-content');
-  if(window.innerWidth < 768) { sb.classList.toggle('open'); }
+  if(window.innerWidth < 768) sb.classList.toggle('open');
   else { sb.classList.toggle('closed'); main.classList.toggle('full'); }
 }
 
-// ── CARGAR TODO ────────────────────────────────
+/* ═══════ CARGAR TODO ═══════ */
 async function cargarTodo() {
   await Promise.all([cargarPedidos(), cargarProductos(), cargarCategorias(), cargarCodigos(), cargarAfiliados(), cargarUsuarios()]);
+  llenarFiltroProductosEst();
 }
 
-// ── PEDIDOS ────────────────────────────────────
+/* ════════════════════════════════════════════════════════
+   PEDIDOS
+   ════════════════════════════════════════════════════════ */
 async function cargarPedidos() {
-  const r = await fetch(`${URL}?accion=getPedidos`);
-  const d = await r.json();
-  pedidosData = d.pedidos || [];
-  renderPedidos(pedidosData);
+  const tbody = document.getElementById('tabla-pedidos');
+  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;"><span class="loader"></span></td></tr>';
+  try {
+    const d = await apiGet({ accion:'getPedidos' });
+    pedidosData = d.pedidos || [];
+    filtrarPedidos();
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#f87171; padding:20px;">Error al cargar pedidos</td></tr>';
+  }
 }
+
 function filtrarPedidos() {
-  const ini = document.getElementById('filtro-fecha-ini').value;
-  const fin = document.getElementById('filtro-fecha-fin').value;
+  const ini  = document.getElementById('filtro-fecha-ini').value;
+  const fin  = document.getElementById('filtro-fecha-fin').value;
   const serv = document.getElementById('filtro-servicio').value.toLowerCase();
-  let data = [...pedidosData];
+  const prod = document.getElementById('filtro-producto').value.toLowerCase();
+  let data   = [...pedidosData];
+  if(ini) data = data.filter(p => p.fecha >= ini);
+  if(fin) data = data.filter(p => p.fecha <= fin);
   if(serv) data = data.filter(p => String(p.servicio).toLowerCase().includes(serv));
+  if(prod) data = data.filter(p => String(p.marca||'').toLowerCase().includes(prod));
   renderPedidos(data);
 }
+
 function renderPedidos(data) {
   const tbody = document.getElementById('tabla-pedidos');
-  if(!data.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;">Sin pedidos</td></tr>'; return; }
+  if(!data.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#475569; padding:40px;">Sin pedidos para este filtro</td></tr>';
+    document.getElementById('resumen-pedidos').innerHTML = '';
+    return;
+  }
   tbody.innerHTML = data.map(p => `
     <tr>
-      <td>${p.fecha}</td>
-      <td style="font-family:monospace;">${p.cliente}</td>
-      <td><span class="badge badge-blue">${p.servicio}</span></td>
-      <td>${p.marca}</td>
-      <td>$${p.subtotal}</td>
-      <td><span style="color:#f7941d; font-weight:800;">${p.codigo}</span></td>
-      <td style="font-weight:800; color:#4ade80;">$${p.total}</td>
+      <td style="white-space:nowrap;">${p.fecha||''}</td>
+      <td style="font-family:monospace; font-size:11px;">${p.cliente||''}</td>
+      <td><span class="badge badge-blue">${p.servicio||''}</span></td>
+      <td style="max-width:160px; word-break:break-word;">${p.marca||''}</td>
+      <td>$${parseFloat(p.subtotal||0).toFixed(2)}</td>
+      <td><span style="color:#f7941d; font-weight:800;">${p.codigo||'-'}</span></td>
+      <td style="font-weight:800; color:#4ade80;">$${parseFloat(p.total||0).toFixed(2)}</td>
       <td>${badgeEstado(p.estado)}</td>
       <td>
-        <select onchange="cambiarEstado(${p.fila}, this.value)" style="width:auto; padding:4px 8px; font-size:11px;">
+        <select onchange="cambiarEstado(${p.fila}, this.value, this)" style="width:auto; padding:4px 8px; font-size:11px;">
           <option ${p.estado==='PENDIENTE'?'selected':''}>PENDIENTE</option>
           <option ${p.estado==='COMPLETADO'?'selected':''}>COMPLETADO</option>
           <option ${p.estado==='CANCELADO'?'selected':''}>CANCELADO</option>
         </select>
       </td>
     </tr>`).join('');
-}
-function badgeEstado(e) {
-  const map = { PENDIENTE:'badge-yellow', COMPLETADO:'badge-green', CANCELADO:'badge-red' };
-  return `<span class="badge ${map[e]||'badge-blue'}">${e}</span>`;
-}
-async function cambiarEstado(fila, estado) {
-  await apiPost({ accion:'actualizarEstado', fila, estado });
+
+  // Resumen rápido
+  const total = data.reduce((a,p) => a + (parseFloat(p.total)||0), 0);
+  document.getElementById('resumen-pedidos').innerHTML = `
+    <div class="stat-card" style="padding:12px 20px;"><span style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase;">Mostrando</span>&nbsp;<span style="font-weight:900; color:#fff;">${data.length}</span>&nbsp;<span style="color:#64748b; font-size:10px;">pedidos</span></div>
+    <div class="stat-card" style="padding:12px 20px;"><span style="color:#64748b; font-size:10px; font-weight:800; text-transform:uppercase;">Subtotal</span>&nbsp;<span style="font-weight:900; color:#4ade80;">$${total.toFixed(2)}</span></div>`;
 }
 
-// ── ESTADÍSTICAS ───────────────────────────────
+function badgeEstado(e) {
+  const map = { PENDIENTE:'badge-yellow', COMPLETADO:'badge-green', CANCELADO:'badge-red' };
+  return `<span class="badge ${map[e]||'badge-blue'}">${e||''}</span>`;
+}
+
+async function cambiarEstado(fila, estado, sel) {
+  sel && (sel.disabled = true);
+  const ok = await apiPost({ accion:'actualizarEstado', fila, estado });
+  if(ok) toast('Estado actualizado a ' + estado);
+  else toast('Error al guardar estado', 'err');
+  sel && (sel.disabled = false);
+  // Actualizar en memoria
+  const p = pedidosData.find(x => x.fila === fila);
+  if(p) p.estado = estado;
+}
+
+/* ════════════════════════════════════════════════════════
+   ESTADÍSTICAS
+   ════════════════════════════════════════════════════════ */
+function llenarFiltroProductosEst() {
+  const opts = [...new Set(pedidosData.map(p => p.marca).filter(Boolean))].sort();
+  const sel = document.getElementById('est-filtro-prod');
+  sel.innerHTML = '<option value="">Todos los productos</option>' + opts.map(o => `<option>${o}</option>`).join('');
+}
+
+function limpiarFiltrosEst() {
+  document.getElementById('est-fecha-ini').value = '';
+  document.getElementById('est-fecha-fin').value = '';
+  document.getElementById('est-filtro-prod').value = '';
+  calcularEstadisticas();
+}
+
 function calcularEstadisticas() {
-  const data = pedidosData;
+  const ini  = document.getElementById('est-fecha-ini').value;
+  const fin  = document.getElementById('est-fecha-fin').value;
+  const prod = document.getElementById('est-filtro-prod').value.toLowerCase();
+  let data   = [...pedidosData];
+  if(ini) data = data.filter(p => p.fecha >= ini);
+  if(fin) data = data.filter(p => p.fecha <= fin);
+  if(prod) data = data.filter(p => String(p.marca||'').toLowerCase() === prod);
+
   const total = data.reduce((a,p) => a + (parseFloat(p.total)||0), 0);
-  const pend = data.filter(p => p.estado==='PENDIENTE').length;
-  const comp = data.filter(p => p.estado==='COMPLETADO').length;
+  const pend  = data.filter(p => p.estado==='PENDIENTE').length;
+  const comp  = data.filter(p => p.estado==='COMPLETADO').length;
   document.getElementById('stat-total').innerText = '$' + total.toFixed(2);
   document.getElementById('stat-count').innerText = data.length;
-  document.getElementById('stat-pend').innerText = pend;
-  document.getElementById('stat-comp').innerText = comp;
+  document.getElementById('stat-pend').innerText  = pend;
+  document.getElementById('stat-comp').innerText  = comp;
 
   // Por servicio
   const porServ = {};
   data.forEach(p => { porServ[p.servicio] = (porServ[p.servicio]||0) + (parseFloat(p.total)||0); });
-  document.getElementById('stats-servicio').innerHTML = Object.entries(porServ).map(([k,v]) =>
-    `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1a1a2e;">
-      <span style="color:#94a3b8; font-size:12px;">${k}</span>
-      <span style="color:#4ade80; font-weight:800; font-size:12px;">$${v.toFixed(2)}</span>
-    </div>`).join('') || '<p style="color:#475569; font-size:12px;">Sin datos</p>';
+  const maxServ = Math.max(...Object.values(porServ), 0.01);
+  document.getElementById('stats-servicio').innerHTML = Object.entries(porServ).map(([k,v]) => `
+    <div style="padding:8px 0; border-bottom:1px solid #1a1a2e;">
+      <div style="display:flex; justify-content:space-between;">
+        <span style="color:#94a3b8; font-size:12px;">${k||'N/A'}</span>
+        <span style="color:#4ade80; font-weight:800; font-size:12px;">$${v.toFixed(2)}</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${(v/maxServ*100).toFixed(1)}%; background:#4ade80;"></div></div>
+    </div>`).join('') || noData();
 
   // Por marca
   const porMarca = {};
   data.forEach(p => { porMarca[p.marca] = (porMarca[p.marca]||0) + (parseFloat(p.total)||0); });
-  const topMarca = Object.entries(porMarca).sort((a,b) => b[1]-a[1]).slice(0,8);
-  document.getElementById('stats-marca').innerHTML = topMarca.map(([k,v]) =>
-    `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1a1a2e;">
-      <span style="color:#94a3b8; font-size:12px;">${k}</span>
-      <span style="color:#60a5fa; font-weight:800; font-size:12px;">$${v.toFixed(2)}</span>
-    </div>`).join('') || '<p style="color:#475569; font-size:12px;">Sin datos</p>';
+  const topMarca = Object.entries(porMarca).sort((a,b) => b[1]-a[1]).slice(0,10);
+  const maxMarca = topMarca[0]?.[1] || 0.01;
+  document.getElementById('stats-marca').innerHTML = topMarca.map(([k,v]) => `
+    <div style="padding:8px 0; border-bottom:1px solid #1a1a2e;">
+      <div style="display:flex; justify-content:space-between;">
+        <span style="color:#94a3b8; font-size:12px;">${k||'N/A'}</span>
+        <span style="color:#60a5fa; font-weight:800; font-size:12px;">$${v.toFixed(2)}</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${(v/maxMarca*100).toFixed(1)}%; background:#60a5fa;"></div></div>
+    </div>`).join('') || noData();
+
+  // Por producto
+  const porProd = {};
+  data.forEach(p => { const key = p.marca||'N/A'; porProd[key] = (porProd[key]||0) + 1; });
+  const topProd = Object.entries(porProd).sort((a,b) => b[1]-a[1]).slice(0,10);
+  const maxProd = topProd[0]?.[1] || 1;
+  document.getElementById('stats-producto').innerHTML = topProd.map(([k,v]) => `
+    <div style="padding:8px 0; border-bottom:1px solid #1a1a2e;">
+      <div style="display:flex; justify-content:space-between;">
+        <span style="color:#94a3b8; font-size:12px;">${k}</span>
+        <span style="color:#a78bfa; font-weight:800; font-size:12px;">${v} ventas</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${(v/maxProd*100).toFixed(1)}%; background:#a78bfa;"></div></div>
+    </div>`).join('') || noData();
 }
 
-// ── PRODUCTOS ──────────────────────────────────
+function noData() { return '<p style="color:#475569; font-size:12px; margin:0;">Sin datos</p>'; }
+
+/* ════════════════════════════════════════════════════════
+   VISITAS
+   ════════════════════════════════════════════════════════ */
+async function cargarVisitas() {
+  const tbody = document.getElementById('tabla-visitas');
+  tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:30px;"><span class="loader"></span></td></tr>';
+  try {
+    const d = await apiGet({ accion:'getVisitas' });
+    visitasData = d.visitas || [];
+    filtrarVisitas();
+  } catch(e) {
+    // Si la acción no existe aún en el Apps Script, mostramos instrucción
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:20px; font-size:11px;">La acción <b>getVisitas</b> no está implementada aún en tu Apps Script.<br>Agrega esa función para ver las estadísticas de visitas aquí.</td></tr>';
+    document.getElementById('vis-total').innerText = '—';
+    document.getElementById('vis-hoy').innerText = '—';
+    document.getElementById('vis-semana').innerText = '—';
+    document.getElementById('vis-mes').innerText = '—';
+  }
+}
+
+function filtrarVisitas() {
+  const ini = document.getElementById('vis-fecha-ini').value;
+  const fin = document.getElementById('vis-fecha-fin').value;
+  let data = [...visitasData];
+  if(ini) data = data.filter(v => v.fecha >= ini);
+  if(fin) data = data.filter(v => v.fecha <= fin);
+
+  const hoy = new Date().toISOString().slice(0,10);
+  const semana = new Date(Date.now() - 7*86400000).toISOString().slice(0,10);
+  const mes = new Date().toISOString().slice(0,7);
+
+  const total = visitasData.reduce((a,v) => a + (parseInt(v.visitas)||0), 0);
+  const hoyN  = visitasData.filter(v => v.fecha === hoy).reduce((a,v) => a + (parseInt(v.visitas)||0), 0);
+  const semN  = visitasData.filter(v => v.fecha >= semana).reduce((a,v) => a + (parseInt(v.visitas)||0), 0);
+  const mesN  = visitasData.filter(v => v.fecha?.startsWith(mes)).reduce((a,v) => a + (parseInt(v.visitas)||0), 0);
+
+  document.getElementById('vis-total').innerText  = total;
+  document.getElementById('vis-hoy').innerText    = hoyN;
+  document.getElementById('vis-semana').innerText = semN;
+  document.getElementById('vis-mes').innerText    = mesN;
+
+  const tbody = document.getElementById('tabla-visitas');
+  if(!data.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:30px;">Sin visitas en este período</td></tr>'; return; }
+
+  const maxV = Math.max(...data.map(v => parseInt(v.visitas)||0), 1);
+  tbody.innerHTML = data.slice().reverse().map(v => {
+    const pct = ((parseInt(v.visitas)||0) / maxV * 100).toFixed(1);
+    return `<tr>
+      <td>${v.fecha}</td>
+      <td style="font-weight:800; color:#f7941d;">${v.visitas}</td>
+      <td style="min-width:120px;">
+        <div class="prog-bar" style="margin:0;">
+          <div class="prog-fill" style="width:${pct}%; background: linear-gradient(90deg, #f7941d, #fbbf24);"></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   PRODUCTOS
+   ════════════════════════════════════════════════════════ */
 async function cargarProductos() {
-  const r = await fetch(`${URL}?accion=getProductos`);
-  const d = await r.json();
-  productosData = d.productos || [];
-  renderProductos(productosData);
-  // llenar filtro
-  const cats = [...new Set(productosData.map(p => p.categoria))];
-  const sel = document.getElementById('filtro-cat-prod');
-  sel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option>${c}</option>`).join('');
+  const tbody = document.getElementById('tabla-productos');
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px;"><span class="loader"></span></td></tr>';
+  try {
+    const d = await apiGet({ accion:'getProductos' });
+    productosData = d.productos || [];
+    // Llenar filtro categorías
+    const cats = [...new Set(productosData.map(p => p.categoria).filter(Boolean))].sort();
+    const sel = document.getElementById('filtro-cat-prod');
+    sel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option>${c}</option>`).join('');
+    filtrarTablaProductos();
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#f87171; padding:20px;">Error al cargar productos</td></tr>';
+  }
 }
+
 function filtrarTablaProductos() {
-  const cat = document.getElementById('filtro-cat-prod').value;
-  renderProductos(cat ? productosData.filter(p => p.categoria === cat) : productosData);
+  const cat  = document.getElementById('filtro-cat-prod').value;
+  const nom  = document.getElementById('filtro-nombre-prod').value.toLowerCase();
+  let data   = productosData;
+  if(cat) data = data.filter(p => p.categoria === cat);
+  if(nom) data = data.filter(p => String(p.nombre).toLowerCase().includes(nom));
+  renderProductos(data);
 }
+
 function renderProductos(data) {
   const tbody = document.getElementById('tabla-productos');
   if(!data.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#475569; padding:40px;">Sin productos</td></tr>'; return; }
   tbody.innerHTML = data.map(p => `
     <tr>
       <td style="font-family:monospace; color:#475569;">${p.id}</td>
-      <td><span class="badge badge-blue">${p.categoria}</span></td>
-      <td>${p.subTipo}</td>
-      <td style="max-width:200px;">${p.nombre}</td>
-      <td>$${p.precioNormal}</td>
-      <td style="color:#4ade80;">$${p.precioDesc}</td>
+      <td><span class="badge badge-blue">${p.categoria||''}</span></td>
+      <td><span class="badge badge-purple">${p.subTipo||''}</span></td>
+      <td style="max-width:200px;">${p.nombre||''}</td>
+      <td>$${parseFloat(p.precioNormal||0).toFixed(2)}</td>
+      <td style="color:#4ade80; font-weight:800;">$${parseFloat(p.precioDesc||0).toFixed(2)}</td>
       <td>${p.activo ? '<span class="badge badge-green">SI</span>' : '<span class="badge badge-red">NO</span>'}</td>
-      <td style="display:flex; gap:6px;">
-        <button class="btn btn-gray" onclick='editarProducto(${JSON.stringify(p)})'>✏️</button>
-        <button class="btn btn-red" onclick="eliminarProducto('${p.id}')">🗑️</button>
+      <td style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="btn btn-gray" onclick='editarProducto(${JSON.stringify(p)})' title="Editar">✏️</button>
+        <button class="btn btn-red" onclick="eliminarProducto('${p.id}')" title="Eliminar">🗑️</button>
       </td>
     </tr>`).join('');
 }
+
 function abrirModalProducto() {
-  document.getElementById('prod-id').value = '';
-  document.getElementById('prod-id-vis').value = '';
-  document.getElementById('prod-cat').value = '';
-  document.getElementById('prod-nombre').value = '';
-  document.getElementById('prod-desc').value = '';
-  document.getElementById('prod-precio').value = '';
+  document.getElementById('prod-id-orig').value   = '';
+  document.getElementById('prod-id-vis').value    = '';
+  document.getElementById('prod-cat').value       = '';
+  document.getElementById('prod-subtipo').value   = 'Paquete';
+  document.getElementById('prod-nombre').value    = '';
+  document.getElementById('prod-desc').value      = '';
+  document.getElementById('prod-precio').value    = '';
   document.getElementById('prod-desc-precio').value = '';
-  document.getElementById('prod-activo').value = 'SI';
+  document.getElementById('prod-activo').value    = 'SI';
   document.getElementById('modal-prod-title').innerText = 'Agregar Producto';
   document.getElementById('modal-producto').classList.add('open');
 }
+
 function editarProducto(p) {
-  document.getElementById('prod-id').value = p.id;
-  document.getElementById('prod-id-vis').value = p.id;
-  document.getElementById('prod-cat').value = p.categoria;
-  document.getElementById('prod-subtipo').value = p.subTipo;
-  document.getElementById('prod-nombre').value = p.nombre;
-  document.getElementById('prod-desc').value = p.descripcion;
-  document.getElementById('prod-precio').value = p.precioNormal;
-  document.getElementById('prod-desc-precio').value = p.precioDesc;
-  document.getElementById('prod-activo').value = p.activo ? 'SI' : 'NO';
+  document.getElementById('prod-id-orig').value     = p.id;
+  document.getElementById('prod-id-vis').value      = p.id;
+  document.getElementById('prod-cat').value         = p.categoria||'';
+  document.getElementById('prod-subtipo').value     = p.subTipo||'Paquete';
+  document.getElementById('prod-nombre').value      = p.nombre||'';
+  document.getElementById('prod-desc').value        = p.descripcion||'';
+  document.getElementById('prod-precio').value      = p.precioNormal||'';
+  document.getElementById('prod-desc-precio').value = p.precioDesc||'';
+  document.getElementById('prod-activo').value      = p.activo ? 'SI' : 'NO';
   document.getElementById('modal-prod-title').innerText = 'Editar Producto';
   document.getElementById('modal-producto').classList.add('open');
 }
+
 async function guardarProducto() {
+  const idOrig = document.getElementById('prod-id-orig').value;
   const datos = {
-    id: document.getElementById('prod-id-vis').value,
-    categoria: document.getElementById('prod-cat').value,
-    subTipo: document.getElementById('prod-subtipo').value,
-    nombre: document.getElementById('prod-nombre').value,
-    descripcion: document.getElementById('prod-desc').value,
+    id:           document.getElementById('prod-id-vis').value,
+    idOrig:       idOrig,
+    categoria:    document.getElementById('prod-cat').value.trim(),
+    subTipo:      document.getElementById('prod-subtipo').value,
+    nombre:       document.getElementById('prod-nombre').value.trim(),
+    descripcion:  document.getElementById('prod-desc').value.trim(),
     precioNormal: document.getElementById('prod-precio').value,
-    precioDesc: document.getElementById('prod-desc-precio').value,
-    activo: document.getElementById('prod-activo').value
+    precioDesc:   document.getElementById('prod-desc-precio').value,
+    activo:       document.getElementById('prod-activo').value
   };
-  if(!datos.id || !datos.nombre) return alert('Completa los campos requeridos');
-  await apiPost({ accion:'guardarProducto', datos });
-  cerrarModal('modal-producto');
-  await cargarProductos();
-}
-async function eliminarProducto(id) {
-  if(!confirm('¿Eliminar este producto?')) return;
-  await apiPost({ accion:'eliminarProducto', id });
-  await cargarProductos();
+  if(!datos.id || !datos.nombre) { toast('Completa ID y Nombre', 'err'); return; }
+  const btn = document.getElementById('btn-guardar-prod');
+  btn.innerHTML = '<span class="loader"></span> Guardando...';
+  btn.disabled = true;
+  const ok = await apiPost({ accion:'guardarProducto', datos });
+  btn.innerHTML = '💾 Guardar producto';
+  btn.disabled = false;
+  if(ok) {
+    toast('Producto guardado. Actualizando lista...');
+    cerrarModal('modal-producto');
+    await cargarProductos();
+  } else {
+    toast('Error al guardar. Revisa la consola.', 'err');
+  }
 }
 
-// ── CATEGORÍAS ─────────────────────────────────
+async function eliminarProducto(id) {
+  if(!confirm('¿Eliminar el producto ID ' + id + '?')) return;
+  const ok = await apiPost({ accion:'eliminarProducto', id });
+  if(ok) { toast('Producto eliminado'); await cargarProductos(); }
+  else toast('Error al eliminar', 'err');
+}
+
+/* ════════════════════════════════════════════════════════
+   CATEGORÍAS
+   ════════════════════════════════════════════════════════ */
 async function cargarCategorias() {
-  const r = await fetch(`${URL}?accion=getCategorias`);
-  const d = await r.json();
-  categoriasData = d.categorias || [];
+  const tbody = document.getElementById('tabla-categorias');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;"><span class="loader"></span></td></tr>';
+  try {
+    const d = await apiGet({ accion:'getCategorias' });
+    categoriasData = d.categorias || [];
+    renderCategorias();
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#f87171; padding:20px;">Error al cargar categorías</td></tr>';
+  }
+}
+
+function renderCategorias() {
   const tbody = document.getElementById('tabla-categorias');
   if(!categoriasData.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Sin categorías</td></tr>'; return; }
   tbody.innerHTML = categoriasData.map(c => `
     <tr>
       <td style="font-family:monospace; color:#475569;">${c.id}</td>
-      <td style="font-weight:700;">${c.nombre}</td>
-      <td>${c.tipo}</td>
-      <td><span class="badge badge-blue">${c.tipoServicio}</span></td>
+      <td style="font-weight:700;">${c.nombre||''}</td>
+      <td>${c.tipo||''}</td>
+      <td><span class="badge badge-blue">${c.tipoServicio||''}</span></td>
       <td>${c.activo ? '<span class="badge badge-green">SI</span>' : '<span class="badge badge-red">NO</span>'}</td>
       <td style="display:flex; gap:6px;">
-        <button class="btn btn-gray" onclick='editarCategoria(${JSON.stringify(c)})'>✏️</button>
-        <button class="btn btn-red" onclick="eliminarCategoria('${c.id}')">🗑️</button>
+        <button class="btn btn-gray" onclick='editarCategoria(${JSON.stringify(c)})' title="Editar">✏️</button>
+        <button class="btn btn-red" onclick="eliminarCategoria('${c.id}')" title="Eliminar">🗑️</button>
       </td>
     </tr>`).join('');
 }
+
 function abrirModalCategoria() {
+  document.getElementById('cat-id-orig').value = '';
   ['cat-id','cat-nombre','cat-icono','cat-color','cat-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cat-tipo').value = 'Recarga';
+  document.getElementById('cat-tiposerv').value = 'Principal';
+  document.getElementById('cat-activo').value = 'SI';
+  document.getElementById('modal-cat-title').innerText = 'Agregar Categoría';
   document.getElementById('modal-categoria').classList.add('open');
 }
+
 function editarCategoria(c) {
-  document.getElementById('cat-id').value = c.id;
-  document.getElementById('cat-nombre').value = c.nombre;
-  document.getElementById('cat-tipo').value = c.tipo;
-  document.getElementById('cat-icono').value = c.icono;
-  document.getElementById('cat-tiposerv').value = c.tipoServicio;
-  document.getElementById('cat-color').value = c.colorFondo;
-  document.getElementById('cat-desc').value = c.descripcion;
-  document.getElementById('cat-activo').value = c.activo ? 'SI' : 'NO';
+  document.getElementById('cat-id-orig').value  = c.id;
+  document.getElementById('cat-id').value       = c.id;
+  document.getElementById('cat-nombre').value   = c.nombre||'';
+  document.getElementById('cat-tipo').value     = c.tipo||'Recarga';
+  document.getElementById('cat-icono').value    = c.icono||'';
+  document.getElementById('cat-tiposerv').value = c.tipoServicio||'Principal';
+  document.getElementById('cat-color').value    = c.colorFondo||'';
+  document.getElementById('cat-desc').value     = c.descripcion||'';
+  document.getElementById('cat-activo').value   = c.activo ? 'SI' : 'NO';
+  document.getElementById('modal-cat-title').innerText = 'Editar Categoría';
   document.getElementById('modal-categoria').classList.add('open');
 }
+
 async function guardarCategoria() {
   const datos = {
-    id: document.getElementById('cat-id').value,
-    nombre: document.getElementById('cat-nombre').value,
-    tipo: document.getElementById('cat-tipo').value,
-    icono: document.getElementById('cat-icono').value,
+    id:           document.getElementById('cat-id').value,
+    idOrig:       document.getElementById('cat-id-orig').value,
+    nombre:       document.getElementById('cat-nombre').value.trim(),
+    tipo:         document.getElementById('cat-tipo').value,
+    icono:        document.getElementById('cat-icono').value.trim(),
     tipoServicio: document.getElementById('cat-tiposerv').value,
-    colorFondo: document.getElementById('cat-color').value,
-    descripcion: document.getElementById('cat-desc').value,
-    activo: document.getElementById('cat-activo').value
+    colorFondo:   document.getElementById('cat-color').value.trim(),
+    descripcion:  document.getElementById('cat-desc').value.trim(),
+    activo:       document.getElementById('cat-activo').value
   };
-  if(!datos.id || !datos.nombre) return alert('Completa los campos requeridos');
-  await apiPost({ accion:'guardarCategoria', datos });
-  cerrarModal('modal-categoria');
-  await cargarCategorias();
-}
-async function eliminarCategoria(id) {
-  if(!confirm('¿Eliminar esta categoría?')) return;
-  await apiPost({ accion:'eliminarCategoria', id });
-  await cargarCategorias();
+  if(!datos.id || !datos.nombre) { toast('Completa ID y Nombre', 'err'); return; }
+  const ok = await apiPost({ accion:'guardarCategoria', datos });
+  if(ok) { toast('Categoría guardada'); cerrarModal('modal-categoria'); await cargarCategorias(); }
+  else toast('Error al guardar', 'err');
 }
 
-// ── CÓDIGOS ────────────────────────────────────
-async function cargarCodigos() {
-  const r = await fetch(`${URL}?accion=getCodigos`);
-  const d = await r.json();
-  const tbody = document.getElementById('tabla-codigos');
-  const codigos = d.codigos || {};
-  const entries = Object.entries(codigos);
-  if(!entries.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Sin códigos</td></tr>'; return; }
-  tbody.innerHTML = entries.map(([k,v]) => `
-    <tr>
-      <td style="font-family:monospace; font-weight:800; color:#f7941d;">${k}</td>
-      <td style="color:#4ade80; font-weight:800;">$${parseFloat(v).toFixed(2)}</td>
-      <td style="display:flex; gap:6px;">
-        <button class="btn btn-gray" onclick="editarCodigo('${k}',${v})">✏️</button>
-        <button class="btn btn-red" onclick="eliminarCodigo('${k}')">🗑️</button>
-      </td>
-    </tr>`).join('');
+async function eliminarCategoria(id) {
+  if(!confirm('¿Eliminar la categoría ID ' + id + '?')) return;
+  const ok = await apiPost({ accion:'eliminarCategoria', id });
+  if(ok) { toast('Categoría eliminada'); await cargarCategorias(); }
+  else toast('Error al eliminar', 'err');
 }
+
+/* ════════════════════════════════════════════════════════
+   CÓDIGOS
+   ════════════════════════════════════════════════════════ */
+async function cargarCodigos() {
+  const tbody = document.getElementById('tabla-codigos');
+  try {
+    const d = await apiGet({ accion:'getCodigos' });
+    const codigos = d.codigos || {};
+    const entries = Object.entries(codigos);
+    if(!entries.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:40px;">Sin códigos</td></tr>'; return; }
+    tbody.innerHTML = entries.map(([k,v]) => `
+      <tr>
+        <td style="font-family:monospace; font-weight:800; color:#f7941d;">${k}</td>
+        <td style="color:#4ade80; font-weight:800;">$${parseFloat(v).toFixed(2)}</td>
+        <td style="display:flex; gap:6px;">
+          <button class="btn btn-gray" onclick="editarCodigo('${k}',${v})" title="Editar">✏️</button>
+          <button class="btn btn-red" onclick="eliminarCodigo('${k}')" title="Eliminar">🗑️</button>
+        </td>
+      </tr>`).join('');
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#f87171; padding:20px;">Error al cargar</td></tr>';
+  }
+}
+
 function abrirModalCodigo() {
   document.getElementById('cod-codigo').value = '';
-  document.getElementById('cod-desc').value = '';
+  document.getElementById('cod-desc').value   = '';
   document.getElementById('modal-codigo').classList.add('open');
-}
-function editarCodigo(codigo, desc) {
-  document.getElementById('cod-codigo').value = codigo;
-  document.getElementById('cod-desc').value = desc;
-  document.getElementById('modal-codigo').classList.add('open');
-}
-async function guardarCodigo() {
-  const datos = { codigo: document.getElementById('cod-codigo').value.toUpperCase().trim(), descuento: document.getElementById('cod-desc').value };
-  if(!datos.codigo || !datos.descuento) return alert('Completa todos los campos');
-  await apiPost({ accion:'guardarCodigo', datos });
-  cerrarModal('modal-codigo');
-  await cargarCodigos();
-}
-async function eliminarCodigo(codigo) {
-  if(!confirm('¿Eliminar código ' + codigo + '?')) return;
-  await apiPost({ accion:'eliminarCodigo', codigo });
-  await cargarCodigos();
 }
 
-// ── AFILIADOS ──────────────────────────────────
+function editarCodigo(codigo, desc) {
+  document.getElementById('cod-codigo').value = codigo;
+  document.getElementById('cod-desc').value   = desc;
+  document.getElementById('modal-codigo').classList.add('open');
+}
+
+async function guardarCodigo() {
+  const datos = {
+    codigo:    document.getElementById('cod-codigo').value.toUpperCase().trim(),
+    descuento: document.getElementById('cod-desc').value
+  };
+  if(!datos.codigo || !datos.descuento) { toast('Completa todos los campos', 'err'); return; }
+  const ok = await apiPost({ accion:'guardarCodigo', datos });
+  if(ok) { toast('Código guardado'); cerrarModal('modal-codigo'); await cargarCodigos(); }
+  else toast('Error al guardar', 'err');
+}
+
+async function eliminarCodigo(codigo) {
+  if(!confirm('¿Eliminar código ' + codigo + '?')) return;
+  const ok = await apiPost({ accion:'eliminarCodigo', codigo });
+  if(ok) { toast('Código eliminado'); await cargarCodigos(); }
+  else toast('Error al eliminar', 'err');
+}
+
+/* ════════════════════════════════════════════════════════
+   AFILIADOS
+   ════════════════════════════════════════════════════════ */
 async function cargarAfiliados() {
-  const r = await fetch(`${URL}?accion=getAfiliados`);
-  const d = await r.json();
-  afiladosData = d.afiliados || [];
+  const tbody = document.getElementById('tabla-afiliados');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px;"><span class="loader"></span></td></tr>';
+  try {
+    const d = await apiGet({ accion:'getAfiliados' });
+    afiladosData = d.afiliados || [];
+    renderAfiliados();
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#f87171; padding:20px;">Error al cargar</td></tr>';
+  }
+}
+
+function renderAfiliados() {
   const tbody = document.getElementById('tabla-afiliados');
   if(!afiladosData.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#475569; padding:40px;">Sin afiliados</td></tr>'; return; }
   tbody.innerHTML = afiladosData.map(a => `
     <tr>
       <td style="font-family:monospace; font-weight:800; color:#f7941d;">${a.codigo}</td>
-      <td>${a.usuario}</td>
-      <td>${a.comisionTipo}</td>
-      <td style="color:#4ade80; font-weight:800;">${a.comisionTipo==='porcentaje' ? a.comisionValor+'%' : '$'+parseFloat(a.comisionValor).toFixed(2)}</td>
-      <td style="color:#94a3b8; font-size:11px;">${a.categorias}</td>
+      <td>${a.usuario||''}</td>
+      <td>${a.comisionTipo||''}</td>
+      <td style="color:#4ade80; font-weight:800;">${a.comisionTipo==='porcentaje' ? (a.comisionValor+'%') : '$'+parseFloat(a.comisionValor||0).toFixed(2)}</td>
+      <td style="color:#94a3b8; font-size:11px; max-width:150px; word-break:break-word;">${a.categorias||'Todas'}</td>
       <td style="display:flex; gap:6px;">
-        <button class="btn btn-gray" onclick='editarAfiliado(${JSON.stringify(a)})'>✏️</button>
-        <button class="btn btn-red" onclick="eliminarAfiliado('${a.codigo}')">🗑️</button>
+        <button class="btn btn-gray" onclick='editarAfiliado(${JSON.stringify(a)})' title="Editar">✏️</button>
+        <button class="btn btn-red" onclick="eliminarAfiliado('${a.codigo}')" title="Eliminar">🗑️</button>
       </td>
     </tr>`).join('');
 }
-function abrirModalAfiliado() {
-  ['afil-codigo','afil-usuario','afil-valor','afil-cats'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('modal-afiliado').classList.add('open');
-}
-function editarAfiliado(a) {
-  document.getElementById('afil-codigo').value = a.codigo;
-  document.getElementById('afil-usuario').value = a.usuario;
-  document.getElementById('afil-tipo').value = a.comisionTipo;
-  document.getElementById('afil-valor').value = a.comisionValor;
-  document.getElementById('afil-cats').value = a.categorias;
-  document.getElementById('modal-afiliado').classList.add('open');
-}
-async function guardarAfiliado() {
-  const datos = {
-    codigo: document.getElementById('afil-codigo').value.toUpperCase().trim(),
-    usuario: document.getElementById('afil-usuario').value.trim(),
-    comisionTipo: document.getElementById('afil-tipo').value,
-    comisionValor: document.getElementById('afil-valor').value,
-    categorias: document.getElementById('afil-cats').value
-  };
-  if(!datos.codigo || !datos.usuario) return alert('Completa los campos requeridos');
-  await apiPost({ accion:'guardarAfiliado', datos });
-  cerrarModal('modal-afiliado');
-  await cargarAfiliados();
-}
-async function eliminarAfiliado(codigo) {
-  if(!confirm('¿Eliminar afiliado ' + codigo + '?')) return;
-  await apiPost({ accion:'eliminarAfiliado', codigo });
-  await cargarAfiliados();
+
+/* Calcular ganancias de afiliados cruzando con pedidos */
+function calcularGananciasAfiliados() {
+  const tbody = document.getElementById('tabla-ganancias');
+  if(!afiladosData.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#475569; padding:20px;">Sin afiliados registrados</td></tr>'; return; }
+
+  tbody.innerHTML = afiladosData.map(a => {
+    // Pedidos donde el código del afiliado fue usado
+    const ventasAfil = pedidosData.filter(p =>
+      String(p.codigo||'').toUpperCase() === String(a.codigo||'').toUpperCase() &&
+      p.estado !== 'CANCELADO'
+    );
+    let ganancia = 0;
+    ventasAfil.forEach(p => {
+      const total = parseFloat(p.total||0);
+      if(a.comisionTipo === 'porcentaje') ganancia += total * (parseFloat(a.comisionValor||0)/100);
+      else ganancia += parseFloat(a.comisionValor||0);
+    });
+    return `<tr>
+      <td style="font-weight:800; color:#f7941d;">${a.codigo} <span style="color:#94a3b8; font-size:10px; font-weight:400;">(${a.usuario})</span></td>
+      <td>${ventasAfil.length} ventas</td>
+      <td style="font-weight:900; color:#4ade80; font-size:16px;">$${ganancia.toFixed(2)}</td>
+      <td>
+        <button class="btn btn-red" style="font-size:10px;" onclick="resetearGanancias('${a.codigo}','${a.usuario}', ${ganancia.toFixed(2)})" title="Pagar y resetear">💸 Pagado / Resetear</button>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
-// ── USUARIOS ───────────────────────────────────
-async function cargarUsuarios() {
-  const r = await fetch(`${URL}?accion=login&usuario=__check__&pass=__check__`);
-  // Cargamos desde la hoja directamente con getPedidos como workaround
-  // Para usuarios usamos getAfiliados como referencia y mostramos los que existen
-  const tbody = document.getElementById('tabla-usuarios');
-  tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#475569; padding:20px; font-size:11px;">Gestiona usuarios directamente desde Google Sheets → hoja Usuarios</td></tr>';
+async function resetearGanancias(codigo, usuario, monto) {
+  if(!confirm(`¿Confirmar pago de $${monto} a ${usuario} (${codigo}) y resetear sus ganancias?\n\nEsto marcará los pedidos de este afiliado como pagados.`)) return;
+  const ok = await apiPost({ accion:'resetearGananciasAfiliado', codigo, monto });
+  if(ok) {
+    toast(`Ganancias de ${codigo} reseteadas correctamente`);
+    await cargarPedidos();
+    calcularGananciasAfiliados();
+  } else {
+    toast('Error al resetear. Verifica tu Apps Script.', 'err');
+  }
 }
-function abrirModalUsuario() { document.getElementById('modal-usuario').classList.add('open'); }
+
+function abrirModalAfiliado() {
+  document.getElementById('afil-codigo-orig').value = '';
+  ['afil-codigo','afil-usuario','afil-valor','afil-cats'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('afil-tipo').value = 'porcentaje';
+  document.getElementById('modal-afil-title').innerText = 'Agregar Afiliado';
+  document.getElementById('modal-afiliado').classList.add('open');
+}
+
+function editarAfiliado(a) {
+  document.getElementById('afil-codigo-orig').value = a.codigo;
+  document.getElementById('afil-codigo').value      = a.codigo;
+  document.getElementById('afil-usuario').value     = a.usuario||'';
+  document.getElementById('afil-tipo').value        = a.comisionTipo||'porcentaje';
+  document.getElementById('afil-valor').value       = a.comisionValor||'';
+  document.getElementById('afil-cats').value        = a.categorias||'';
+  document.getElementById('modal-afil-title').innerText = 'Editar Afiliado';
+  document.getElementById('modal-afiliado').classList.add('open');
+}
+
+async function guardarAfiliado() {
+  const datos = {
+    codigo:       document.getElementById('afil-codigo').value.toUpperCase().trim(),
+    codigoOrig:   document.getElementById('afil-codigo-orig').value,
+    usuario:      document.getElementById('afil-usuario').value.trim(),
+    comisionTipo: document.getElementById('afil-tipo').value,
+    comisionValor:document.getElementById('afil-valor').value,
+    categorias:   document.getElementById('afil-cats').value.trim()
+  };
+  if(!datos.codigo || !datos.usuario) { toast('Completa código y usuario', 'err'); return; }
+  const ok = await apiPost({ accion:'guardarAfiliado', datos });
+  if(ok) { toast('Afiliado guardado'); cerrarModal('modal-afiliado'); await cargarAfiliados(); calcularGananciasAfiliados(); }
+  else toast('Error al guardar', 'err');
+}
+
+async function eliminarAfiliado(codigo) {
+  if(!confirm('¿Eliminar afiliado ' + codigo + '?')) return;
+  const ok = await apiPost({ accion:'eliminarAfiliado', codigo });
+  if(ok) { toast('Afiliado eliminado'); await cargarAfiliados(); calcularGananciasAfiliados(); }
+  else toast('Error al eliminar', 'err');
+}
+
+/* ════════════════════════════════════════════════════════
+   USUARIOS
+   ════════════════════════════════════════════════════════ */
+async function cargarUsuarios() {
+  const tbody = document.getElementById('tabla-usuarios');
+  // La mayoría de Apps Scripts no exponen un getUsuarios por seguridad;
+  // mostramos un mensaje informativo y el botón de agregar funciona.
+  tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#475569; padding:20px; font-size:11px; line-height:1.6;">
+    Para seguridad, la lista de usuarios no se muestra en el panel.<br>
+    Puedes <b>agregar nuevos usuarios</b> con el botón de arriba.<br>
+    Para ver o eliminar usuarios existentes, accede directamente a la hoja <b>Usuarios</b> en Google Sheets.
+  </td></tr>`;
+}
+
+function abrirModalUsuario() {
+  document.getElementById('usu-usuario').value = '';
+  document.getElementById('usu-pass').value    = '';
+  document.getElementById('usu-tipo').value    = 'admin';
+  document.getElementById('modal-usuario').classList.add('open');
+}
+
 async function guardarUsuario() {
   const datos = {
     usuario: document.getElementById('usu-usuario').value.trim(),
-    pass: document.getElementById('usu-pass').value.trim(),
-    tipo: document.getElementById('usu-tipo').value
+    pass:    document.getElementById('usu-pass').value.trim(),
+    tipo:    document.getElementById('usu-tipo').value
   };
-  if(!datos.usuario || !datos.pass) return alert('Completa todos los campos');
-  await apiPost({ accion:'guardarUsuario', datos });
-  cerrarModal('modal-usuario');
-  alert('✅ Usuario guardado correctamente');
+  if(!datos.usuario || !datos.pass) { toast('Completa todos los campos', 'err'); return; }
+  const ok = await apiPost({ accion:'guardarUsuario', datos });
+  if(ok) { toast('Usuario guardado correctamente'); cerrarModal('modal-usuario'); }
+  else toast('Error al guardar', 'err');
 }
 
-// ── HELPERS ────────────────────────────────────
+/* ════════════════════════════════════════════════════════
+   HELPERS
+   ════════════════════════════════════════════════════════ */
 function cerrarModal(id) { document.getElementById(id).classList.remove('open'); }
-async function apiPost(body) {
-  try {
-    await fetch(URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
-  } catch(e) {}
-}
+
+// Cerrar modal al click en fondo
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if(e.target === bg) bg.classList.remove('open'); });
+});
 </script>
 </body>
 </html>
