@@ -545,15 +545,10 @@ main { flex: 1; }
 
 <!-- FOOTER COMPLETO -->
 <style>
-footer, footer *, footer p, footer div, footer a, footer span {
-  text-align: left !important;
-}
-footer .ft-center {
-  text-align: center !important;
-}
+footer .ft-left, footer .ft-left * { text-align: left !important; }
 </style>
 <footer style="background:#0a0a12;border-top:1px solid #1a1a2e;margin-top:auto;">
-  <div style="max-width:1200px;margin:0 auto;padding:28px 14px 0;">
+  <div class="ft-left" style="max-width:1200px;margin:0 auto;padding:28px 14px 0;">
     <!-- Logo + descripción + contacto -->
     <div style="margin-bottom:24px;">
       <img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;margin-bottom:12px;">
@@ -602,10 +597,10 @@ footer .ft-center {
       </div>
     </div>
   </div>
-  <!-- Barra inferior — esta sí centrada -->
-  <div class="ft-center" style="border-top:1px solid #1a1a2e;padding:14px;">
-    <img src="logo.png" alt="Rexpres Play" style="height:20px;opacity:.4;display:block;margin:0 auto 6px;">
-    <p style="font-size:9px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+  <!-- Barra inferior — centrada -->
+  <div style="border-top:1px solid #1a1a2e;padding:14px;text-align:center !important;">
+    <img src="logo.png" alt="Rexpres Play" style="height:20px;opacity:.4;display:block;margin:0 auto 6px !important;">
+    <p style="font-size:9px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;text-align:center !important;margin:0 auto;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
   </div>
 </footer>
 
