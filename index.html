@@ -365,6 +365,12 @@ main { flex: 1; }
 .comunidad-btn:hover { background: #1fb857; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,.5); }
 .comunidad-btn:active { transform: scale(.97); }
 
+.cat-green .cat-ov { background: linear-gradient(170deg, rgba(0,80,20,.9) 0%, rgba(0,160,40,.4) 100%); }
+.cat-teal  .cat-ov { background: linear-gradient(170deg, rgba(0,60,120,.9) 0%, rgba(0,120,200,.4) 100%); }
+.cat-promo { position:relative; overflow:hidden; text-decoration:none; cursor:pointer; transition:transform .2s,box-shadow .2s; }
+.cat-promo:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(106,13,173,.45); }
+.cat-promo:active { transform:scale(.97); }
+
 .sec-label { font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
 .sec-title { font-size: clamp(18px,4vw,28px); font-weight: 800; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 12px; }
 </style>
@@ -492,6 +498,22 @@ main { flex: 1; }
       <p class="sec-label">¿Qué deseas hacer hoy?</p>
       <h2 class="sec-title">Selecciona un servicio</h2>
 
+      <!-- PROMOCIONES — centrada arriba, ancho completo -->
+      <a class="cat-card cat-promo" href="promociones.html" style="aspect-ratio:unset;margin-bottom:12px;display:flex;align-items:center;justify-content:center;min-height:90px;border-radius:16px;">
+        <div class="cat-bg" style="background:linear-gradient(135deg,#1a0533 0%,#3d0a6e 50%,#6a0dad 100%);filter:none;position:absolute;inset:0;"></div>
+        <div class="cat-ov" style="background:linear-gradient(135deg,rgba(106,13,173,.7) 0%,rgba(61,10,110,.4) 100%);"></div>
+        <!-- brillos decorativos -->
+        <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(200,100,255,.25) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(200,100,255,.15) 0%,transparent 70%);pointer-events:none;"></div>
+        <div class="cat-body" style="position:relative;inset:unset;padding:20px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;">
+          <div class="cat-ico" style="font-size:30px;margin-bottom:6px;">🔥</div>
+          <div class="cat-name" style="font-size:18px;">Promociones</div>
+          <div class="cat-sub" style="font-size:11px;">Ofertas · Descuentos · Combos</div>
+          <span class="cat-badge" style="margin-top:8px;">Ver promociones →</span>
+        </div>
+      </a>
+
+      <!-- GRID 2x2: Recargas, Videojuegos, Pronósticos, Compras -->
       <div class="cats-grid">
         <a class="cat-card cat-blue" href="recargas.html">
           <div class="cat-bg" style="background-image:url('banner1.webp');filter:brightness(.25);"></div>
@@ -511,6 +533,26 @@ main { flex: 1; }
             <div class="cat-name">Videojuegos</div>
             <div class="cat-sub">Diamantes · Monedas · Gemas</div>
             <span class="cat-badge">Ver juegos →</span>
+          </div>
+        </a>
+        <a class="cat-card cat-green" href="pronosticos.html">
+          <div class="cat-bg" style="background:linear-gradient(135deg,#0a1f0a,#0f3d1a);filter:none;position:absolute;inset:0;"></div>
+          <div class="cat-ov" style="background:linear-gradient(170deg,rgba(0,80,20,.9) 0%,rgba(0,160,40,.4) 100%);"></div>
+          <div class="cat-body">
+            <div class="cat-ico">⚽</div>
+            <div class="cat-name">Pronósticos</div>
+            <div class="cat-sub">Recargas · Casas de apuestas</div>
+            <span class="cat-badge">Ver más →</span>
+          </div>
+        </a>
+        <a class="cat-card cat-teal" href="compras.html">
+          <div class="cat-bg" style="background:linear-gradient(135deg,#0a1a2e,#0d2a45);filter:none;position:absolute;inset:0;"></div>
+          <div class="cat-ov" style="background:linear-gradient(170deg,rgba(0,60,120,.9) 0%,rgba(0,120,200,.4) 100%);"></div>
+          <div class="cat-body">
+            <div class="cat-ico">🛒</div>
+            <div class="cat-name">Servicios Digitales</div>
+            <div class="cat-sub">Streaming · Apps · Suscripciones</div>
+            <span class="cat-badge">Ver catálogo →</span>
           </div>
         </a>
       </div>
