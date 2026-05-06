@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicios Digitales — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+<style>
+html, body { height: 100%; margin: 0; }
+body { display: flex; flex-direction: column; }
+main { flex: 1; }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (min-width: 600px) { .services-grid { grid-template-columns: repeat(3,1fr); gap: 16px; } }
+@media (min-width: 900px) { .services-grid { grid-template-columns: repeat(4,1fr); } }
+
+.svc-card {
+  background: #131320;
+  border: 2px solid #21213a;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+}
+.svc-card:hover {
+  border-color: #f7941d;
+  box-shadow: 0 0 0 1px rgba(247,148,29,.25);
+}
+.svc-card:active { opacity: .85; }
+
+.svc-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  object-fit: contain;
+  background: #1a1a28;
+  padding: 18px;
+}
+
+.svc-card span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 8px;
+  text-align: center;
+  border-top: 1px solid #21213a;
+  width: 100%;
+}
+
+.di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
+.di-clean:last-child { border-bottom: none; }
+.di-clean:hover { background: rgba(255,255,255,.04); color: white; }
+.login-opt { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #1a1a28; border: 1px solid #21213a; border-radius: 14px; margin-bottom: 10px; text-decoration: none; transition: border-color .2s; }
+.login-opt:hover { border-color: #f7941d; }
+.login-opt:last-of-type { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<!-- MODAL LOGIN -->
+<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
+    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
+    <a class="login-opt" href="admin.html">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div>
+      </div>
+      <span style="color:#64748b;font-size:20px;">›</span>
+    </a>
+    <a class="login-opt" href="afiliado.html">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div>
+      </div>
+      <span style="color:#64748b;font-size:20px;">›</span>
+    </a>
+    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di-clean" href="index.html">Tienda</a>
+    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
+  </div>
+  <div class="drawer-foot">
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main style="padding:20px 16px 32px;">
+
+  <a class="back-btn" href="index.html">← Inicio</a>
+
+  <!-- TÍTULO -->
+  <div style="margin-bottom:24px;">
+    <p style="font-size:10px;font-weight:700;color:#64748b;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;">Tecnología y digital</p>
+    <h2 style="font-size:24px;font-weight:800;color:white;margin-bottom:6px;">Servicios Digitales</h2>
+    <p style="font-size:13px;color:#64748b;">Monedas, licencias y servicios digitales al mejor precio</p>
+  </div>
+
+  <!-- GRID SERVICIOS -->
+  <div class="services-grid">
+
+    <a class="svc-card" href="checkout.html?cat=Servicios Digitales&marca=Monedas TikTok">
+      <img src="monedastiktok.webp" alt="Monedas TikTok">
+      <span>Monedas TikTok</span>
+    </a>
+
+    <a class="svc-card" href="checkout.html?cat=Servicios Digitales&marca=Firma Electrónica">
+      <img src="firmaelectronica.webp" alt="Firma Electrónica">
+      <span>Firma Electrónica</span>
+    </a>
+
+    <a class="svc-card" href="checkout.html?cat=Servicios Digitales&marca=Kaspersky">
+      <img src="kaspersky.webp" alt="Kaspersky">
+      <span>Kaspersky</span>
+    </a>
+
+  </div>
+</main>
+
+<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
+  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+</footer>
+
+<script src="rexpres.js"></script>
+<script>
+function abrirLogin()  { document.getElementById('modal-login').style.display='flex'; closeDrawer(); }
+function cerrarLogin() { document.getElementById('modal-login').style.display='none'; }
+document.getElementById('modal-login').addEventListener('click',function(e){if(e.target===this)cerrarLogin();});
+</script>
+</body>
+</html>
