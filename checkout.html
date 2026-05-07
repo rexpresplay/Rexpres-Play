@@ -198,7 +198,7 @@ main { flex: 1; }
           <div class="summary">
             <div class="sum-row sum-total">
               <span class="sum-label">Total a pagar</span>
-              <span class="sum-val" id="tiktok-total-display">$0.00</span>
+              <span class="sum-val" id="tiktok-total-display">$0,00</span>
             </div>
           </div>
           <div class="aviso-verificar">
@@ -231,24 +231,12 @@ main { flex: 1; }
           <div class="field">
             <label class="field-label">Cantidad de monedas</label>
             <input type="number" id="f-monedas" class="field-input" min="30" step="1" placeholder="Ej: 100" oninput="calcularTikTok()">
-            <p class="field-hint">Cada moneda = $0.01 · Se aplica una comisión del 15%</p>
+            <p class="field-hint">1 moneda equivale a $0,0115</p>
           </div>
           <div class="tiktok-calc" id="tiktok-calc-wrap" style="display:none;">
-            <div class="tiktok-calc-row">
-              <span class="tiktok-calc-lbl">Monedas</span>
-              <span class="tiktok-calc-val" id="tc-monedas">0</span>
-            </div>
-            <div class="tiktok-calc-row">
-              <span class="tiktok-calc-lbl">Valor base</span>
-              <span class="tiktok-calc-val" id="tc-base">$0.00</span>
-            </div>
-            <div class="tiktok-calc-row">
-              <span class="tiktok-calc-lbl">Comisión (15%)</span>
-              <span class="tiktok-calc-val" id="tc-comision">$0.00</span>
-            </div>
             <div class="tiktok-calc-row tiktok-calc-total">
               <span class="tiktok-calc-lbl">Total a pagar</span>
-              <span class="tiktok-calc-val" id="tc-total">$0.00</span>
+              <span class="tiktok-calc-val" id="tc-total">$0,00</span>
             </div>
           </div>
         </div>
@@ -377,10 +365,10 @@ main { flex: 1; }
         </div>
       </div>
 
-      <!-- CUPÓN (solo juegos) -->
-      <div id="cupon-wrap" style="display:none;">
+      <!-- CÓDIGO (visible en todos los servicios) -->
+      <div id="cupon-wrap">
         <div class="cupon-box">
-          <p class="cupon-label">🏷️ Código de descuento</p>
+          <p class="cupon-label">🏷️ Colocar un código</p>
           <div class="cupon-row">
             <input type="text" id="promo-in" class="cupon-input" placeholder="Tu código aquí">
             <button class="cupon-btn-apply" onclick="aplicarCodigo()">Aplicar</button>
@@ -509,7 +497,7 @@ if (esTikTokPersonal) {
   document.getElementById('tiktok-whatsapp-block').style.display = 'block';
   document.getElementById('normal-block').style.display          = 'none';
   document.getElementById('tiktok-custom-block').style.display   = 'none';
-  document.getElementById('tiktok-total-display').innerText = '$' + precio.toFixed(2);
+  document.getElementById('tiktok-total-display').innerText = '$' + formatComa(precio);
 } else {
   document.getElementById('normal-block').style.display          = 'block';
   document.getElementById('tiktok-whatsapp-block').style.display = 'none';
@@ -533,7 +521,7 @@ function configurarCamposNormales() {
   if (isPronos) {
     const m = marca.toLowerCase();
 
-    if (m.includes('astrobet') || m.includes('ecuabet') || m.includes('bet 593') || m.includes('databet')) {
+    if (m.includes('astrobet') || m.includes('bet 593') || m.includes('databet')) {
       // Solicitar cédula
       labelId.innerText = 'Número de cédula de identidad';
       fId.type          = 'text';
@@ -543,10 +531,22 @@ function configurarCamposNormales() {
       montoField.style.display = 'block';
       labelMonto.innerText = 'Monto a recargar ($)';
 
-      if (m.includes('astrobet'))  { fMonto.min = 1; fMonto.max = 1000; hintMonto.innerText = 'Monto desde $1 hasta $1,000'; fMonto.setAttribute('max','1000'); }
-      if (m.includes('ecuabet'))   { fMonto.min = 1; fMonto.max = 1000; hintMonto.innerText = 'Monto desde $1 hasta $1,000'; fMonto.setAttribute('max','1000'); }
+      if (m.includes('astrobet'))  { fMonto.min = 1; fMonto.max = 1000; hintMonto.innerText = 'Monto desde $1 hasta $1.000'; fMonto.setAttribute('max','1000'); }
       if (m.includes('bet 593'))   { fMonto.min = 1; fMonto.max = 500;  hintMonto.innerText = 'Monto desde $1 hasta $500'; fMonto.setAttribute('max','500'); }
       if (m.includes('databet'))   { fMonto.min = 1; fMonto.max = 300;  hintMonto.innerText = 'Monto desde $1 hasta $300'; fMonto.setAttribute('max','300'); }
+
+    } else if (m.includes('ecuabet')) {
+      // ID de cuenta + depósito $1-$1000
+      labelId.innerText = 'ID de cuenta';
+      fId.type          = 'text';
+      fId.placeholder   = 'Ej: 123456789';
+      hintId.innerText  = 'Ingresa tu ID de cuenta Ecuabet';
+
+      montoField.style.display = 'block';
+      labelMonto.innerText = 'Monto a depositar ($)';
+      fMonto.min = 1; fMonto.max = 1000;
+      hintMonto.innerText = 'Monto desde $1 hasta $1.000';
+      fMonto.setAttribute('max','1000');
 
     } else if (m.includes('sportbet')) {
       // Solicitar número de orden o ID de cuenta
@@ -607,7 +607,6 @@ function configurarCamposNormales() {
     hintId.innerText  = 'Solo números, entre 6 y 15 dígitos';
     fId.type          = 'text';
     fId.placeholder   = 'Ej: 123456789';
-    document.getElementById('cupon-wrap').style.display = 'block';
   }
 
   // --- RECARGAS OPERADORAS ---
@@ -624,15 +623,22 @@ function configurarCamposNormales() {
 }
 
 // ═══════════════════════════════════════════════════════
+// HELPER: formatear número con coma decimal (para hoja de cálculo)
+// ═══════════════════════════════════════════════════════
+function formatComa(n) {
+  return n.toFixed(2).replace('.', ',');
+}
+
+// ═══════════════════════════════════════════════════════
 // RESUMEN (bloque normal)
 // ═══════════════════════════════════════════════════════
 function actualizarResumen() {
   const fm  = document.getElementById('f-monto');
   const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
   const tot = Math.max(sub - descuento, 0);
-  document.getElementById('s-sub').innerText   = '$' + sub.toFixed(2);
-  document.getElementById('s-desc').innerText  = '-$' + descuento.toFixed(2);
-  document.getElementById('s-total').innerText = '$' + tot.toFixed(2);
+  document.getElementById('s-sub').innerText   = '$' + formatComa(sub);
+  document.getElementById('s-desc').innerText  = '-$' + formatComa(descuento);
+  document.getElementById('s-total').innerText = '$' + formatComa(tot);
   document.getElementById('s-desc-row').style.display = descuento > 0 ? 'flex' : 'none';
 }
 
@@ -643,13 +649,13 @@ function calcularTikTok() {
   const monedas = parseInt(document.getElementById('f-monedas').value) || 0;
   const wrap = document.getElementById('tiktok-calc-wrap');
   if (monedas < 30) { wrap.style.display = 'none'; return; }
-  const base     = monedas * 0.01;           // cada moneda = $0.01
-  const comision = base * 0.15;              // 15%
-  const total    = base + comision;
-  document.getElementById('tc-monedas').innerText  = monedas.toLocaleString();
-  document.getElementById('tc-base').innerText     = '$' + base.toFixed(2);
-  document.getElementById('tc-comision').innerText = '$' + comision.toFixed(2);
-  document.getElementById('tc-total').innerText    = '$' + total.toFixed(2);
+  // Cada moneda = $0,0115 — redondeo: si el tercer decimal >= 5, sube al siguiente centavo
+  const rawTotal = monedas * 0.0115;
+  const centavos = Math.floor(rawTotal * 100);
+  const resto    = rawTotal * 100 - centavos;
+  const totalCentavos = resto >= 0.5 ? centavos + 1 : centavos;
+  const total    = totalCentavos / 100;
+  document.getElementById('tc-total').innerText = '$' + formatComa(total);
   wrap.style.display = 'block';
 }
 
@@ -751,8 +757,8 @@ function enviar() {
 
   const datos = {
     fecha: new Date().toLocaleString(), cliente: id, servicio: cat, marca: marca,
-    monto: sub.toFixed(2), codigo: codigoUsado,
-    descuento: descuento.toFixed(2), total: tot.toFixed(2), estado: 'PENDIENTE'
+    monto: formatComa(sub), codigo: codigoUsado,
+    descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE'
   };
   const ifr = document.createElement('iframe'); ifr.style.display='none';
   ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -764,7 +770,8 @@ function enviar() {
   let campoLabel = 'Número/ID';
   if (isPronos) {
     const mn = marca.toLowerCase();
-    if (mn.includes('astrobet')||mn.includes('ecuabet')||mn.includes('bet 593')||mn.includes('databet')) campoLabel = 'Cédula';
+    if (mn.includes('astrobet')||mn.includes('bet 593')||mn.includes('databet')) campoLabel = 'Cédula';
+    else if (mn.includes('ecuabet'))    campoLabel = 'ID de cuenta';
     else if (mn.includes('sportbet'))  campoLabel = 'N° Orden/ID Cuenta';
     else if (mn.includes('betcris'))   campoLabel = 'ID Cuenta/Jugador';
     else if (mn.includes('prontopaga')) campoLabel = 'N° Orden de pago';
@@ -781,9 +788,9 @@ function enviar() {
     `• ${campoLabel}: ${id}\n` +
     `• Método de pago: ${metodoSeleccionado.charAt(0).toUpperCase() + metodoSeleccionado.slice(1)}\n` +
     `• Banco: ${bancoSeleccionado}\n` +
-    `• Subtotal: $${sub.toFixed(2)}\n` +
+    `• Subtotal: $${formatComa(sub)}\n` +
     `• Código: ${codigoUsado}\n` +
-    `• *Total Final: $${tot.toFixed(2)}*`;
+    `• *Total Final: $${formatComa(tot)}*`;
 
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
 }
@@ -811,9 +818,11 @@ function enviarTikTokPersonalizado() {
   if (!tcMetodo) { alert('Por favor selecciona un método de pago.'); return; }
   if (!tcBanco)  { alert('Por favor selecciona un banco.'); return; }
 
-  const base     = monedas * 0.01;
-  const comision = base * 0.15;
-  const total    = base + comision;
+  const rawTotal = monedas * 0.0115;
+  const centavos = Math.floor(rawTotal * 100);
+  const resto    = rawTotal * 100 - centavos;
+  const totalCentavos = resto >= 0.5 ? centavos + 1 : centavos;
+  const total    = totalCentavos / 100;
 
   const btn = document.getElementById('tc-btn-ok');
   btn.disabled = true; btn.innerText = '⏳ Procesando...';
@@ -823,9 +832,7 @@ function enviarTikTokPersonalizado() {
     `¡Hola Rexpres Play! 🎵\n\n` +
     `*Pedido Personalizado de Monedas TikTok:*\n` +
     `• Cantidad de monedas: ${monedas.toLocaleString()}\n` +
-    `• Valor base: $${base.toFixed(2)}\n` +
-    `• Comisión (15%): $${comision.toFixed(2)}\n` +
-    `• *Total a pagar: $${total.toFixed(2)}*\n` +
+    `• *Total a pagar: $${formatComa(total)}*\n` +
     `• Método de pago: ${tcMetodo.charAt(0).toUpperCase() + tcMetodo.slice(1)}\n` +
     `• Banco: ${tcBanco}\n\n` +
     `Quiero coordinar la entrega de mis monedas TikTok.`;
