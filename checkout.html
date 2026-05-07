@@ -12,7 +12,7 @@ main { flex: 1; }
 
 .service-card {
   background: #131320; border: 1px solid #21213a; border-radius: 20px;
-  padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
 }
 .service-img {
   width: 72px; height: 72px; min-width: 72px; border-radius: 14px;
@@ -24,13 +24,22 @@ main { flex: 1; }
 .service-paq  { font-size: 11px; color: #60a5fa; font-weight: 600; margin-top: 4px; line-height: 1.4; }
 .service-cat  { display: inline-block; background: rgba(247,148,29,.15); border: 1px solid rgba(247,148,29,.3); padding: 3px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; color: #f7941d; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
 
+.tiktok-info-box {
+  background: rgba(20,184,166,.08); border: 1px solid rgba(20,184,166,.3);
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 14px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.tiktok-info-box .tiktok-ico { font-size: 26px; flex-shrink: 0; }
+.tiktok-info-box p { font-size: 12px; color: #5eead4; font-weight: 700; line-height: 1.6; margin: 0; }
+
 .step-box { background: #131320; border: 1px solid #21213a; border-radius: 18px; margin-bottom: 14px; overflow: hidden; }
 .step-head { padding: 16px 18px; display: flex; align-items: center; gap: 14px; }
-.step-circle { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: #000; background: #f7941d; }
-.step-circle.blue  { background: #3b82f6; color: white; }
-.step-circle.green { background: #22c55e; color: white; }
+.step-num  { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; }
+.step-num.orange { background: #f7941d; color: #000; }
+.step-num.blue   { background: #3b82f6; color: white; }
+.step-num.green  { background: #22c55e; color: white; }
 .step-title    { font-size: 15px; font-weight: 800; color: white; }
-.step-subtitle { font-size: 10px; color: #f7941d; font-weight: 700; margin-top: 2px; }
+.step-subtitle { font-size: 10px; font-weight: 700; margin-top: 2px; }
 .step-body { padding: 0 18px 20px; }
 
 .field { margin-bottom: 14px; }
@@ -40,13 +49,14 @@ main { flex: 1; }
 .field-input:focus { border-color: #f7941d; box-shadow: 0 0 0 3px rgba(247,148,29,.1); }
 .field-hint { font-size: 10px; color: #475569; margin-top: 6px; font-weight: 600; }
 
+.tiktok-calc { background: #0e0e1a; border: 1px solid #21213a; border-radius: 12px; padding: 14px 16px; margin-top: 10px; }
+.tiktok-calc-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #21213a; }
+.tiktok-calc-row:last-child { border: none; padding-top: 8px; }
+.tiktok-calc-lbl { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.tiktok-calc-val { font-size: 13px; font-weight: 800; color: #94a3b8; }
+
 .metodos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.metodo-btn {
-  background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px;
-  padding: 16px 12px; text-align: center; cursor: pointer;
-  transition: border-color .2s, background .2s; display: flex; flex-direction: column;
-  align-items: center; gap: 8px;
-}
+.metodo-btn { background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px; padding: 16px 12px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .metodo-btn:hover { border-color: rgba(247,148,29,.4); }
 .metodo-btn.selected { border-color: #f7941d; background: rgba(247,148,29,.08); }
 .metodo-ico  { font-size: 26px; }
@@ -56,11 +66,7 @@ main { flex: 1; }
 .bancos-wrap { display: none; }
 .bancos-wrap.show { display: block; }
 .bancos-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-.banco-btn {
-  background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px;
-  padding: 14px 18px; cursor: pointer; display: flex; align-items: center;
-  gap: 14px; transition: border-color .2s, background .2s;
-}
+.banco-btn { background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px; padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: border-color .2s, background .2s; }
 .banco-btn:hover { border-color: rgba(247,148,29,.4); }
 .banco-btn.selected { border-color: #f7941d; background: rgba(247,148,29,.06); }
 .banco-name  { font-size: 14px; font-weight: 800; color: white; }
@@ -73,7 +79,8 @@ main { flex: 1; }
 .cupon-input { flex: 1; background: #0e0e1a; border: 1px solid #21213a; border-radius: 10px; padding: 12px 14px; color: white; font-size: 13px; outline: none; text-transform: uppercase; transition: border-color .2s; }
 .cupon-input:focus { border-color: #f7941d; }
 .cupon-btn-apply { background: #f7941d; color: #000; font-weight: 900; font-size: 11px; text-transform: uppercase; padding: 0 18px; border-radius: 10px; border: none; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
-.cupon-ok { font-size: 11px; font-weight: 800; color: #4ade80; margin-top: 8px; display: none; }
+.cupon-ok  { font-size: 11px; font-weight: 800; color: #4ade80; margin-top: 8px; display: none; }
+.cupon-err { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #f87171; margin-top: 8px; display: none; }
 
 .summary { background: #0e0e1a; border: 1px solid #21213a; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
 .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #21213a; }
@@ -82,42 +89,18 @@ main { flex: 1; }
 .sum-val   { font-size: 13px; font-weight: 800; color: #94a3b8; }
 .sum-total .sum-label { font-size: 14px; color: white; font-weight: 900; }
 .sum-total .sum-val   { font-size: 26px; color: #f7941d; font-weight: 900; }
+.sum-desc  .sum-label { color: #4ade80; }
 .sum-desc  .sum-val   { color: #4ade80; }
 
-.aviso-verificar {
-  background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.2);
-  border-radius: 12px; padding: 12px 16px; margin-bottom: 14px;
-  display: flex; align-items: flex-start; gap: 10px;
-}
+.aviso-verificar { background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.2); border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 10px; }
 .aviso-verificar span { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.aviso-verificar p { font-size: 11px; color: #fbbf24; font-weight: 700; line-height: 1.5; }
+.aviso-verificar p { font-size: 11px; color: #fbbf24; font-weight: 700; line-height: 1.5; margin: 0; }
 
 .btn-ok { width: 100%; background: linear-gradient(135deg,#16a34a,#22c55e); color: white; font-weight: 900; padding: 17px; border-radius: 14px; font-size: 15px; text-transform: uppercase; letter-spacing: 2px; border: none; cursor: pointer; transition: opacity .2s, transform .2s; }
 .btn-ok:hover  { opacity: .9; }
 .btn-ok:active { transform: scale(.98); }
 .btn-ok:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 .secure-note { text-align: center; font-size: 10px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 12px; }
-
-/* Aviso especial TikTok personalizado */
-.tiktok-info-box {
-  background: rgba(20,184,166,.08); border: 1px solid rgba(20,184,166,.3);
-  border-radius: 14px; padding: 18px; margin-bottom: 14px;
-  display: flex; align-items: flex-start; gap: 12px;
-}
-.tiktok-info-box .tiktok-ico { font-size: 28px; flex-shrink: 0; }
-.tiktok-info-box p { font-size: 12px; color: #5eead4; font-weight: 700; line-height: 1.6; margin: 0; }
-
-/* Calculadora TikTok */
-.tiktok-calc {
-  background: rgba(247,148,29,.05); border: 1px solid rgba(247,148,29,.2);
-  border-radius: 14px; padding: 16px; margin-top: 10px;
-}
-.tiktok-calc-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(247,148,29,.1); }
-.tiktok-calc-row:last-child { border: none; padding-top: 10px; }
-.tiktok-calc-lbl { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-.tiktok-calc-val { font-size: 13px; font-weight: 800; color: #94a3b8; }
-.tiktok-calc-total .tiktok-calc-lbl { color: #f7941d; font-size: 12px; }
-.tiktok-calc-total .tiktok-calc-val { color: #f7941d; font-size: 22px; font-weight: 900; }
 
 .di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
 .di-clean:last-child { border-bottom: none; }
@@ -163,276 +146,151 @@ main { flex: 1; }
 </header>
 
 <main style="padding:20px 16px 40px;">
-  <div style="max-width:480px;margin:0 auto;">
+<div style="max-width:480px;margin:0 auto;">
 
-    <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
+  <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
 
-    <!-- SERVICE CARD -->
-    <div class="service-card">
-      <div class="service-img"><img id="svc-img" src="" alt=""></div>
-      <div style="flex:1;min-width:0;">
-        <div class="service-name" id="svc-name"></div>
-        <div class="service-paq"  id="svc-paq"></div>
-        <span class="service-cat" id="svc-cat"></span>
-      </div>
+  <!-- TARJETA DEL SERVICIO -->
+  <div class="service-card">
+    <div class="service-img"><img id="svc-img" src="" alt=""></div>
+    <div style="flex:1;min-width:0;">
+      <div class="service-name" id="svc-name"></div>
+      <div class="service-paq"  id="svc-paq"></div>
+      <span class="service-cat" id="svc-cat"></span>
     </div>
-
-    <!-- ═══════════════════════════════════════════════════════
-         BLOQUE ESPECIAL: TikTok via WhatsApp (paquete normal)
-         Solo cuando cat=Servicios Digitales & marca=TikTok & NO es personalizado
-    ════════════════════════════════════════════════════════════ -->
-    <div id="tiktok-whatsapp-block" style="display:none;">
-      <div class="tiktok-info-box">
-        <div class="tiktok-ico">🎵</div>
-        <p>El proceso de transferencia de monedas TikTok se realizará internamente a través de <strong>WhatsApp</strong>.<br>Se coordinará la conexión para el traslado de las monedas a tu cuenta de forma segura.</p>
-      </div>
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle green">✓</div>
-          <div>
-            <div class="step-title">Confirmación de pedido</div>
-            <div class="step-subtitle" style="color:#22c55e;">Precio final incluido</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="summary">
-            <div class="sum-row sum-total">
-              <span class="sum-label">Total a pagar</span>
-              <span class="sum-val" id="tiktok-total-display">$0,00</span>
-            </div>
-          </div>
-          <div class="aviso-verificar">
-            <span>💬</span>
-            <p>Al confirmar serás redirigido a WhatsApp para coordinar la entrega de tus monedas TikTok.</p>
-          </div>
-          <button class="btn-ok" onclick="enviarTikTokWhatsApp()">🎵 Confirmar por WhatsApp</button>
-          <p class="secure-note">🔒 Tu pedido se coordina de forma segura vía WhatsApp</p>
-        </div>
-      </div>
-      <!-- CÓDIGO -->
-      <div class="cupon-box" style="margin-bottom:14px;">
-        <p class="cupon-label">🏷️ Colocar un código</p>
-        <div class="cupon-row">
-          <input type="text" id="tt-promo-in" class="cupon-input" placeholder="Tu código aquí">
-          <button class="cupon-btn-apply" onclick="aplicarCodigoTT('tt')">Aplicar</button>
-        </div>
-        <p id="tt-promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
-        <p id="tt-promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════
-         BLOQUE ESPECIAL: TikTok PERSONALIZADO (calculadora)
-    ════════════════════════════════════════════════════════════ -->
-    <div id="tiktok-custom-block" style="display:none;">
-      <div class="tiktok-info-box">
-        <div class="tiktok-ico">🎵</div>
-        <p>El proceso de transferencia de monedas TikTok se realizará internamente a través de <strong>WhatsApp</strong>.<br>Se coordinará la conexión para el traslado de las monedas a tu cuenta.</p>
-      </div>
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle">1</div>
-          <div>
-            <div class="step-title">Cantidad de monedas deseadas</div>
-            <div class="step-subtitle">Mínimo 30 monedas · Sin límite</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="field">
-            <label class="field-label">Cantidad de monedas</label>
-            <input type="number" id="f-monedas" class="field-input" min="30" step="1" placeholder="Ej: 100" oninput="calcularTikTok()">
-            <p class="field-hint">1 moneda equivale a $0,0115</p>
-          </div>
-          <div class="tiktok-calc" id="tiktok-calc-wrap" style="display:none;">
-            <div class="tiktok-calc-row tiktok-calc-total">
-              <span class="tiktok-calc-lbl">Total a pagar</span>
-              <span class="tiktok-calc-val" id="tc-total">$0,00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle" style="background:#3b82f6;color:white;">2</div>
-          <div>
-            <div class="step-title">Método de pago</div>
-            <div class="step-subtitle" style="color:#3b82f6;">Selecciona cómo vas a pagar</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="metodos-grid">
-            <div class="metodo-btn" id="tc-m-transferencia" onclick="selMetodoTikTok('transferencia')">
-              <div class="metodo-ico">🏦</div>
-              <div class="metodo-name">Transferencia</div>
-              <div class="metodo-desc">Transferencia bancaria</div>
-            </div>
-            <div class="metodo-btn" id="tc-m-deposito" onclick="selMetodoTikTok('deposito')">
-              <div class="metodo-ico">💵</div>
-              <div class="metodo-name">Depósito</div>
-              <div class="metodo-desc">Depósito en ventanilla</div>
-            </div>
-          </div>
-          <div class="bancos-wrap" id="tc-bancos-wrap">
-            <p style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Selecciona el banco</p>
-            <div class="bancos-grid">
-              <div class="banco-btn" id="tc-banco-pichincha" onclick="selBancoTikTok('Banco Pichincha')">
-                <div class="banco-name">Banco Pichincha</div><div class="banco-check">✓</div>
-              </div>
-              <div class="banco-btn" id="tc-banco-produbanco" onclick="selBancoTikTok('Produbanco')">
-                <div class="banco-name">Produbanco</div><div class="banco-check">✓</div>
-              </div>
-              <div class="banco-btn" id="tc-banco-guayaquil" onclick="selBancoTikTok('Banco Guayaquil')">
-                <div class="banco-name">Banco Guayaquil</div><div class="banco-check">✓</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle green">3</div>
-          <div>
-            <div class="step-title">Confirmación de pedido</div>
-            <div class="step-subtitle" style="color:#22c55e;">Precio final incluido</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="cupon-box" style="margin-bottom:14px;">
-            <p class="cupon-label">🏷️ Colocar un código</p>
-            <div class="cupon-row">
-              <input type="text" id="tc-promo-in" class="cupon-input" placeholder="Tu código aquí">
-              <button class="cupon-btn-apply" onclick="aplicarCodigoTT('tc')">Aplicar</button>
-            </div>
-            <p id="tc-promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
-            <p id="tc-promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
-          </div>
-          <div class="aviso-verificar">
-            <span>💬</span>
-            <p>Al confirmar serás redirigido a WhatsApp para coordinar la entrega de las monedas.</p>
-          </div>
-          <button class="btn-ok" id="tc-btn-ok" onclick="enviarTikTokPersonalizado()">🎵 Confirmar por WhatsApp</button>
-          <p class="secure-note">🔒 Tu pedido se coordina de forma segura vía WhatsApp</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════
-         BLOQUE NORMAL (juegos, recarga operadoras, pronósticos,
-         firma electrónica, kaspersky)
-    ════════════════════════════════════════════════════════════ -->
-    <div id="normal-block">
-
-      <!-- ① INFORMACIÓN DEL CLIENTE -->
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle">1</div>
-          <div>
-            <div class="step-title">Información del cliente</div>
-            <div class="step-subtitle" id="step1-sub">Datos del pedido</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="field" id="field-id-wrap">
-            <label class="field-label" id="label-id">Número de cédula</label>
-            <input type="text" id="f-id" class="field-input" placeholder="">
-            <p class="field-hint" id="hint-id"></p>
-          </div>
-          <div id="monto-field" class="field" style="display:none;">
-            <label class="field-label" id="label-monto">Monto a recargar ($)</label>
-            <input type="number" id="f-monto" class="field-input" min="1" step="0.01" oninput="actualizarResumen()" placeholder="0.00">
-            <p class="field-hint" id="hint-monto">Monto desde $1</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- ② MÉTODO DE PAGO -->
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle" style="background:#3b82f6;color:white;">2</div>
-          <div>
-            <div class="step-title">Método de pago</div>
-            <div class="step-subtitle" style="color:#3b82f6;">Selecciona cómo vas a pagar</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="metodos-grid">
-            <div class="metodo-btn" id="m-transferencia" onclick="selMetodo('transferencia')">
-              <div class="metodo-ico">🏦</div>
-              <div class="metodo-name">Transferencia</div>
-              <div class="metodo-desc">Transferencia bancaria</div>
-            </div>
-            <div class="metodo-btn" id="m-deposito" onclick="selMetodo('deposito')">
-              <div class="metodo-ico">💵</div>
-              <div class="metodo-name">Depósito</div>
-              <div class="metodo-desc">Depósito en ventanilla</div>
-            </div>
-          </div>
-          <div class="bancos-wrap" id="bancos-wrap">
-            <p style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Selecciona el banco</p>
-            <div class="bancos-grid">
-              <div class="banco-btn" id="banco-pichincha" onclick="selBanco('Banco Pichincha')">
-                <div class="banco-name">Banco Pichincha</div><div class="banco-check">✓</div>
-              </div>
-              <div class="banco-btn" id="banco-produbanco" onclick="selBanco('Produbanco')">
-                <div class="banco-name">Produbanco</div><div class="banco-check">✓</div>
-              </div>
-              <div class="banco-btn" id="banco-guayaquil" onclick="selBanco('Banco Guayaquil')">
-                <div class="banco-name">Banco Guayaquil</div><div class="banco-check">✓</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CÓDIGO (visible en todos los servicios) -->
-      <div id="cupon-wrap">
-        <div class="cupon-box">
-          <p class="cupon-label">🏷️ Colocar un código</p>
-          <div class="cupon-row">
-            <input type="text" id="promo-in" class="cupon-input" placeholder="Tu código aquí">
-            <button class="cupon-btn-apply" onclick="aplicarCodigo()">Aplicar</button>
-          </div>
-          <p id="promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
-          <p id="promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
-        </div>
-      </div>
-
-      <!-- ③ CONFIRMACIÓN -->
-      <div class="step-box">
-        <div class="step-head">
-          <div class="step-circle green">3</div>
-          <div>
-            <div class="step-title">Confirmación de pedido</div>
-            <div class="step-subtitle" style="color:#22c55e;">Precio final incluido</div>
-          </div>
-        </div>
-        <div class="step-body">
-          <div class="summary">
-            <div class="sum-row">
-              <span class="sum-label">Subtotal</span>
-              <span class="sum-val" id="s-sub">$0.00</span>
-            </div>
-            <div class="sum-row sum-desc" id="s-desc-row" style="display:none;">
-              <span class="sum-label" style="color:#4ade80;">Descuento</span>
-              <span class="sum-val" id="s-desc">-$0.00</span>
-            </div>
-            <div class="sum-row sum-total">
-              <span class="sum-label">Total a pagar</span>
-              <span class="sum-val" id="s-total">$0.00</span>
-            </div>
-          </div>
-          <div class="aviso-verificar">
-            <span>⚠️</span>
-            <p>Por favor verifica que toda la información proporcionada esté correcta antes de confirmar tu pedido.</p>
-          </div>
-          <button class="btn-ok" id="btn-ok" onclick="enviar()">✅ Confirmar pedido por WhatsApp</button>
-          <p class="secure-note">🔒 Tu pedido se confirma de forma segura vía WhatsApp</p>
-        </div>
-      </div>
-
-    </div><!-- /normal-block -->
-
   </div>
+
+  <!-- AVISO TIKTOK -->
+  <div id="tiktok-aviso" style="display:none;" class="tiktok-info-box">
+    <div class="tiktok-ico">🎵</div>
+    <p>El proceso de transferencia de monedas TikTok se realizará internamente a través de <strong>WhatsApp</strong>. Se coordinará la conexión para el traslado de las monedas a tu cuenta de forma segura.</p>
+  </div>
+
+  <!-- ═══ PASO 1 — DATOS DEL CLIENTE ═══ -->
+  <div class="step-box" id="step1-box">
+    <div class="step-head">
+      <div class="step-num orange">1</div>
+      <div>
+        <div class="step-title">Información del cliente</div>
+        <div class="step-subtitle" style="color:#f7941d;" id="step1-sub">Datos del pedido</div>
+      </div>
+    </div>
+    <div class="step-body">
+
+      <!-- Campo ID/correo/etc -->
+      <div class="field" id="field-id-wrap">
+        <label class="field-label" id="label-id">Número</label>
+        <input type="text" id="f-id" class="field-input" placeholder="">
+        <p class="field-hint" id="hint-id"></p>
+      </div>
+
+      <!-- Campo monto — solo pronósticos y recargas sin paquete -->
+      <div class="field" id="monto-field" style="display:none;">
+        <label class="field-label" id="label-monto">Monto a recargar ($)</label>
+        <input type="number" id="f-monto" class="field-input" min="1" step="0.01" placeholder="0,00" oninput="actualizarResumen()">
+        <p class="field-hint" id="hint-monto"></p>
+      </div>
+
+      <!-- Calculadora TikTok personalizado -->
+      <div id="tiktok-calc-wrap" style="display:none;">
+        <div class="field">
+          <label class="field-label">Cantidad de monedas</label>
+          <input type="number" id="f-monedas" class="field-input" min="30" step="1" placeholder="Ej: 100" oninput="calcularTikTok()">
+          <p class="field-hint">1 moneda equivale a $0,0115 · Mínimo 30 monedas</p>
+        </div>
+        <div class="tiktok-calc" id="tiktok-desglose" style="display:none;">
+          <div class="tiktok-calc-row">
+            <span class="tiktok-calc-lbl">Monedas solicitadas</span>
+            <span class="tiktok-calc-val" id="tc-monedas-lbl">—</span>
+          </div>
+          <div class="tiktok-calc-row" style="border-top:1px solid #21213a;margin-top:4px;padding-top:10px;">
+            <span class="tiktok-calc-lbl" style="color:#f7941d;font-size:12px;">Valor calculado</span>
+            <span class="tiktok-calc-val" style="color:#f7941d;font-size:20px;font-weight:900;" id="tc-total-lbl">—</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ PASO 2 — MÉTODO DE PAGO ═══ -->
+  <div class="step-box">
+    <div class="step-head">
+      <div class="step-num blue">2</div>
+      <div>
+        <div class="step-title">Método de pago</div>
+        <div class="step-subtitle" style="color:#3b82f6;">Selecciona cómo vas a pagar</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="metodos-grid">
+        <div class="metodo-btn" id="m-transferencia" onclick="selMetodo('transferencia')">
+          <div class="metodo-ico">🏦</div>
+          <div class="metodo-name">Transferencia</div>
+          <div class="metodo-desc">Transferencia bancaria</div>
+        </div>
+        <div class="metodo-btn" id="m-deposito" onclick="selMetodo('deposito')">
+          <div class="metodo-ico">💵</div>
+          <div class="metodo-name">Depósito</div>
+          <div class="metodo-desc">Depósito en ventanilla</div>
+        </div>
+      </div>
+      <div class="bancos-wrap" id="bancos-wrap">
+        <p style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Selecciona el banco</p>
+        <div class="bancos-grid">
+          <div class="banco-btn" id="banco-pichincha"  onclick="selBanco('Banco Pichincha')"><div class="banco-name">Banco Pichincha</div><div class="banco-check">✓</div></div>
+          <div class="banco-btn" id="banco-produbanco" onclick="selBanco('Produbanco')"><div class="banco-name">Produbanco</div><div class="banco-check">✓</div></div>
+          <div class="banco-btn" id="banco-guayaquil"  onclick="selBanco('Banco Guayaquil')"><div class="banco-name">Banco Guayaquil</div><div class="banco-check">✓</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PASO 3 — CÓDIGO (TODOS LOS PRODUCTOS) ═══ -->
+  <div class="cupon-box">
+    <p class="cupon-label">🏷️ Colocar un código</p>
+    <div class="cupon-row">
+      <input type="text" id="promo-in" class="cupon-input" placeholder="Tu código aquí">
+      <button class="cupon-btn-apply" onclick="aplicarCodigo()">Aplicar</button>
+    </div>
+    <p id="promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
+    <p id="promo-err" class="cupon-err">❌ Código no válido</p>
+  </div>
+
+  <!-- ═══ PASO 4 — RESUMEN + CONFIRMACIÓN (TODOS LOS PRODUCTOS) ═══ -->
+  <div class="step-box">
+    <div class="step-head">
+      <div class="step-num green">3</div>
+      <div>
+        <div class="step-title">Confirmación de pedido</div>
+        <div class="step-subtitle" style="color:#22c55e;">Revisa el resumen antes de confirmar</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="summary">
+        <div class="sum-row">
+          <span class="sum-label">Subtotal</span>
+          <span class="sum-val" id="s-sub">$0,00</span>
+        </div>
+        <div class="sum-row sum-desc" id="s-desc-row" style="display:none;">
+          <span class="sum-label">Descuento aplicado</span>
+          <span class="sum-val" id="s-desc">-$0,00</span>
+        </div>
+        <div class="sum-row sum-total">
+          <span class="sum-label">Total a pagar</span>
+          <span class="sum-val" id="s-total">$0,00</span>
+        </div>
+      </div>
+      <div class="aviso-verificar" id="aviso-txt">
+        <span>⚠️</span>
+        <p id="aviso-p">Por favor verifica que toda la información proporcionada esté correcta antes de confirmar tu pedido.</p>
+      </div>
+      <button class="btn-ok" id="btn-ok" onclick="enviar()">✅ Confirmar pedido por WhatsApp</button>
+      <p class="secure-note">🔒 Tu pedido se confirma de forma segura vía WhatsApp</p>
+    </div>
+  </div>
+
+</div>
 </main>
 
 <footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
@@ -441,50 +299,56 @@ main { flex: 1; }
 
 <script src="rexpres.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════
-// PARÁMETROS URL
-// ═══════════════════════════════════════════════════════
-const params      = new URLSearchParams(location.search);
-const cat         = params.get('cat')          || '';
-const marca       = params.get('marca')        || '';
-const paq         = params.get('paq')          || '';
-const precio      = parseFloat(params.get('precio') || '0');
-const detalle     = params.get('detalle')      || '';
+// ═══════════════════════════════════════════
+// PARÁMETROS
+// ═══════════════════════════════════════════
+const params       = new URLSearchParams(location.search);
+const cat          = params.get('cat')    || '';
+const marca        = params.get('marca')  || '';
+const paq          = params.get('paq')    || '';
+const precio       = parseFloat(params.get('precio') || '0');
+const detalle      = params.get('detalle') || '';
 const tiktokCustom = params.get('tiktok_custom') === '1';
 
-// Flags de categoría
-const isJuego          = cat === 'Juegos';
-const isRecargas       = cat === 'Recargas';
-const isPronos         = cat === 'Pronósticos';
-const isServDigital    = cat === 'Servicios Digitales';
-const desdePaquete     = !!paq;
-const esSoloRecarga    = isRecargas;
-const esTikTok         = isServDigital && marca.toLowerCase().includes('tiktok');
-const esFirma          = isServDigital && marca.toLowerCase().includes('firma');
-const esKaspersky      = isServDigital && marca.toLowerCase().includes('kaspersky');
-const esTikTokNormal   = esTikTok && !tiktokCustom && desdePaquete;
-const esTikTokPersonal = esTikTok && tiktokCustom;
+const isJuego       = cat === 'Juegos';
+const isRecargas    = cat === 'Recargas';
+const isPronos      = cat === 'Pronósticos';
+const isServDigital = cat === 'Servicios Digitales';
+const desdePaquete  = !!paq && !tiktokCustom;
+const esTikTok      = isServDigital && marca.toLowerCase().includes('tiktok');
+const esFirma       = isServDigital && marca.toLowerCase().includes('firma');
+const esKaspersky   = isServDigital && marca.toLowerCase().includes('kaspersky');
 
 let descuento = 0, codigoUsado = 'SISTEMA', codigos = {};
-let metodoSeleccionado = '';
-let bancoSeleccionado  = '';
-let tcMetodo = '', tcBanco = '';
+let metodoSel = '', bancoSel = '';
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+function formatComa(n) { return n.toFixed(2).replace('.', ','); }
+
+// ═══════════════════════════════════════════
+// CARGAR CÓDIGOS (SIEMPRE, para todos los productos)
+// ═══════════════════════════════════════════
+fetch(API + '?accion=getCodigos')
+  .then(r => r.json())
+  .then(d => { codigos = d.codigos || {}; })
+  .catch(() => {});
+
+// ═══════════════════════════════════════════
 // BACK LINK
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 const bl = document.getElementById('back-link');
-if (desdePaquete || esTikTokPersonal) {
-  bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
-} else if (isRecargas)  { bl.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`; }
-else if (isJuego)       { bl.href = 'juegos.html'; }
-else if (isPronos)      { bl.href = 'pronosticos.html'; }
-else if (isServDigital) { bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`; }
-else                    { bl.href = 'index.html'; }
+if      (isJuego)        bl.href = 'juegos.html';
+else if (isPronos)       bl.href = 'pronosticos.html';
+else if (isServDigital)  bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
+else if (desdePaquete)   bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
+else if (isRecargas)     bl.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
+else                     bl.href = 'index.html';
 
-// ═══════════════════════════════════════════════════════
-// SERVICE CARD
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// TARJETA SERVICIO
+// ═══════════════════════════════════════════
 const imgMap = {
   'claro':'claro.webp','movistar':'movistar.webp','cnt':'cnt.webp','tuenti':'tuenti.webp',
   'aki móvil':'akimovil (1).webp','maxi plus':'maxiplus.webp',
@@ -497,167 +361,158 @@ const imgMap = {
 const imgEl  = document.getElementById('svc-img');
 const imgSrc = imgMap[marca.toLowerCase().trim()] || '';
 if (imgSrc) { imgEl.src = imgSrc; imgEl.alt = marca; }
-else imgEl.parentElement.innerHTML = `<span style="font-size:36px;">${isPronos ? '⚽' : isServDigital ? '💻' : isJuego ? '🎮' : '📱'}</span>`;
-
+else imgEl.parentElement.innerHTML = `<span style="font-size:36px;">${isPronos?'⚽':isServDigital?'💻':isJuego?'🎮':'📱'}</span>`;
 document.getElementById('svc-name').innerText = marca;
-document.getElementById('svc-paq').innerText  = desdePaquete
-  ? (paq + (detalle ? ' · ' + detalle.substring(0,60) + (detalle.length>60?'...':'') : ''))
-  : (tiktokCustom ? 'Personalizado · Otra cantidad de monedas' : '');
-document.getElementById('svc-cat').innerText  = cat;
+document.getElementById('svc-paq').innerText  = tiktokCustom
+  ? 'Personalizado · Otra cantidad de monedas'
+  : (paq ? (paq + (detalle ? ' · '+detalle.substring(0,60)+(detalle.length>60?'...':'') : '')) : '');
+document.getElementById('svc-cat').innerText = cat;
 
-// ═══════════════════════════════════════════════════════
-// MOSTRAR BLOQUE CORRECTO
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// AVISO TIKTOK
+// ═══════════════════════════════════════════
+if (esTikTok) document.getElementById('tiktok-aviso').style.display = 'flex';
 
-// Cargar códigos siempre, sin importar el bloque activo
-fetch(API + '?accion=getCodigos').then(r=>r.json()).then(d=>{ codigos = d.codigos||{}; }).catch(()=>{});
-
-if (esTikTokPersonal) {
-  document.getElementById('tiktok-custom-block').style.display  = 'block';
-  document.getElementById('normal-block').style.display          = 'none';
-  document.getElementById('tiktok-whatsapp-block').style.display = 'none';
-} else if (esTikTokNormal) {
-  document.getElementById('tiktok-whatsapp-block').style.display = 'block';
-  document.getElementById('normal-block').style.display          = 'none';
-  document.getElementById('tiktok-custom-block').style.display   = 'none';
-  document.getElementById('tiktok-total-display').innerText = '$' + formatComa(precio);
-} else {
-  document.getElementById('normal-block').style.display          = 'block';
-  document.getElementById('tiktok-whatsapp-block').style.display = 'none';
-  document.getElementById('tiktok-custom-block').style.display   = 'none';
-  configurarCamposNormales();
-}
-
-// ═══════════════════════════════════════════════════════
-// CONFIGURACIÓN DEL BLOQUE NORMAL SEGÚN CATEGORÍA/MARCA
-// ═══════════════════════════════════════════════════════
-function configurarCamposNormales() {
-  const labelId   = document.getElementById('label-id');
-  const hintId    = document.getElementById('hint-id');
-  const fId       = document.getElementById('f-id');
+// ═══════════════════════════════════════════
+// CONFIGURAR PASO 1 SEGÚN PRODUCTO
+// ═══════════════════════════════════════════
+(function configurarPaso1() {
+  const labelId    = document.getElementById('label-id');
+  const hintId     = document.getElementById('hint-id');
+  const fId        = document.getElementById('f-id');
+  const montoField = document.getElementById('monto-field');
   const labelMonto = document.getElementById('label-monto');
   const hintMonto  = document.getElementById('hint-monto');
   const fMonto     = document.getElementById('f-monto');
-  const montoField = document.getElementById('monto-field');
+  const step1sub   = document.getElementById('step1-sub');
 
-  // --- PRONÓSTICOS: configuración por casa de apuestas ---
+  // TikTok personalizado: calculadora, ocultar campo ID
+  if (tiktokCustom) {
+    document.getElementById('field-id-wrap').style.display    = 'none';
+    document.getElementById('tiktok-calc-wrap').style.display = 'block';
+    step1sub.innerText = 'Cantidad de monedas a enviar';
+    actualizarResumen();
+    return;
+  }
+
+  // TikTok paquete fijo: ocultar paso 1 completamente (no hay datos que pedir)
+  if (esTikTok) {
+    document.getElementById('step1-box').style.display = 'none';
+    actualizarResumen();
+    return;
+  }
+
+  // Pronósticos
   if (isPronos) {
     const m = marca.toLowerCase();
-
+    step1sub.innerText = 'Datos de tu cuenta';
     if (m.includes('astrobet') || m.includes('bet 593') || m.includes('databet')) {
-      // Solicitar cédula
       labelId.innerText = 'Número de cédula de identidad';
-      fId.type          = 'text';
       fId.placeholder   = 'Ej: 1700000000';
       hintId.innerText  = 'Ingresa tu número de cédula (10 dígitos)';
-
-      montoField.style.display = 'block';
-      labelMonto.innerText = 'Monto a recargar ($)';
-
-      if (m.includes('astrobet'))  { fMonto.min = 1; fMonto.max = 1000; hintMonto.innerText = 'Monto desde $1 hasta $1.000'; fMonto.setAttribute('max','1000'); }
-      if (m.includes('bet 593'))   { fMonto.min = 1; fMonto.max = 500;  hintMonto.innerText = 'Monto desde $1 hasta $500'; fMonto.setAttribute('max','500'); }
-      if (m.includes('databet'))   { fMonto.min = 1; fMonto.max = 300;  hintMonto.innerText = 'Monto desde $1 hasta $300'; fMonto.setAttribute('max','300'); }
-
     } else if (m.includes('ecuabet')) {
-      // ID de cuenta + depósito $1-$1000
       labelId.innerText = 'ID de cuenta';
-      fId.type          = 'text';
       fId.placeholder   = 'Ej: 123456789';
       hintId.innerText  = 'Ingresa tu ID de cuenta Ecuabet';
-
-      montoField.style.display = 'block';
-      labelMonto.innerText = 'Monto a depositar ($)';
-      fMonto.min = 1; fMonto.max = 1000;
-      hintMonto.innerText = 'Monto desde $1 hasta $1.000';
-      fMonto.setAttribute('max','1000');
-
     } else if (m.includes('sportbet')) {
-      // Solicitar número de orden o ID de cuenta
       labelId.innerText = 'N° de orden de pago / ID de cuenta';
-      fId.type          = 'text';
       fId.placeholder   = 'Ej: 987654321';
-      hintId.innerText  = 'Ingresa tu número de orden de pago o ID de cuenta';
-
-      montoField.style.display = 'block';
-      labelMonto.innerText     = 'Monto a recargar ($)';
-      fMonto.min = 1; fMonto.max = 1000;
-      hintMonto.innerText = 'Monto desde $1 hasta $1,000';
-      fMonto.setAttribute('max','1000');
-
+      hintId.innerText  = 'Ingresa tu número de orden o ID de cuenta';
     } else if (m.includes('betcris')) {
-      // Solicitar ID de cuenta / jugador
       labelId.innerText = 'ID de cuenta / jugador';
-      fId.type          = 'text';
       fId.placeholder   = 'Ej: 123456';
-      hintId.innerText  = 'Ingresa tu ID de cuenta o jugador';
-
-      montoField.style.display = 'block';
-      labelMonto.innerText     = 'Monto a recargar ($)';
-      fMonto.min = 10; fMonto.max = 300;
-      hintMonto.innerText = 'Monto mínimo $10 hasta $300';
-      fMonto.setAttribute('min','10');
-      fMonto.setAttribute('max','300');
-
+      hintId.innerText  = 'Ingresa tu ID de cuenta o jugador en Betcris';
     } else if (m.includes('prontopaga')) {
-      // Solicitar número de orden de pago
       labelId.innerText = 'Número de orden de pago';
-      fId.type          = 'text';
       fId.placeholder   = 'Ej: OP-001234';
       hintId.innerText  = 'Ingresa tu número de orden de pago';
-
-      montoField.style.display = 'block';
-      labelMonto.innerText     = 'Monto a recargar ($)';
-      fMonto.min = 1; fMonto.max = 300;
-      hintMonto.innerText = 'Monto desde $1 hasta $300';
-      fMonto.setAttribute('max','300');
     }
-
-    // Los pronósticos no tienen cupón
+    montoField.style.display = 'block';
+    labelMonto.innerText = 'Monto a recargar ($)';
+    if      (m.includes('astrobet'))   { fMonto.min='1';  fMonto.max='1000'; hintMonto.innerText='Monto desde $1 hasta $1.000'; }
+    else if (m.includes('ecuabet'))    { fMonto.min='1';  fMonto.max='1000'; hintMonto.innerText='Monto desde $1 hasta $1.000'; }
+    else if (m.includes('bet 593'))    { fMonto.min='1';  fMonto.max='500';  hintMonto.innerText='Monto desde $1 hasta $500'; }
+    else if (m.includes('databet'))    { fMonto.min='1';  fMonto.max='300';  hintMonto.innerText='Monto desde $1 hasta $300'; }
+    else if (m.includes('sportbet'))   { fMonto.min='1';  fMonto.max='1000'; hintMonto.innerText='Monto desde $1 hasta $1.000'; }
+    else if (m.includes('betcris'))    { fMonto.min='10'; fMonto.max='300';  hintMonto.innerText='Monto mínimo $10 hasta $300'; }
+    else if (m.includes('prontopaga')) { fMonto.min='1';  fMonto.max='300';  hintMonto.innerText='Monto desde $1 hasta $300'; }
+    actualizarResumen();
+    return;
   }
 
-  // --- SERVICIOS DIGITALES: Firma Electrónica / Kaspersky ---
-  else if (esFirma || esKaspersky) {
-    labelId.innerText   = 'Correo electrónico';
-    fId.type            = 'email';
-    fId.placeholder     = 'tucorreo@ejemplo.com';
-    hintId.innerText    = 'Ingresa el correo donde recibirás tu licencia o firma';
-    montoField.style.display = 'none';
+  // Firma Electrónica / Kaspersky
+  if (esFirma || esKaspersky) {
+    labelId.innerText  = 'Correo electrónico';
+    fId.type           = 'email';
+    fId.placeholder    = 'tucorreo@ejemplo.com';
+    hintId.innerText   = 'Ingresa el correo donde recibirás tu licencia';
+    step1sub.innerText = 'Correo de entrega';
+    actualizarResumen();
+    return;
   }
 
-  // --- JUEGOS ---
-  else if (isJuego) {
-    labelId.innerText = 'ID de jugador';
-    hintId.innerText  = 'Solo números, entre 6 y 15 dígitos';
-    fId.type          = 'text';
-    fId.placeholder   = 'Ej: 123456789';
+  // Videojuegos
+  if (isJuego) {
+    labelId.innerText  = 'ID de jugador';
+    fId.placeholder    = 'Ej: 123456789';
+    hintId.innerText   = 'Solo números, entre 6 y 15 dígitos';
+    step1sub.innerText = 'Tu ID en el juego';
+    actualizarResumen();
+    return;
   }
 
-  // --- RECARGAS OPERADORAS ---
-  else if (isRecargas) {
-    labelId.innerText = 'Número de celular';
-    hintId.innerText  = 'Debe empezar con 09 y tener 10 dígitos';
-    fId.type          = 'tel';
-    fId.placeholder   = '09xxxxxxxx';
+  // Recargas operadoras
+  if (isRecargas) {
+    labelId.innerText  = 'Número de celular';
+    fId.type           = 'tel';
+    fId.placeholder    = '09xxxxxxxx';
+    hintId.innerText   = 'Debe empezar con 09 y tener 10 dígitos';
+    step1sub.innerText = 'Número a recargar';
     if (!desdePaquete) montoField.style.display = 'block';
+    actualizarResumen();
+    return;
   }
 
-  fetch(API + '?accion=getCodigos').then(r=>r.json()).then(d=>{ /* ya cargado globalmente */ }).catch(()=>{});
+  actualizarResumen();
+})();
+
+// ═══════════════════════════════════════════
+// CALCULADORA TIKTOK
+// ═══════════════════════════════════════════
+function calcularTikTok() {
+  const monedas = parseInt(document.getElementById('f-monedas').value) || 0;
+  const des = document.getElementById('tiktok-desglose');
+  if (monedas < 30) { des.style.display = 'none'; actualizarResumen(); return; }
+  const rawTotal      = monedas * 0.0115;
+  const centavos      = Math.floor(rawTotal * 100);
+  const resto         = rawTotal * 100 - centavos;
+  const totalCentavos = resto >= 0.5 ? centavos + 1 : centavos;
+  const total         = totalCentavos / 100;
+  document.getElementById('tc-monedas-lbl').innerText = monedas.toLocaleString();
+  document.getElementById('tc-total-lbl').innerText   = '$' + formatComa(total);
+  des.style.display = 'block';
   actualizarResumen();
 }
 
-// ═══════════════════════════════════════════════════════
-// HELPER: formatear número con coma decimal (para hoja de cálculo)
-// ═══════════════════════════════════════════════════════
-function formatComa(n) {
-  return n.toFixed(2).replace('.', ',');
-}
-
-// ═══════════════════════════════════════════════════════
-// RESUMEN (bloque normal)
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// ACTUALIZAR RESUMEN (igual para TODOS)
+// ═══════════════════════════════════════════
 function actualizarResumen() {
-  const fm  = document.getElementById('f-monto');
-  const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
+  let sub = 0;
+  if (tiktokCustom) {
+    const monedas = parseInt(document.getElementById('f-monedas')?.value) || 0;
+    if (monedas >= 30) {
+      const rawTotal = monedas * 0.0115;
+      const centavos = Math.floor(rawTotal * 100);
+      const resto    = rawTotal * 100 - centavos;
+      sub = (resto >= 0.5 ? centavos + 1 : centavos) / 100;
+    }
+  } else if (desdePaquete || esTikTok) {
+    sub = precio;
+  } else {
+    const fm = document.getElementById('f-monto');
+    sub = parseFloat(fm?.value) || 0;
+  }
   const tot = Math.max(sub - descuento, 0);
   document.getElementById('s-sub').innerText   = '$' + formatComa(sub);
   document.getElementById('s-desc').innerText  = '-$' + formatComa(descuento);
@@ -665,223 +520,137 @@ function actualizarResumen() {
   document.getElementById('s-desc-row').style.display = descuento > 0 ? 'flex' : 'none';
 }
 
-// ═══════════════════════════════════════════════════════
-// CALCULADORA TIKTOK
-// ═══════════════════════════════════════════════════════
-function calcularTikTok() {
-  const monedas = parseInt(document.getElementById('f-monedas').value) || 0;
-  const wrap = document.getElementById('tiktok-calc-wrap');
-  if (monedas < 30) { wrap.style.display = 'none'; return; }
-  // Cada moneda = $0,0115 — redondeo: si el tercer decimal >= 5, sube al siguiente centavo
-  const rawTotal = monedas * 0.0115;
-  const centavos = Math.floor(rawTotal * 100);
-  const resto    = rawTotal * 100 - centavos;
-  const totalCentavos = resto >= 0.5 ? centavos + 1 : centavos;
-  const total    = totalCentavos / 100;
-  document.getElementById('tc-total').innerText = '$' + formatComa(total);
-  wrap.style.display = 'block';
-}
-
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // MÉTODOS DE PAGO
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function selMetodo(m) {
-  metodoSeleccionado = m;
-  document.getElementById('m-transferencia').classList.toggle('selected', m==='transferencia');
-  document.getElementById('m-deposito').classList.toggle('selected', m==='deposito');
+  metodoSel = m;
+  document.getElementById('m-transferencia').classList.toggle('selected', m === 'transferencia');
+  document.getElementById('m-deposito').classList.toggle('selected', m === 'deposito');
   document.getElementById('bancos-wrap').classList.add('show');
-  bancoSeleccionado = '';
+  bancoSel = '';
   document.querySelectorAll('#bancos-wrap .banco-btn').forEach(b => b.classList.remove('selected'));
 }
-
-function selBanco(banco) {
-  bancoSeleccionado = banco;
-  const ids = {'Banco Pichincha':'banco-pichincha','Produbanco':'banco-produbanco','Banco Guayaquil':'banco-guayaquil'};
-  document.querySelectorAll('#bancos-wrap .banco-btn').forEach(b => b.classList.remove('selected'));
-  if (ids[banco]) document.getElementById(ids[banco]).classList.add('selected');
+function selBanco(b) {
+  bancoSel = b;
+  const ids = { 'Banco Pichincha':'banco-pichincha', 'Produbanco':'banco-produbanco', 'Banco Guayaquil':'banco-guayaquil' };
+  document.querySelectorAll('#bancos-wrap .banco-btn').forEach(x => x.classList.remove('selected'));
+  if (ids[b]) document.getElementById(ids[b]).classList.add('selected');
 }
 
-function selMetodoTikTok(m) {
-  tcMetodo = m;
-  document.getElementById('tc-m-transferencia').classList.toggle('selected', m==='transferencia');
-  document.getElementById('tc-m-deposito').classList.toggle('selected', m==='deposito');
-  document.getElementById('tc-bancos-wrap').classList.add('show');
-  tcBanco = '';
-  document.querySelectorAll('#tc-bancos-wrap .banco-btn').forEach(b => b.classList.remove('selected'));
-}
-
-function selBancoTikTok(banco) {
-  tcBanco = banco;
-  const ids = {'Banco Pichincha':'tc-banco-pichincha','Produbanco':'tc-banco-produbanco','Banco Guayaquil':'tc-banco-guayaquil'};
-  document.querySelectorAll('#tc-bancos-wrap .banco-btn').forEach(b => b.classList.remove('selected'));
-  if (ids[banco]) document.getElementById(ids[banco]).classList.add('selected');
-}
-
-// ═══════════════════════════════════════════════════════
-// CUPÓN
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// CÓDIGO DE CUPÓN
+// ═══════════════════════════════════════════
 function aplicarCodigo() {
   const input = document.getElementById('promo-in').value.toUpperCase().trim();
   const ok  = document.getElementById('promo-ok');
   const err = document.getElementById('promo-err');
   if (codigos[input] !== undefined) {
-    descuento = Number(codigos[input]); codigoUsado = input;
-    ok.style.display  = 'block'; err.style.display = 'none';
+    descuento = Number(codigos[input]);
+    codigoUsado = input;
+    ok.style.display = 'block'; err.style.display = 'none';
   } else {
-    descuento = 0; codigoUsado = 'SISTEMA';
-    ok.style.display  = 'none'; err.style.display = 'block';
+    descuento = 0;
+    codigoUsado = 'SISTEMA';
+    ok.style.display = 'none'; err.style.display = 'block';
   }
   actualizarResumen();
 }
 
-// Código para bloques TikTok (prefijo 'tt' o 'tc')
-function aplicarCodigoTT(prefijo) {
-  const input = document.getElementById(prefijo + '-promo-in').value.toUpperCase().trim();
-  const ok  = document.getElementById(prefijo + '-promo-ok');
-  const err = document.getElementById(prefijo + '-promo-err');
-  if (codigos[input] !== undefined) {
-    codigoUsado = input;
-    ok.style.display  = 'block'; err.style.display = 'none';
-  } else {
-    codigoUsado = 'SISTEMA';
-    ok.style.display  = 'none'; err.style.display = 'block';
-  }
-}
-
-// ═══════════════════════════════════════════════════════
-// VALIDACIÓN Y ENVÍO NORMAL
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// ENVIAR
+// ═══════════════════════════════════════════
 function enviar() {
-  const fi  = document.getElementById('f-id');
-  const fm  = document.getElementById('f-monto');
-  const id  = fi ? fi.value.trim() : '';
-  const sub = desdePaquete ? precio : (parseFloat(fm?.value) || 0);
+  const fi = document.getElementById('f-id');
+  const fm = document.getElementById('f-monto');
+  const id = fi ? fi.value.trim() : '';
+
+  // Calcular subtotal
+  let sub = 0;
+  if (tiktokCustom) {
+    const monedas = parseInt(document.getElementById('f-monedas')?.value) || 0;
+    if (monedas < 30) { alert('La cantidad mínima es 30 monedas.'); document.getElementById('f-monedas').focus(); return; }
+    const rawTotal = monedas * 0.0115;
+    const centavos = Math.floor(rawTotal * 100);
+    const resto    = rawTotal * 100 - centavos;
+    sub = (resto >= 0.5 ? centavos + 1 : centavos) / 100;
+  } else if (desdePaquete || esTikTok) {
+    sub = precio;
+  } else {
+    sub = parseFloat(fm?.value) || 0;
+  }
   const tot = Math.max(sub - descuento, 0);
-  const m   = marca.toLowerCase();
 
-  // Validación campo ID
-  if (!id) { alert('Por favor completa el campo requerido.'); fi?.focus(); return; }
-
-  if (isRecargas && !/^09\d{8}$/.test(id)) {
-    alert('Número inválido — debe empezar con 09 y tener 10 dígitos.'); fi?.focus(); return;
-  }
-  if (isJuego && (id.length < 6 || id.length > 15 || isNaN(Number(id)))) {
-    alert('ID inválido — debe tener entre 6 y 15 dígitos.'); fi?.focus(); return;
-  }
-  if ((esFirma || esKaspersky) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(id)) {
-    alert('Por favor ingresa un correo electrónico válido.'); fi?.focus(); return;
+  // Validar campo ID (no aplica a TikTok paquete fijo)
+  const necesitaId = !(esTikTok && !tiktokCustom);
+  if (necesitaId) {
+    if (!id) { alert('Por favor completa el campo requerido.'); fi?.focus(); return; }
+    if (isRecargas && !/^09\d{8}$/.test(id)) { alert('Número inválido — debe empezar con 09 y tener 10 dígitos.'); fi?.focus(); return; }
+    if (isJuego && (id.length < 6 || id.length > 15 || isNaN(Number(id)))) { alert('ID inválido — debe tener entre 6 y 15 dígitos.'); fi?.focus(); return; }
+    if ((esFirma || esKaspersky) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(id)) { alert('Por favor ingresa un correo electrónico válido.'); fi?.focus(); return; }
   }
 
-  // Validación monto
-  if (fm && fm.offsetParent !== null) {
+  // Validar monto (pronósticos / recargas sin paquete)
+  if (fm && fm.offsetParent !== null && !tiktokCustom && !desdePaquete && !esTikTok) {
     const minV = parseFloat(fm.min) || 1;
     const maxV = parseFloat(fm.max) || 999999;
-    if (sub <= 0 || sub < minV) {
-      alert(`El monto mínimo es $${minV.toFixed(2)}.`); fm?.focus(); return;
-    }
-    if (sub > maxV) {
-      alert(`El monto máximo es $${maxV.toFixed(2)}.`); fm?.focus(); return;
-    }
-  } else if (!desdePaquete && sub <= 0) {
-    alert('Por favor ingresa un monto mayor a $0.00.'); fm?.focus(); return;
+    if (sub < minV) { alert(`El monto mínimo es $${formatComa(minV)}.`); fm.focus(); return; }
+    if (sub > maxV) { alert(`El monto máximo es $${formatComa(maxV)}.`); fm.focus(); return; }
+  }
+  if (isPronos && fm) {
+    const minV = parseFloat(fm.min) || 1;
+    const maxV = parseFloat(fm.max) || 999999;
+    if (sub < minV) { alert(`El monto mínimo es $${formatComa(minV)}.`); fm.focus(); return; }
+    if (sub > maxV) { alert(`El monto máximo es $${formatComa(maxV)}.`); fm.focus(); return; }
   }
 
-  if (!metodoSeleccionado) { alert('Por favor selecciona un método de pago.'); return; }
-  if (!bancoSeleccionado)  { alert('Por favor selecciona un banco.'); return; }
+  if (!metodoSel) { alert('Por favor selecciona un método de pago.'); return; }
+  if (!bancoSel)  { alert('Por favor selecciona un banco.'); return; }
 
   const btn = document.getElementById('btn-ok');
   btn.disabled = true; btn.innerText = '⏳ Procesando...';
+  setTimeout(() => { btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp'; }, 3000);
 
+  // Guardar en Sheets
   const datos = {
-    fecha: new Date().toLocaleString(), cliente: id, servicio: cat, marca: marca,
-    monto: formatComa(sub), codigo: codigoUsado,
-    descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE'
+    fecha: new Date().toLocaleString(), cliente: id || 'TikTok',
+    servicio: cat, marca, monto: formatComa(sub),
+    codigo: codigoUsado, descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE'
   };
-  const ifr = document.createElement('iframe'); ifr.style.display='none';
+  const ifr = document.createElement('iframe'); ifr.style.display = 'none';
   ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
   document.body.appendChild(ifr);
-  setTimeout(()=>{ try{document.body.removeChild(ifr);}catch(e){} }, 5000);
-  setTimeout(()=>{ btn.disabled=false; btn.innerText='✅ Confirmar pedido por WhatsApp'; }, 3000);
+  setTimeout(() => { try { document.body.removeChild(ifr); } catch(e) {} }, 5000);
 
-  // Etiqueta del campo según tipo
-  let campoLabel = 'Número/ID';
+  // Etiqueta campo cliente
+  let campoLabel = 'N°/ID';
   if (isPronos) {
     const mn = marca.toLowerCase();
     if (mn.includes('astrobet')||mn.includes('bet 593')||mn.includes('databet')) campoLabel = 'Cédula';
-    else if (mn.includes('ecuabet'))    campoLabel = 'ID de cuenta';
-    else if (mn.includes('sportbet'))  campoLabel = 'N° Orden/ID Cuenta';
-    else if (mn.includes('betcris'))   campoLabel = 'ID Cuenta/Jugador';
-    else if (mn.includes('prontopaga')) campoLabel = 'N° Orden de pago';
-  } else if (esFirma || esKaspersky) { campoLabel = 'Correo'; }
-  else if (isRecargas) { campoLabel = 'Número de celular'; }
-  else if (isJuego)    { campoLabel = 'ID de jugador'; }
+    else if (mn.includes('ecuabet'))     campoLabel = 'ID de cuenta';
+    else if (mn.includes('sportbet'))    campoLabel = 'N° Orden/ID Cuenta';
+    else if (mn.includes('betcris'))     campoLabel = 'ID Cuenta/Jugador';
+    else if (mn.includes('prontopaga')) campoLabel  = 'N° Orden de pago';
+  } else if (esFirma || esKaspersky) campoLabel = 'Correo';
+  else if (isRecargas) campoLabel = 'Número de celular';
+  else if (isJuego)    campoLabel = 'ID de jugador';
 
-  const det = paq ? `\n*Paquete:* ${paq}\n*Detalle:* ${detalle}` : '';
+  const detPaq  = paq ? `\n• Paquete: ${paq}${detalle ? '\n• Detalle: '+detalle : ''}` : '';
+  const linMon  = tiktokCustom ? `\n• Monedas: ${document.getElementById('f-monedas').value}` : '';
+  const linCli  = (necesitaId && id) ? `\n• ${campoLabel}: ${id}` : '';
+
   const msg =
-    `¡Hola Rexpres Play! 🚀\n\n` +
-    `*Detalle del pedido:*\n` +
-    `• Servicio: ${cat}${det}\n` +
-    `• Marca: ${marca}\n` +
-    `• ${campoLabel}: ${id}\n` +
-    `• Método de pago: ${metodoSeleccionado.charAt(0).toUpperCase() + metodoSeleccionado.slice(1)}\n` +
-    `• Banco: ${bancoSeleccionado}\n` +
-    `• Subtotal: $${formatComa(sub)}\n` +
-    `• Código: ${codigoUsado}\n` +
-    `• *Total Final: $${formatComa(tot)}*`;
+    `¡Hola Rexpres Play! 🚀\n\n*Detalle del pedido:*\n` +
+    `• Servicio: ${cat}${detPaq}${linMon}\n• Marca: ${marca}${linCli}\n` +
+    `• Método de pago: ${metodoSel.charAt(0).toUpperCase()+metodoSel.slice(1)}\n• Banco: ${bancoSel}\n` +
+    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*`;
 
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
 }
 
-// ═══════════════════════════════════════════════════════
-// ENVÍO TIKTOK NORMAL (paquete fijo)
-// ═══════════════════════════════════════════════════════
-function enviarTikTokWhatsApp() {
-  const msg =
-    `¡Hola Rexpres Play! 🎵\n\n` +
-    `*Pedido de Monedas TikTok:*\n` +
-    `• Paquete: ${paq}\n` +
-    `• Detalle: ${detalle}\n` +
-    `• Código: ${codigoUsado}\n` +
-    `• *Total: $${formatComa(precio)}*\n\n` +
-    `Quiero coordinar la entrega de mis monedas TikTok.`;
-  window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
-}
-
-// ═══════════════════════════════════════════════════════
-// ENVÍO TIKTOK PERSONALIZADO (calculadora)
-// ═══════════════════════════════════════════════════════
-function enviarTikTokPersonalizado() {
-  const monedas = parseInt(document.getElementById('f-monedas').value) || 0;
-  if (monedas < 30) { alert('La cantidad mínima es 30 monedas.'); document.getElementById('f-monedas').focus(); return; }
-  if (!tcMetodo) { alert('Por favor selecciona un método de pago.'); return; }
-  if (!tcBanco)  { alert('Por favor selecciona un banco.'); return; }
-
-  const rawTotal = monedas * 0.0115;
-  const centavos = Math.floor(rawTotal * 100);
-  const resto    = rawTotal * 100 - centavos;
-  const totalCentavos = resto >= 0.5 ? centavos + 1 : centavos;
-  const total    = totalCentavos / 100;
-
-  const btn = document.getElementById('tc-btn-ok');
-  btn.disabled = true; btn.innerText = '⏳ Procesando...';
-  setTimeout(()=>{ btn.disabled=false; btn.innerText='🎵 Confirmar por WhatsApp'; }, 3000);
-
-  const msg =
-    `¡Hola Rexpres Play! 🎵\n\n` +
-    `*Pedido Personalizado de Monedas TikTok:*\n` +
-    `• Cantidad de monedas: ${monedas.toLocaleString()}\n` +
-    `• *Total a pagar: $${formatComa(total)}*\n` +
-    `• Método de pago: ${tcMetodo.charAt(0).toUpperCase() + tcMetodo.slice(1)}\n` +
-    `• Banco: ${tcBanco}\n` +
-    `• Código: ${codigoUsado}\n\n` +
-    `Quiero coordinar la entrega de mis monedas TikTok.`;
-
-  window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
-}
-
-function abrirLogin()  { document.getElementById('modal-login').style.display='flex'; closeDrawer(); }
-function cerrarLogin() { document.getElementById('modal-login').style.display='none'; }
-document.getElementById('modal-login').addEventListener('click',function(e){if(e.target===this)cerrarLogin();});
+function abrirLogin()  { document.getElementById('modal-login').style.display = 'flex'; closeDrawer(); }
+function cerrarLogin() { document.getElementById('modal-login').style.display = 'none'; }
+document.getElementById('modal-login').addEventListener('click', function(e) { if (e.target === this) cerrarLogin(); });
 </script>
 </body>
 </html>
