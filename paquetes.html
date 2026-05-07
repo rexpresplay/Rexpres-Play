@@ -10,7 +10,6 @@ html, body { height: 100%; margin: 0; }
 body { display: flex; flex-direction: column; }
 main { flex: 1; }
 
-/* ✅ Grid que ocupa todo el ancho disponible */
 .packs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -34,7 +33,6 @@ main { flex: 1; }
   text-align: center;
   gap: 6px;
   text-decoration: none;
-  /* ✅ Sin transform para no mover cards vecinas */
 }
 .pack:hover {
   border-color: #f7941d;
@@ -48,7 +46,29 @@ main { flex: 1; }
 .pack-old   { font-size: 10px; color: #334155; text-decoration: line-through; font-weight: 700; margin-top: 4px; }
 .pack-price { font-size: 18px; font-weight: 900; color: #f7941d; margin-top: 2px; }
 
-/* ✅ Spinner grande que ocupa toda la pantalla disponible */
+/* Tarjeta especial "Personalizado" para TikTok */
+.pack-personalizado {
+  background: linear-gradient(135deg, rgba(247,148,29,.12), rgba(247,148,29,.04));
+  border: 2px solid rgba(247,148,29,.5);
+  border-radius: 16px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+  text-align: center;
+  gap: 6px;
+  text-decoration: none;
+}
+.pack-personalizado:hover {
+  border-color: #f7941d;
+  box-shadow: 0 0 0 2px rgba(247,148,29,.3);
+}
+.pack-personalizado .pack-name { color: #f7941d; }
+.pack-personalizado .pack-desc { color: #94a3b8; }
+
+/* Spinner */
 .spinner-full {
   grid-column: 1 / -1;
   display: flex;
@@ -59,8 +79,7 @@ main { flex: 1; }
   gap: 18px;
 }
 .spinner-big {
-  width: 56px;
-  height: 56px;
+  width: 56px; height: 56px;
   border: 4px solid #21213a;
   border-top-color: #f7941d;
   border-radius: 50%;
@@ -68,14 +87,10 @@ main { flex: 1; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner-big-txt {
-  font-size: 12px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: 12px; font-weight: 700; color: #64748b;
+  text-transform: uppercase; letter-spacing: 2px;
 }
 
-/* Drawer/login */
 .di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
 .di-clean:last-child { border-bottom: none; }
 .di-clean:hover { background: rgba(255,255,255,.04); color: white; }
@@ -142,7 +157,18 @@ main { flex: 1; }
   <div style="max-width:1100px;margin:0 auto;padding:20px 16px 32px;">
     <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
     <h2 class="pg-title" id="pg-title">Paquetes</h2>
-    <!-- ✅ Spinner mostrado desde el HTML, sin esperar JS -->
+
+    <!-- Tarjeta "Personalizado" — solo visible para TikTok, insertada por JS arriba del grid -->
+    <div id="tiktok-personalizado-wrap" style="display:none;margin-bottom:12px;">
+      <a class="pack-personalizado" id="tiktok-personalizado-btn"
+         href="checkout.html?cat=Servicios%20Digitales&marca=Monedas%20TikTok&paq=Personalizado&tiktok_custom=1">
+        <div class="pack-ico">🎯</div>
+        <div class="pack-name">Personalizado</div>
+        <div class="pack-desc">Otra cantidad de monedas</div>
+        <div style="font-size:9px;color:#64748b;font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Desde 30 monedas · Sin límite</div>
+      </a>
+    </div>
+
     <div id="grid" class="packs-grid">
       <div class="spinner-full">
         <div class="spinner-big"></div>
@@ -166,15 +192,30 @@ guardar('cat', cat); guardar('marca', marca);
 
 // Back link
 const bl = document.getElementById('back-link');
-bl.href = cat === 'Juegos' ? 'juegos.html' : `operadoras.html?tipo=${encodeURIComponent(cat)}`;
+if (cat === 'Juegos') {
+  bl.href = 'juegos.html';
+} else if (cat === 'Servicios Digitales') {
+  bl.href = 'compras.html';
+} else {
+  bl.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
+}
 
 document.getElementById('pg-title').innerText = marca;
+
+// Mostrar tarjeta "Personalizado" si es TikTok
+const esTikTok = marca.toLowerCase().includes('tiktok');
+if (esTikTok) {
+  document.getElementById('tiktok-personalizado-wrap').style.display = 'block';
+}
 
 // Icono dinámico según juego
 function getIcono(marcaNom, subTipo) {
   const m = marcaNom.toLowerCase();
   if (m.includes('blood'))   return '🪙';
   if (m.includes('mobile'))  return '💠';
+  if (m.includes('tiktok'))  return '🎵';
+  if (m.includes('firma'))   return '✍️';
+  if (m.includes('kaspersky')) return '🛡️';
   if (subTipo === 'Diamantes') return '💎';
   if (subTipo === 'Paquete')   return '📦';
   if (subTipo === 'Recarga')   return '💳';
@@ -197,6 +238,9 @@ function renderPaquetes(productos) {
     const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
     const ico  = getIcono(marca, p.subTipo);
     const desc = p.descripcion.length > 60 ? p.descripcion.substring(0,60)+'...' : p.descripcion;
+
+    // Para TikTok: no hay campo de correo en checkout, solo mensaje WhatsApp
+    // Para Firma/Kaspersky: pedir correo en checkout
     const url  = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}&paq=${encodeURIComponent(p.nombre)}&precio=${p.precioDesc}&detalle=${encodeURIComponent(p.descripcion)}`;
 
     const a = document.createElement('a');
