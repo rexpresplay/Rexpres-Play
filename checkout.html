@@ -196,7 +196,7 @@ main { flex: 1; }
         <div class="field">
           <label class="field-label">Cantidad de monedas</label>
           <input type="number" id="f-monedas" class="field-input" min="30" step="1" placeholder="Ej: 100" oninput="calcularTikTok()">
-          <p class="field-hint">1 moneda equivale a $0,0115 · Mínimo 30 monedas</p>
+          <p class="field-hint">1 moneda equivale a $0,0115 · Mínimo 30 monedas · Máximo sin límite</p>
         </div>
         <div class="tiktok-calc" id="tiktok-desglose" style="display:none;">
           <div class="tiktok-calc-row">
@@ -339,12 +339,13 @@ fetch(API + '?accion=getCodigos')
 // BACK LINK
 // ═══════════════════════════════════════════
 const bl = document.getElementById('back-link');
-if      (isJuego)        bl.href = 'juegos.html';
-else if (isPronos)       bl.href = 'pronosticos.html';
-else if (isServDigital)  bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
-else if (desdePaquete)   bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
-else if (isRecargas)     bl.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
-else                     bl.href = 'index.html';
+if      (isJuego)                   bl.href = 'juegos.html';
+else if (isPronos)                  bl.href = 'pronosticos.html';
+else if (esTikTok)                  bl.href = 'compras.html';
+else if (isServDigital)             bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
+else if (desdePaquete)              bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
+else if (isRecargas)                bl.href = `operadoras.html?tipo=${encodeURIComponent(cat)}`;
+else                                bl.href = 'index.html';
 
 // ═══════════════════════════════════════════
 // TARJETA SERVICIO
