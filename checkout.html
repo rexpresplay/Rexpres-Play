@@ -201,15 +201,6 @@ main { flex: 1; }
               <span class="sum-val" id="tiktok-total-display">$0,00</span>
             </div>
           </div>
-          <div class="cupon-box" style="margin-bottom:14px;">
-            <p class="cupon-label">🏷️ Colocar un código</p>
-            <div class="cupon-row">
-              <input type="text" id="tt-promo-in" class="cupon-input" placeholder="Tu código aquí">
-              <button class="cupon-btn-apply" onclick="aplicarCodigoTT('tt')">Aplicar</button>
-            </div>
-            <p id="tt-promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
-            <p id="tt-promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
-          </div>
           <div class="aviso-verificar">
             <span>💬</span>
             <p>Al confirmar serás redirigido a WhatsApp para coordinar la entrega de tus monedas TikTok.</p>
@@ -217,6 +208,16 @@ main { flex: 1; }
           <button class="btn-ok" onclick="enviarTikTokWhatsApp()">🎵 Confirmar por WhatsApp</button>
           <p class="secure-note">🔒 Tu pedido se coordina de forma segura vía WhatsApp</p>
         </div>
+      </div>
+      <!-- CÓDIGO -->
+      <div class="cupon-box" style="margin-bottom:14px;">
+        <p class="cupon-label">🏷️ Colocar un código</p>
+        <div class="cupon-row">
+          <input type="text" id="tt-promo-in" class="cupon-input" placeholder="Tu código aquí">
+          <button class="cupon-btn-apply" onclick="aplicarCodigoTT('tt')">Aplicar</button>
+        </div>
+        <p id="tt-promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
+        <p id="tt-promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
       </div>
     </div>
 
@@ -507,6 +508,10 @@ document.getElementById('svc-cat').innerText  = cat;
 // ═══════════════════════════════════════════════════════
 // MOSTRAR BLOQUE CORRECTO
 // ═══════════════════════════════════════════════════════
+
+// Cargar códigos siempre, sin importar el bloque activo
+fetch(API + '?accion=getCodigos').then(r=>r.json()).then(d=>{ codigos = d.codigos||{}; }).catch(()=>{});
+
 if (esTikTokPersonal) {
   document.getElementById('tiktok-custom-block').style.display  = 'block';
   document.getElementById('normal-block').style.display          = 'none';
@@ -636,7 +641,7 @@ function configurarCamposNormales() {
     if (!desdePaquete) montoField.style.display = 'block';
   }
 
-  fetch(API + '?accion=getCodigos').then(r=>r.json()).then(d=>{ codigos = d.codigos||{}; }).catch(()=>{});
+  fetch(API + '?accion=getCodigos').then(r=>r.json()).then(d=>{ /* ya cargado globalmente */ }).catch(()=>{});
   actualizarResumen();
 }
 
