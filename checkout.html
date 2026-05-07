@@ -201,6 +201,15 @@ main { flex: 1; }
               <span class="sum-val" id="tiktok-total-display">$0,00</span>
             </div>
           </div>
+          <div class="cupon-box" style="margin-bottom:14px;">
+            <p class="cupon-label">🏷️ Colocar un código</p>
+            <div class="cupon-row">
+              <input type="text" id="tt-promo-in" class="cupon-input" placeholder="Tu código aquí">
+              <button class="cupon-btn-apply" onclick="aplicarCodigoTT('tt')">Aplicar</button>
+            </div>
+            <p id="tt-promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
+            <p id="tt-promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
+          </div>
           <div class="aviso-verificar">
             <span>💬</span>
             <p>Al confirmar serás redirigido a WhatsApp para coordinar la entrega de tus monedas TikTok.</p>
@@ -287,6 +296,15 @@ main { flex: 1; }
           </div>
         </div>
         <div class="step-body">
+          <div class="cupon-box" style="margin-bottom:14px;">
+            <p class="cupon-label">🏷️ Colocar un código</p>
+            <div class="cupon-row">
+              <input type="text" id="tc-promo-in" class="cupon-input" placeholder="Tu código aquí">
+              <button class="cupon-btn-apply" onclick="aplicarCodigoTT('tc')">Aplicar</button>
+            </div>
+            <p id="tc-promo-ok"  class="cupon-ok">✅ Código aplicado correctamente</p>
+            <p id="tc-promo-err" style="font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;">❌ Código no válido</p>
+          </div>
           <div class="aviso-verificar">
             <span>💬</span>
             <p>Al confirmar serás redirigido a WhatsApp para coordinar la entrega de las monedas.</p>
@@ -711,6 +729,20 @@ function aplicarCodigo() {
   actualizarResumen();
 }
 
+// Código para bloques TikTok (prefijo 'tt' o 'tc')
+function aplicarCodigoTT(prefijo) {
+  const input = document.getElementById(prefijo + '-promo-in').value.toUpperCase().trim();
+  const ok  = document.getElementById(prefijo + '-promo-ok');
+  const err = document.getElementById(prefijo + '-promo-err');
+  if (codigos[input] !== undefined) {
+    codigoUsado = input;
+    ok.style.display  = 'block'; err.style.display = 'none';
+  } else {
+    codigoUsado = 'SISTEMA';
+    ok.style.display  = 'none'; err.style.display = 'block';
+  }
+}
+
 // ═══════════════════════════════════════════════════════
 // VALIDACIÓN Y ENVÍO NORMAL
 // ═══════════════════════════════════════════════════════
@@ -804,7 +836,8 @@ function enviarTikTokWhatsApp() {
     `*Pedido de Monedas TikTok:*\n` +
     `• Paquete: ${paq}\n` +
     `• Detalle: ${detalle}\n` +
-    `• *Total: $${precio.toFixed(2)}*\n\n` +
+    `• Código: ${codigoUsado}\n` +
+    `• *Total: $${formatComa(precio)}*\n\n` +
     `Quiero coordinar la entrega de mis monedas TikTok.`;
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
 }
@@ -834,7 +867,8 @@ function enviarTikTokPersonalizado() {
     `• Cantidad de monedas: ${monedas.toLocaleString()}\n` +
     `• *Total a pagar: $${formatComa(total)}*\n` +
     `• Método de pago: ${tcMetodo.charAt(0).toUpperCase() + tcMetodo.slice(1)}\n` +
-    `• Banco: ${tcBanco}\n\n` +
+    `• Banco: ${tcBanco}\n` +
+    `• Código: ${codigoUsado}\n\n` +
     `Quiero coordinar la entrega de mis monedas TikTok.`;
 
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
