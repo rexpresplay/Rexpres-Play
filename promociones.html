@@ -354,21 +354,18 @@ setInterval(() => {
 
 /* IR AL CHECKOUT */
 function irACheckout(card) {
-  const nombre  = card.dataset.nombre  || '';
-  const cat     = card.dataset.cat     || 'Promociones';
-  const imagen  = card.dataset.imagen  || '';
-  const precio  = card.dataset.precio  || '';
+  const nombre = card.dataset.nombre || '';
+  const cat    = card.dataset.cat    || 'Promociones';
+  const imagen = card.dataset.imagen || '';
+  const precio = card.dataset.precio || '';
 
-  if (typeof guardar === 'function') {
-    guardar('cat',    cat);
-    guardar('marca',  nombre);
-    guardar('icono',  imagen);
-    guardar('paq',    nombre);
-    guardar('precio', precio);
-    guardar('detalle','Promoción especial');
-  }
-
-  const url = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(nombre)}&paq=${encodeURIComponent(nombre)}&precio=${encodeURIComponent(precio)}&icono=${encodeURIComponent(imagen)}&detalle=${encodeURIComponent('Promoción especial')}&desde=promociones`;
+  const url = 'checkout.html?cat=' + encodeURIComponent(cat) +
+              '&marca='   + encodeURIComponent(nombre) +
+              '&paq='     + encodeURIComponent(nombre) +
+              '&precio='  + encodeURIComponent(precio) +
+              '&icono='   + encodeURIComponent(imagen) +
+              '&detalle=' + encodeURIComponent('Promoción exclusiva') +
+              '&desde=promociones';
   window.location.href = url;
 }
 
