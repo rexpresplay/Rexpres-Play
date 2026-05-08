@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promociones — Rexpres Play</title>
+<link rel="stylesheet" href="rexpres.css">
+<style>
+html, body { height: 100%; margin: 0; }
+body { display: flex; flex-direction: column; }
+main { flex: 1; }
+
+/* ── BANNER HERO ── */
+.hero-inner {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+.hero-inner img.hero-base {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.hero-inner .slide-extra {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.1s ease;
+}
+.hero-inner .slide-extra.on { opacity: 1; }
+.hero-inner .slide-extra img { width: 100%; height: 100%; object-fit: cover; }
+.h-dots {
+  position: absolute;
+  bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 5;
+}
+.h-dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.3); cursor: pointer; transition: all .3s; }
+.h-dot.on { width: 20px; background: #f7941d; }
+
+/* ── GRID PROMOS ── */
+.promos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+@media (min-width: 600px) { .promos-grid { grid-template-columns: repeat(3,1fr); } }
+@media (min-width: 900px) { .promos-grid { grid-template-columns: repeat(4,1fr); } }
+
+/* ── CARD PROMO ── */
+.promo-card {
+  background: #131320;
+  border: 2px solid #21213a;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+  height: 100%;
+}
+.promo-card:hover {
+  border-color: #f7941d;
+  box-shadow: 0 0 0 1px rgba(247,148,29,.3);
+}
+.promo-card:active { opacity: .8; }
+
+/* Imagen 16:9 de la promo */
+.promo-card .promo-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: cover;
+  background: #1a1a28;
+}
+
+/* Cuerpo de texto */
+.promo-card .promo-body {
+  padding: 10px 10px 12px;
+  border-top: 1px solid #21213a;
+}
+.promo-card .promo-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: white;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.promo-card .promo-desc {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.promo-card .promo-price {
+  font-size: 18px;
+  font-weight: 900;
+  color: #f7941d;
+  letter-spacing: -0.3px;
+}
+.promo-card .promo-price sup {
+  font-size: 11px;
+  font-weight: 900;
+  vertical-align: super;
+}
+
+/* Badge */
+.promo-card { position: relative; }
+.promo-badge {
+  position: absolute;
+  top: 8px; left: 8px;
+  z-index: 3;
+  background: linear-gradient(90deg, #f7941d, #ff5c00);
+  color: #000;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+/* ── BLOQUE WHATSAPP (igual al index) ── */
+.comunidad-box {
+  background: linear-gradient(135deg, rgba(37,211,102,.08), rgba(37,211,102,.03));
+  border: 1px solid rgba(37,211,102,.2);
+  border-radius: 16px;
+  padding: 20px 18px;
+  text-align: center;
+  margin-top: 32px;
+}
+.comunidad-icon { font-size: 28px; margin-bottom: 8px; }
+.comunidad-title { font-size: 15px; font-weight: 900; color: white; margin: 0 0 6px; }
+.comunidad-desc  { font-size: 12px; color: #64748b; font-weight: 600; line-height: 1.55; margin: 0 0 16px; }
+.comunidad-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #25D366; color: white;
+  font-size: 13px; font-weight: 800;
+  padding: 12px 24px; border-radius: 30px;
+  text-decoration: none; transition: opacity .2s;
+}
+.comunidad-btn:hover { opacity: .88; }
+
+/* Drawer */
+.di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
+.di-clean:last-child { border-bottom: none; }
+.di-clean:hover { background: rgba(255,255,255,.04); color: white; }
+.login-opt { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #1a1a28; border: 1px solid #21213a; border-radius: 14px; margin-bottom: 10px; text-decoration: none; transition: border-color .2s; }
+.login-opt:hover { border-color: #f7941d; }
+.login-opt:last-of-type { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<!-- MODAL LOGIN -->
+<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
+    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
+    <a class="login-opt" href="admin.html">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div>
+      </div>
+      <span style="color:#64748b;font-size:20px;">›</span>
+    </a>
+    <a class="login-opt" href="afiliado.html">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div>
+        <div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div>
+      </div>
+      <span style="color:#64748b;font-size:20px;">›</span>
+    </a>
+    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-nav">
+    <a class="di-clean" href="index.html">Tienda</a>
+    <a class="di-clean" href="promociones.html">Promociones</a>
+    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
+  </div>
+  <div class="drawer-foot">
+    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="burger" onclick="openDrawer()">
+        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+    </div>
+    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+  </div>
+</header>
+
+<main>
+  <!-- BANNER -->
+  <div class="hero-inner">
+    <img id="hero-base" class="hero-base" src="banner-promociones-1.webp" alt="Promociones Rexpres Play"
+         onerror="this.onerror=null;this.style.display='none';document.getElementById('hero-fallback').style.display='block';">
+    <div id="hero-fallback" style="display:none;width:100%;aspect-ratio:3/1;min-height:140px;background:linear-gradient(135deg,#0d0d1c,#1a0d00);"></div>
+    <div class="slide-extra" id="slide-2">
+      <img src="banner-promociones-2.webp" alt="" onerror="this.style.display='none';">
+    </div>
+    <div class="h-dots">
+      <div class="h-dot on" id="dot-0" onclick="goSlide(0)"></div>
+      <div class="h-dot"    id="dot-1" onclick="goSlide(1)"></div>
+    </div>
+  </div>
+
+  <div style="max-width:960px;margin:0 auto;padding:20px 16px 32px;">
+    <a class="back-btn" href="index.html">← Inicio</a>
+    <h2 class="pg-title">Promociones exclusivas</h2>
+
+    <!--
+    ════════════════════════════════════════════════════════
+    GRID DE PROMOCIONES
+    ────────────────────────────────────────────────────────
+    CÓMO AGREGAR MÁS PROMOS:
+      1. Copia un bloque .promo-card completo
+      2. Pégalo debajo del último
+      3. Cambia solo estos datos:
+           · src="promo2.webp"        → imagen de la promo
+           · alt="Nombre"             → nombre
+           · data-nombre=""           → nombre del producto
+           · data-cat=""              → categoría (Videojuegos / Recargas / etc.)
+           · data-imagen=""           → mismo archivo de imagen
+           · data-precio=""           → precio (ej: 5.99)
+           · .promo-name              → título visible
+           · .promo-desc              → descripción corta
+           · .promo-price             → precio visible
+    ════════════════════════════════════════════════════════
+    -->
+    <div class="promos-grid">
+
+      <!-- ── PROMO 1 ── copia desde aquí ↓ -->
+      <div class="promo-card"
+           data-nombre="111 Diamantes"
+           data-cat="Videojuegos"
+           data-imagen="promo1.webp"
+           data-precio="0.50"
+           onclick="irACheckout(this)">
+        <span class="promo-badge">🔥 Promo</span>
+        <img class="promo-img" src="promo1.webp" alt="111 Diamantes"
+             onerror="this.style.opacity='.2';">
+        <div class="promo-body">
+          <p class="promo-name">111 Diamantes</p>
+          <p class="promo-desc">Válida solo en tu primera recarga en nuestra página.</p>
+          <span class="promo-price"><sup>$</sup>0.50</span>
+        </div>
+      </div>
+      <!-- ── FIN PROMO 1 ── hasta aquí ↑ -->
+
+      <!-- ── PROMO 2 ── copia desde aquí ↓ -->
+      <div class="promo-card"
+           data-nombre="Recarga Especial $2"
+           data-cat="Recargas"
+           data-imagen="promo2.webp"
+           data-precio="2.00"
+           onclick="irACheckout(this)">
+        <span class="promo-badge">⚡ Oferta</span>
+        <img class="promo-img" src="promo2.webp" alt="Recarga Especial"
+             onerror="this.style.opacity='.2';">
+        <div class="promo-body">
+          <p class="promo-name">Recarga Especial $2</p>
+          <p class="promo-desc">Solo por este fin de semana. Bono adicional incluido.</p>
+          <span class="promo-price"><sup>$</sup>2.00</span>
+        </div>
+      </div>
+      <!-- ── FIN PROMO 2 ── hasta aquí ↑ -->
+
+      <!-- ── PROMO 3 ── copia desde aquí ↓ -->
+      <div class="promo-card"
+           data-nombre="Pack Gamer 520 Diamantes"
+           data-cat="Videojuegos"
+           data-imagen="promo3.webp"
+           data-precio="5.99"
+           onclick="irACheckout(this)">
+        <span class="promo-badge">🎮 Pack</span>
+        <img class="promo-img" src="promo3.webp" alt="Pack Gamer 520"
+             onerror="this.style.opacity='.2';">
+        <div class="promo-body">
+          <p class="promo-name">Pack Gamer 520 Diamantes</p>
+          <p class="promo-desc">El paquete más popular al precio especial de esta semana.</p>
+          <span class="promo-price"><sup>$</sup>5.99</span>
+        </div>
+      </div>
+      <!-- ── FIN PROMO 3 ── hasta aquí ↑ -->
+
+      <!--
+      PEGA AQUÍ MÁS PROMOS
+      -->
+
+    </div><!-- fin .promos-grid -->
+
+    <!-- BLOQUE COMUNIDAD WHATSAPP -->
+    <div class="comunidad-box">
+      <div class="comunidad-icon">📢</div>
+      <h3 class="comunidad-title">¡Únete a nuestra comunidad!</h3>
+      <p class="comunidad-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos especiales y dinámicas con premios para nuestra comunidad gamer.</p>
+      <a class="comunidad-btn" href="https://whatsapp.com/channel/0029Vb8DjsKHQbS2yeezJu1C" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Unirse al canal
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
+  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+</footer>
+
+<script src="rexpres.js"></script>
+<script>
+/* SLIDESHOW BANNER */
+let cur = 0;
+const slides  = [null, document.getElementById('slide-2')];
+const dots    = [document.getElementById('dot-0'), document.getElementById('dot-1')];
+const base    = document.getElementById('hero-base');
+const banners = ['banner-promociones-1.webp', 'banner-promociones-2.webp'];
+
+function goSlide(n) {
+  base.src = banners[n];
+  if (slides[1]) slides[1].classList.remove('on');
+  dots[cur].classList.remove('on');
+  cur = n;
+  dots[cur].classList.add('on');
+}
+
+let slideIdx = 0;
+setInterval(() => {
+  slideIdx = (slideIdx + 1) % 2;
+  if (slideIdx === 1) { if (slides[1]) slides[1].classList.add('on'); }
+  else               { if (slides[1]) slides[1].classList.remove('on'); }
+  dots[cur].classList.remove('on');
+  cur = slideIdx;
+  dots[cur].classList.add('on');
+}, 4500);
+
+/* IR AL CHECKOUT */
+function irACheckout(card) {
+  const nombre  = card.dataset.nombre  || '';
+  const cat     = card.dataset.cat     || 'Promociones';
+  const imagen  = card.dataset.imagen  || '';
+  const precio  = card.dataset.precio  || '';
+
+  if (typeof guardar === 'function') {
+    guardar('cat',    cat);
+    guardar('marca',  nombre);
+    guardar('icono',  imagen);
+    guardar('paq',    nombre);
+    guardar('precio', precio);
+    guardar('detalle','Promoción especial');
+  }
+
+  const url = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(nombre)}&paq=${encodeURIComponent(nombre)}&precio=${encodeURIComponent(precio)}&icono=${encodeURIComponent(imagen)}&detalle=${encodeURIComponent('Promoción especial')}&desde=promociones`;
+  window.location.href = url;
+}
+
+/* MODAL LOGIN */
+function abrirLogin()  { document.getElementById('modal-login').style.display = 'flex'; closeDrawer(); }
+function cerrarLogin() { document.getElementById('modal-login').style.display = 'none'; }
+document.getElementById('modal-login').addEventListener('click', function(e) {
+  if (e.target === this) cerrarLogin();
+});
+</script>
+</body>
+</html>

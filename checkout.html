@@ -338,8 +338,10 @@ fetch(API + '?accion=getCodigos')
 // ═══════════════════════════════════════════
 // BACK LINK
 // ═══════════════════════════════════════════
-const bl = document.getElementById('back-link');
-if      (isJuego)                   bl.href = 'juegos.html';
+const bl    = document.getElementById('back-link');
+const desde = params.get('desde') || '';
+if      (desde === 'promociones')   bl.href = 'promociones.html';
+else if (isJuego)                   bl.href = 'juegos.html';
 else if (isPronos)                  bl.href = 'pronosticos.html';
 else if (esTikTok)                  bl.href = 'compras.html';
 else if (isServDigital)             bl.href = `paquetes.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}`;
