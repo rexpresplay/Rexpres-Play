@@ -4,246 +4,199 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rexpres Play · Ecuador</title>
-<link rel="stylesheet" href="rexpres.css">
 <style>
-/* ── RESET BASE ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: #0a0a0f; color: #ffffff; font-family: Arial, Helvetica, sans-serif; min-height: 100%; }
-body { display: flex; flex-direction: column; }
-main { flex: 1; }
-a { text-decoration: none; color: inherit; }
-img { display: block; }
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#08080f;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100%;}
+body{display:flex;flex-direction:column;}
+main{flex:1;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
 
 /* ── HEADER ── */
-.hdr {
-  background: #0a0a0f;
-  border-bottom: 1px solid #1c1c28;
-  position: sticky; top: 0; z-index: 100;
-  padding: 0 14px;
-  height: 54px;
-  display: flex; align-items: center; justify-content: space-between;
+.hdr{
+  background:#08080f;border-bottom:1px solid #16162a;
+  position:sticky;top:0;z-index:100;
+  height:64px;padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
 }
-.hdr-left { display: flex; align-items: center; gap: 10px; }
-.hdr-right { display: flex; align-items: center; gap: 8px; }
-
-.burger-btn {
-  background: none; border: none; cursor: pointer;
-  padding: 6px; display: flex; align-items: center; justify-content: center;
+.hdr-left{display:flex;align-items:center;gap:12px;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.burger-btn{background:none;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;}
+.acct-btn{
+  background:#13131f;border:1.5px solid #22223a;
+  border-radius:11px;width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .2s;
 }
-
-.acct-btn {
-  background: #1c1c28; border: 1.5px solid #2a2a3e;
-  border-radius: 10px; width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: border-color .2s;
-}
-.acct-btn:hover { border-color: #f7941d; }
+.acct-btn:hover{border-color:#f7941d;}
 
 /* ── HERO ── */
-.hero-wrap { position: relative; width: 100%; line-height: 0; background: #0a0a0f; }
-.hero-wrap img.hero-base { width: 100%; height: auto; display: block; }
-.hero-extra { position: absolute; inset: 0; opacity: 0; transition: opacity 1.1s ease; }
-.hero-extra.on { opacity: 1; }
-.hero-extra img { width: 100%; height: 100%; object-fit: cover; }
-.hero-dots {
-  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 5px; z-index: 5;
-}
-.hero-dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.3); cursor: pointer; transition: all .3s; }
-.hero-dot.on { width: 18px; background: #f7941d; }
+.hero-wrap{position:relative;width:100%;line-height:0;background:#08080f;}
+.hero-wrap img.hero-base{width:100%;height:auto;display:block;}
+.hero-extra{position:absolute;inset:0;opacity:0;transition:opacity 1.1s;}
+.hero-extra.on{opacity:1;}
+.hero-extra img{width:100%;height:100%;object-fit:cover;}
+.hero-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5;}
+.hero-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s;}
+.hero-dot.on{width:18px;background:#f7941d;}
 
-/* ── BUSCADOR ── */
-.search-bar {
-  margin: 14px 14px 0;
-  display: flex; align-items: center; gap: 10px;
-  background: #1c1c28; border: 1.5px solid #2a2a3e;
-  border-radius: 50px; padding: 11px 16px;
-  transition: border-color .2s;
-}
-.search-bar:focus-within { border-color: #f7941d; }
-.search-bar input {
-  flex: 1; background: none; border: none; outline: none;
-  color: #ffffff; font-size: 14px; font-family: Arial, sans-serif; font-weight: 500;
-}
-.search-bar input::placeholder { color: #3a3a55; }
+/* ── WRAP ── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 14px;}
 
-/* ── ACCESOS RÁPIDOS ── */
-.quick-row {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  margin: 14px 14px 0;
-  border-radius: 12px; overflow: hidden;
-  border: 1px solid #1c1c28;
-  background: #1c1c28;
-  gap: 1px;
+/* ── NOVEDAD STRIP ── */
+.nov-strip{
+  display:flex;align-items:center;gap:12px;
+  background:#0f0f1e;border:1.5px solid #f7941d;
+  border-radius:12px;padding:14px;margin:18px 0 0;
+  cursor:pointer;transition:box-shadow .2s;
 }
-.quick-btn {
-  background: #0f0f1a; padding: 13px 6px;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  cursor: pointer; transition: background .15s; text-decoration: none;
-}
-.quick-btn:hover { background: #16162a; }
-.quick-ico { font-size: 26px; line-height: 1; }
-.quick-lbl { font-size: 13px; font-weight: 700; color: #ffffff; }
-
-/* ── CONTENEDOR ── */
-.wrap { max-width: 1200px; margin: 0 auto; padding: 0 14px; }
-
-/* ── NOVEDAD ── */
-.nov-strip {
-  display: flex; align-items: center; gap: 12px;
-  background: #0f0f1a; border: 1.5px solid #f7941d;
-  border-radius: 12px; padding: 14px; margin: 20px 0 0;
-  text-decoration: none; transition: box-shadow .2s;
-}
-.nov-strip:hover { box-shadow: 0 6px 24px rgba(247,148,29,.25); }
-.nov-strip-bar { width: 4px; height: 48px; background: #f7941d; border-radius: 4px; flex-shrink: 0; }
-.nov-strip-body { flex: 1; }
-.nov-strip-top { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
-.nov-badge { background: #f7941d; color: #000; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 2px 8px; border-radius: 20px; }
-.nov-cat { font-size: 10px; font-weight: 700; color: #555577; text-transform: uppercase; letter-spacing: 1px; }
-.nov-title { font-size: 14px; font-weight: 900; color: #ffffff; line-height: 1.3; margin-bottom: 4px; }
-.nov-sub { font-size: 11px; color: #6b7280; }
-.nov-arr { font-size: 22px; color: #f7941d; flex-shrink: 0; }
+.nov-strip:hover{box-shadow:0 4px 24px rgba(247,148,29,.2);}
+.nov-bar{width:4px;height:44px;background:#f7941d;border-radius:4px;flex-shrink:0;}
+.nov-body{flex:1;}
+.nov-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.nov-badge{background:#f7941d;color:#000;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:20px;}
+.nov-cat{font-size:10px;font-weight:700;color:#444466;text-transform:uppercase;letter-spacing:1px;}
+.nov-title{font-size:14px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:3px;}
+.nov-sub{font-size:11px;color:#555577;}
+.nov-arr{font-size:22px;color:#f7941d;flex-shrink:0;}
 
 /* ── SECTION HEADER ── */
-.sh { display: flex; align-items: center; justify-content: space-between; margin: 26px 0 14px; }
-.sh-title { font-size: 18px; font-weight: 900; color: #ffffff; }
-.sh-btn {
-  font-size: 11px; font-weight: 900; color: #000000;
-  background: #f7941d; padding: 7px 14px; border-radius: 50px;
-  text-transform: uppercase; letter-spacing: .5px;
-  transition: background .2s;
-}
-.sh-btn:hover { background: #e07f10; }
+.sh{display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px;}
+.sh-title{font-size:19px;font-weight:900;color:#fff;letter-spacing:-.3px;}
+.sh-link{font-size:12px;font-weight:900;color:#f7941d;white-space:nowrap;}
+.sh-link:hover{color:#ffa83c;}
 
-/* ── SUB HEADER ── */
-.sub-sh { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 12px; }
-.sub-sh-title { font-size: 15px; font-weight: 900; color: #ffffff; }
-.sub-sh-link { font-size: 11px; font-weight: 900; color: #f7941d; }
+/* ── PRODUCT GRID ── */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(min-width:600px){.pgrid{grid-template-columns:repeat(4,1fr);}}
 
-/* ── PRODUCT CARDS ── */
-.pgrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-@media(min-width:600px){ .pgrid { grid-template-columns: repeat(4,1fr); } }
-
-.pcard {
-  background: #0f0f1a; border: 1px solid #1c1c28;
-  border-radius: 12px; overflow: hidden;
-  text-decoration: none;
-  transition: transform .18s, border-color .18s;
+.pcard{
+  background:#0f0f1e;border:1px solid #16162a;
+  border-radius:12px;overflow:hidden;
+  text-decoration:none;
+  transition:transform .18s,border-color .18s;
+  cursor:pointer;
 }
-.pcard:hover { transform: translateY(-3px); border-color: #f7941d; }
-.pcard:active { transform: scale(.97); }
-
-.pcard-img {
-  width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block;
+.pcard:hover{transform:translateY(-3px);border-color:#f7941d;}
+.pcard:active{transform:scale(.97);}
+.pcard-img{width:100%;aspect-ratio:1/1;object-fit:cover;}
+.pcard-ph{
+  width:100%;aspect-ratio:1/1;
+  display:flex;align-items:center;justify-content:center;
 }
-.pcard-img-ph {
-  width: 100%; aspect-ratio: 1/1;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 34px;
-}
-.pcard-name {
-  padding: 8px 6px 10px;
-  font-size: 11px; font-weight: 900; color: #ffffff;
-  text-align: center; text-transform: uppercase; letter-spacing: .5px; line-height: 1.3;
+.pcard-ph svg{width:38px;height:38px;}
+.pcard-name{
+  padding:8px 6px 10px;
+  font-size:11px;font-weight:900;color:#fff;
+  text-align:center;text-transform:uppercase;letter-spacing:.5px;line-height:1.3;
 }
 
-/* ── VER MÁS BTN ── */
-.ver-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 100%; margin-top: 12px;
-  background: #0f0f1a; border: 1.5px solid #f7941d;
-  border-radius: 10px; padding: 13px;
-  font-size: 13px; font-weight: 900; color: #f7941d;
-  text-transform: uppercase; letter-spacing: 1px;
-  text-decoration: none; cursor: pointer; transition: background .2s;
+/* ── AFIL BANNER ── */
+.afil{
+  display:flex;align-items:center;gap:12px;
+  background:#0f0f1e;border:1.5px solid #f7941d;
+  border-radius:12px;padding:16px;margin-top:28px;
+  transition:box-shadow .2s;
 }
-.ver-btn:hover { background: rgba(247,148,29,.08); }
+.afil:hover{box-shadow:0 4px 24px rgba(247,148,29,.2);}
+.afil-ico{
+  width:48px;height:48px;border-radius:12px;
+  background:#1c1c2e;border:1px solid #f7941d;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.afil-ico svg{width:24px;height:24px;}
+.afil-body{flex:1;}
+.afil-tag{display:inline-block;background:#f7941d;color:#000;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:20px;margin-bottom:5px;}
+.afil-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:3px;}
+.afil-sub{font-size:11px;color:#555577;}
+.afil-arr{font-size:20px;color:#f7941d;flex-shrink:0;}
 
-/* ── AFILIADOS BANNER ── */
-.afil {
-  display: flex; align-items: center; gap: 12px;
-  background: #0f0f1a; border: 1.5px solid #f7941d;
-  border-radius: 12px; padding: 16px; margin-top: 26px;
-  text-decoration: none; transition: box-shadow .2s;
+/* ── WHY SECTION ── */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.why-card{
+  background:#0f0f1e;border:1px solid #16162a;
+  border-radius:12px;padding:16px 14px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color .2s;
 }
-.afil:hover { box-shadow: 0 6px 24px rgba(247,148,29,.25); }
-.afil-ico { font-size: 30px; flex-shrink: 0; }
-.afil-body { flex: 1; }
-.afil-tag { display: inline-block; background: #f7941d; color: #000; font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 2px 7px; border-radius: 20px; margin-bottom: 5px; }
-.afil-title { font-size: 14px; font-weight: 900; color: #ffffff; margin-bottom: 3px; }
-.afil-sub { font-size: 11px; color: #6b7280; }
-.afil-arr { font-size: 20px; color: #f7941d; flex-shrink: 0; }
+.why-card:hover{border-color:#f7941d;}
+.why-ico{
+  width:40px;height:40px;border-radius:10px;
+  background:#1c1c2e;
+  display:flex;align-items:center;justify-content:center;
+}
+.why-ico svg{width:20px;height:20px;}
+.why-title{font-size:13px;font-weight:900;color:#fff;line-height:1.3;}
+.why-desc{font-size:11px;color:#555577;line-height:1.5;}
 
-/* ── POR QUÉ ── */
-.feats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-.feat {
-  background: #0f0f1a; border: 1px solid #1c1c28;
-  border-radius: 10px; padding: 14px 12px;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.feat-ico { font-size: 20px; }
-.feat-title { font-size: 12px; font-weight: 900; color: #ffffff; }
-.feat-desc { font-size: 11px; color: #555577; line-height: 1.4; }
+/* ── STATS STRIP ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#16162a;border-radius:12px;overflow:hidden;margin-top:28px;}
+.stat{background:#0f0f1e;padding:16px 8px;text-align:center;}
+.stat-num{font-size:22px;font-weight:900;color:#f7941d;line-height:1;}
+.stat-lbl{font-size:10px;font-weight:700;color:#555577;text-transform:uppercase;letter-spacing:.5px;margin-top:5px;}
 
 /* ── COMUNIDAD ── */
-.comunidad {
-  background: #081408; border: 1.5px solid #25d366;
-  border-radius: 12px; padding: 22px 16px; text-align: center; margin-top: 24px;
+.comunidad{
+  background:#050f08;border:1.5px solid #25d366;
+  border-radius:12px;padding:22px 16px;text-align:center;margin-top:28px;
 }
-.comunidad-ico { font-size: 30px; margin-bottom: 10px; }
-.comunidad-title { font-size: 17px; font-weight: 900; color: #ffffff; margin-bottom: 8px; }
-.comunidad-desc { font-size: 12px; color: #6b7280; line-height: 1.6; margin-bottom: 16px; }
-.comunidad-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #25d366; color: #ffffff; font-size: 13px; font-weight: 900;
-  padding: 12px 22px; border-radius: 50px; text-decoration: none;
-  transition: background .2s;
+.com-ico{
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
 }
-.comunidad-btn:hover { background: #1db954; }
+.com-ico svg{width:26px;height:26px;}
+.com-title{font-size:17px;font-weight:900;color:#fff;margin-bottom:8px;}
+.com-desc{font-size:12px;color:#555577;line-height:1.6;margin-bottom:16px;}
+.com-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#25d366;color:#fff;font-size:13px;font-weight:900;
+  padding:12px 22px;border-radius:50px;
+  transition:background .2s;
+}
+.com-btn:hover{background:#1db954;}
+.com-btn svg{width:18px;height:18px;fill:white;}
 
 /* ── WA FLOAT ── */
-.wa-float {
-  position: fixed; bottom: 22px; right: 16px;
-  width: 52px; height: 52px; background: #25d366; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,.5); z-index: 500;
-  text-decoration: none; transition: transform .2s;
+.wa-float{
+  position:fixed;bottom:20px;right:14px;
+  width:50px;height:50px;background:#25d366;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(37,211,102,.5);z-index:500;
+  transition:transform .2s;
 }
-.wa-float:hover { transform: scale(1.08); }
-.wa-float svg { width: 26px; height: 26px; fill: white; }
+.wa-float:hover{transform:scale(1.08);}
+.wa-float svg{width:24px;height:24px;fill:white;}
 
-/* ── MODAL LOGIN ── */
-.modal-ov { display:none; position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:400; align-items:center; justify-content:center; padding:16px; }
-.modal-ov.open { display:flex; }
-.modal-box { background:#0f0f1a; border:1.5px solid #2a2a3e; border-radius:18px; padding:24px; width:100%; max-width:310px; }
-.mopt { display:flex; align-items:center; justify-content:space-between; padding:13px; background:#1c1c28; border:1px solid #2a2a3e; border-radius:10px; margin-bottom:10px; text-decoration:none; transition:border-color .2s; }
-.mopt:hover { border-color:#f7941d; }
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;align-items:center;justify-content:center;padding:16px;}
+.modal-ov.open{display:flex;}
+.modal-box{background:#0f0f1e;border:1.5px solid #22223a;border-radius:18px;padding:24px;width:100%;max-width:310px;}
+.mopt{display:flex;align-items:center;justify-content:space-between;padding:13px;background:#13131f;border:1px solid #22223a;border-radius:10px;margin-bottom:10px;text-decoration:none;transition:border-color .2s;}
+.mopt:hover{border-color:#f7941d;}
+.mopt:last-of-type{margin-bottom:0;}
 
 /* ── DRAWER ── */
-.dr-ov { display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:199; }
-.dr-ov.open { display:block; }
-.drawer {
-  position:fixed; top:0; left:-270px; width:255px; height:100%; z-index:200;
-  background:#0a0a0f; border-right:1px solid #1c1c28;
-  transition:left .28s ease; display:flex; flex-direction:column;
-}
-.drawer.open { left:0; }
-.dr-head { display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid #1c1c28; }
-.dr-close { background:none; border:none; color:#fff; font-size:18px; cursor:pointer; }
-.dr-nav { flex:1; overflow-y:auto; padding:6px 0; }
-.dr-link { display:block; padding:13px 16px; font-size:13px; font-weight:700; color:#9ca3af; border-bottom:1px solid #1c1c28; text-decoration:none; background:none; border-left:none; border-right:none; border-top:none; width:100%; text-align:left; cursor:pointer; font-family:Arial,sans-serif; transition:color .15s, background .15s; }
-.dr-link:hover { color:#ffffff; background:#16162a; }
-.dr-foot { padding:12px 16px; border-top:1px solid #1c1c28; }
+.dr-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:199;}
+.dr-ov.open{display:block;}
+.drawer{position:fixed;top:0;left:-265px;width:252px;height:100%;z-index:200;background:#08080f;border-right:1px solid #16162a;transition:left .28s ease;display:flex;flex-direction:column;}
+.drawer.open{left:0;}
+.dr-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid #16162a;}
+.dr-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
+.dr-nav{flex:1;overflow-y:auto;padding:6px 0;}
+.dr-item{display:flex;align-items:center;gap:10px;padding:13px 16px;color:#9ca3af;border-bottom:1px solid #16162a;text-decoration:none;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;cursor:pointer;font-family:Arial,sans-serif;font-size:13px;font-weight:700;transition:color .15s,background .15s;}
+.dr-item:hover{color:#fff;background:#13131f;}
+.dr-item-ico{width:32px;height:32px;border-radius:8px;background:#13131f;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dr-item-ico svg{width:16px;height:16px;}
+.dr-foot{padding:12px 16px;border-top:1px solid #16162a;}
 
 /* ── FOOTER ── */
-.footer { background:#060609; border-top:1px solid #1c1c28; margin-top:32px; }
-.footer-inner { max-width:1200px; margin:0 auto; padding:26px 14px 0; text-align:left !important; }
-.footer-inner * { text-align:left !important; }
-.footer-bottom { border-top:1px solid #1c1c28; padding:14px; text-align:center !important; }
-.footer-bottom * { text-align:center !important; }
-
-.div-line { height:1px; background:#1c1c28; margin:20px 0; }
+.footer{background:#040409;border-top:1px solid #16162a;margin-top:32px;}
+.ft-main{max-width:1200px;margin:0 auto;padding:26px 14px 0;}
+.ft-divider{height:1px;background:#16162a;margin:20px 0;}
+.ft-bottom{border-top:1px solid #16162a;padding:14px;text-align:center;}
 </style>
 </head>
 <body>
@@ -255,25 +208,23 @@ img { display: block; }
     <p style="font-size:11px;color:#555577;margin-bottom:18px;">Selecciona cómo deseas acceder</p>
     <a class="mopt" href="admin.html">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:34px;height:34px;border-radius:9px;background:#1c1c28;display:flex;align-items:center;justify-content:center;font-size:16px;">🛡️</div>
-        <div>
-          <div style="font-size:13px;font-weight:900;color:#fff;">Administrador</div>
-          <div style="font-size:10px;color:#555577;">Panel de control</div>
+        <div style="width:34px;height:34px;border-radius:9px;background:#1c1c2e;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Administrador</div><div style="font-size:10px;color:#555577;">Panel de control</div></div>
       </div>
       <span style="color:#f7941d;font-size:18px;">›</span>
     </a>
     <a class="mopt" href="afiliado.html">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:34px;height:34px;border-radius:9px;background:#1c1c28;display:flex;align-items:center;justify-content:center;font-size:16px;">🤝</div>
-        <div>
-          <div style="font-size:13px;font-weight:900;color:#fff;">Afiliado</div>
-          <div style="font-size:10px;color:#555577;">Ver comisiones y pedidos</div>
+        <div style="width:34px;height:34px;border-radius:9px;background:#1c1c2e;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Afiliado</div><div style="font-size:10px;color:#555577;">Ver comisiones y pedidos</div></div>
       </div>
       <span style="color:#f7941d;font-size:18px;">›</span>
     </a>
-    <button style="width:100%;background:none;border:1px solid #2a2a3e;border-radius:9px;padding:11px;color:#6b7280;font-size:12px;font-weight:700;cursor:pointer;margin-top:12px;font-family:Arial,sans-serif;" onclick="cerrarLogin()">Cancelar</button>
+    <button style="width:100%;background:none;border:1px solid #22223a;border-radius:9px;padding:11px;color:#555577;font-size:12px;font-weight:700;cursor:pointer;margin-top:12px;font-family:Arial,sans-serif;" onclick="cerrarLogin()">Cancelar</button>
   </div>
 </div>
 
@@ -285,17 +236,37 @@ img { display: block; }
     <button class="dr-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="dr-nav">
-    <a class="dr-link" href="index.html">🏠 Inicio</a>
-    <a class="dr-link" href="recargas.html">📱 Recargas Móviles</a>
-    <a class="dr-link" href="juegos.html">🎮 Videojuegos</a>
-    <a class="dr-link" href="pronosticos.html">⚽ Pronósticos</a>
-    <a class="dr-link" href="compras.html">💻 Servicios Digitales</a>
-    <a class="dr-link" href="promociones.html">🔥 Promociones</a>
-    <a class="dr-link" href="afiliadopro.html">💸 Programa de Afiliados</a>
-    <button class="dr-link" onclick="abrirLogin()">👤 Iniciar sesión</button>
+    <a class="dr-item" href="index.html">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      Inicio
+    </a>
+    <a class="dr-item" href="recargas.html">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      Recargas Móviles
+    </a>
+    <a class="dr-item" href="juegos.html">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01M7 12h.01"/><path d="M17 10v4"/><path d="M15 12h4"/></svg></div>
+      Videojuegos
+    </a>
+    <a class="dr-item" href="pronosticos.html">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+      Pronósticos
+    </a>
+    <a class="dr-item" href="compras.html">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      Servicios Digitales
+    </a>
+    <a class="dr-item" href="afiliadopro.html">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      Programa de Afiliados
+    </a>
+    <button class="dr-item" onclick="abrirLogin()">
+      <div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      Iniciar sesión
+    </button>
   </div>
   <div class="dr-foot">
-    <p style="font-size:10px;color:#2a2a3e;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
+    <p style="font-size:10px;color:#22223a;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
   </div>
 </div>
 
@@ -305,69 +276,145 @@ img { display: block; }
     <button class="burger-btn" onclick="openDrawer()">
       <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
     </button>
-    <a href="index.html">
-      <img src="logo.png" alt="Rexpres Play" style="height:32px;">
-    </a>
+    <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:38px;"></a>
   </div>
   <div class="hdr-right">
     <div class="acct-btn" onclick="abrirLogin()">
-      <svg width="19" height="19" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <svg width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
-    <span style="font-size:13px;font-weight:700;color:#4a4a6a;letter-spacing:1px;">🇪🇨</span>
+    <span style="font-size:13px;color:#33334a;font-weight:700;">🇪🇨</span>
   </div>
 </header>
 
 <main>
 
-  <!-- HERO -->
-  <div class="hero-wrap">
-    <img class="hero-base" id="hero-base" src="banner1.webp" alt="Rexpres Play">
-    <div class="hero-extra" id="hero-extra">
-      <img src="banner2.webp" alt="Banner 2">
+  <!-- TICKER ANIMADO -->
+  <div style="background:#0f0f1e;border-top:1px solid #16162a;border-bottom:1px solid #16162a;overflow:hidden;padding:10px 0;">
+    <div style="display:flex;animation:ticker 22s linear infinite;width:max-content;">
+      <!-- bloque 1 -->
+      <div style="display:flex;align-items:center;gap:32px;padding-right:48px;white-space:nowrap;">
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Compra 100% segura
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+          Atención Lun–Dom · 8:00 a.m – 10:30 p.m
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          +500 clientes satisfechos
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Entrega inmediata garantizada
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round"/></svg>
+          6 operadoras disponibles
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+      </div>
+      <!-- bloque 2 — copia para loop infinito -->
+      <div style="display:flex;align-items:center;gap:32px;padding-right:48px;white-space:nowrap;">
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Compra 100% segura
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+          Atención Lun–Dom · 8:00 a.m – 10:30 p.m
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          +500 clientes satisfechos
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Entrega inmediata garantizada
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+        <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#fff;">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round"/></svg>
+          6 operadoras disponibles
+        </span>
+        <span style="color:#f7941d;font-size:12px;">✦</span>
+      </div>
     </div>
+  </div>
+  <style>
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  </style>
+    <img class="hero-base" id="hero-base" src="banner1.webp" alt="Rexpres Play">
+    <div class="hero-extra" id="hero-extra"><img src="banner2.webp" alt="Banner 2"></div>
     <div class="hero-dots">
       <div class="hero-dot on" onclick="goSlide(0)" id="dot-0"></div>
       <div class="hero-dot"    onclick="goSlide(1)" id="dot-1"></div>
     </div>
   </div>
 
-  <!-- BUSCADOR -->
-  <div class="wrap">
-    <div class="search-bar">
-      <svg width="17" height="17" fill="none" stroke="#3a3a55" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="¿Qué producto estás buscando?">
+  <!-- TICKER ANIMADO debajo del banner -->
+  <style>
+  @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  </style>
+  <div style="background:#0f0f1e;border-bottom:1px solid #16162a;overflow:hidden;padding:13px 0;">
+    <div style="display:flex;animation:ticker 20s linear infinite;width:max-content;will-change:transform;">
+      <!-- bloque 1 -->
+      <div style="display:flex;align-items:center;gap:36px;padding-right:56px;white-space:nowrap;">
+        <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#fff;">
+          <svg width="17" height="17" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Compra 100% segura
+        </span>
+        <span style="color:#f7941d;font-size:16px;font-weight:900;">✦</span>
+        <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#fff;">
+          <svg width="17" height="17" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+          Atención Lun – Dom · 8:00 a.m – 10:30 p.m
+        </span>
+        <span style="color:#f7941d;font-size:16px;font-weight:900;">✦</span>
+        <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#fff;">
+          <svg width="17" height="17" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          +2.000 transacciones realizadas
+        </span>
+        <span style="color:#f7941d;font-size:16px;font-weight:900;">✦</span>
+      </div>
+      <!-- bloque 2 — copia para loop -->
+      <div style="display:flex;align-items:center;gap:36px;padding-right:56px;white-space:nowrap;">
+        <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#fff;">
+          <svg width="17" height="17" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Compra 100% segura
+        </span>
+        <span style="color:#f7941d;font-size:16px;font-weight:900;">✦</span>
+        <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#fff;">
+          <svg width="17" height="17" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+          Atención Lun – Dom · 8:00 a.m – 10:30 p.m
+        </span>
+        <span style="color:#f7941d;font-size:16px;font-weight:900;">✦</span>
+        <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:900;color:#fff;">
+          <svg width="17" height="17" fill="none" stroke="#f7941d" stroke-width="2.2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          +2.000 transacciones realizadas
+        </span>
+        <span style="color:#f7941d;font-size:16px;font-weight:900;">✦</span>
+      </div>
     </div>
   </div>
 
-  <!-- ACCESOS RÁPIDOS -->
-  <div class="wrap" style="margin-top:14px;">
-    <div class="quick-row">
-      <a class="quick-btn" href="compras.html">
-        <div class="quick-ico">🛒</div>
-        <div class="quick-lbl">Compra</div>
-      </a>
-      <a class="quick-btn" href="juegos.html">
-        <div class="quick-ico">🕹️</div>
-        <div class="quick-lbl">Juega</div>
-      </a>
-      <a class="quick-btn" href="pronosticos.html">
-        <div class="quick-ico">🏆</div>
-        <div class="quick-lbl">Apuesta</div>
-      </a>
-    </div>
-  </div>
-
-  <!-- CONTENIDO -->
   <div class="wrap">
 
     <!-- NOVEDAD -->
     <a href="afiliadopro.html" class="nov-strip">
-      <div class="nov-strip-bar"></div>
-      <div class="nov-strip-body">
-        <div class="nov-strip-top">
-          <span class="nov-badge">Nuevo</span>
-          <span class="nov-cat">Programa de afiliados</span>
-        </div>
+      <div class="nov-bar"></div>
+      <div class="nov-body">
+        <div class="nov-top"><span class="nov-badge">Nuevo</span><span class="nov-cat">Programa de afiliados</span></div>
         <div class="nov-title">Gana comisiones por cada venta que generes</div>
         <div class="nov-sub">Hasta 10% · Pagos cada viernes · Sin límites</div>
       </div>
@@ -379,114 +426,110 @@ img { display: block; }
       <span class="sh-title">Tienda de productos</span>
     </div>
 
-    <!-- Recomendados para ti -->
-    <div class="sub-sh">
-      <span class="sub-sh-title">Recomendados para ti</span>
-    </div>
-    <div class="pgrid">
-      <a class="pcard" href="juegos.html">
-        <img class="pcard-img" src="freefire.webp" alt="Free Fire" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="pcard-img-ph" style="display:none;background:#1a0800;">🔥</div>
-        <div class="pcard-name">Free Fire</div>
-      </a>
-      <a class="pcard" href="juegos.html">
-        <div class="pcard-img-ph" style="background:#12001a;">⚔️</div>
-        <div class="pcard-name">Mobile Legends</div>
-      </a>
-      <a class="pcard" href="juegos.html">
-        <div class="pcard-img-ph" style="background:#1a0000;">🩸</div>
-        <div class="pcard-name">Blood Strike</div>
-      </a>
-    </div>
-
     <!-- Videojuegos -->
-    <div class="sub-sh" style="margin-top:24px;">
-      <span class="sub-sh-title">Videojuegos</span>
-      <a href="juegos.html" class="sub-sh-link">Ver tienda →</a>
+    <div class="sh" style="margin-top:0;margin-bottom:12px;">
+      <span style="font-size:15px;font-weight:900;color:#fff;">Videojuegos</span>
+      <a href="juegos.html" class="sh-link">Ver todos</a>
     </div>
     <div class="pgrid">
       <a class="pcard" href="juegos.html">
         <img class="pcard-img" src="freefire.webp" alt="Free Fire" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="pcard-img-ph" style="display:none;background:#1a0800;">🔥</div>
+        <div class="pcard-ph" style="display:none;background:#1a0800;"><svg fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
         <div class="pcard-name">Free Fire</div>
       </a>
       <a class="pcard" href="juegos.html">
-        <div class="pcard-img-ph" style="background:#12001a;">⚔️</div>
+        <div class="pcard-ph" style="background:#12001f;"><svg fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
         <div class="pcard-name">Mobile Legends</div>
       </a>
       <a class="pcard" href="juegos.html">
-        <div class="pcard-img-ph" style="background:#1a0000;">🩸</div>
+        <div class="pcard-ph" style="background:#1a0000;"><svg fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
         <div class="pcard-name">Blood Strike</div>
       </a>
     </div>
-    <a href="juegos.html" class="ver-btn">Ver todos los videojuegos →</a>
 
     <!-- Recargas Móviles -->
-    <div class="sub-sh" style="margin-top:24px;">
-      <span class="sub-sh-title">Recargas Móviles</span>
-      <a href="recargas.html" class="sub-sh-link">Ver más opciones →</a>
+    <div class="sh" style="margin-top:24px;margin-bottom:12px;">
+      <span style="font-size:15px;font-weight:900;color:#fff;">Recargas Móviles</span>
+      <a href="recargas.html" class="sh-link">Ver todos</a>
     </div>
     <div class="pgrid">
       <a class="pcard" href="recargas.html">
-        <div class="pcard-img-ph" style="background:#002200;">🔴</div>
+        <div class="pcard-ph" style="background:#0d0014;">
+          <svg fill="white" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" fill="none" stroke="white" stroke-width="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke="white" stroke-width="2"/></svg>
+        </div>
         <div class="pcard-name">Claro</div>
       </a>
       <a class="pcard" href="recargas.html">
-        <div class="pcard-img-ph" style="background:#001a00;">🟢</div>
+        <div class="pcard-ph" style="background:#001a0d;">
+          <svg fill="white" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" fill="none" stroke="white" stroke-width="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke="white" stroke-width="2"/></svg>
+        </div>
         <div class="pcard-name">Movistar</div>
       </a>
       <a class="pcard" href="recargas.html">
-        <div class="pcard-img-ph" style="background:#1a1600;">🔵</div>
+        <div class="pcard-ph" style="background:#001020;">
+          <svg fill="white" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" fill="none" stroke="white" stroke-width="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke="white" stroke-width="2"/></svg>
+        </div>
         <div class="pcard-name">CNT</div>
       </a>
     </div>
-    <a href="recargas.html" class="ver-btn">Ver todas las operadoras →</a>
 
     <!-- Pronósticos -->
-    <div class="sub-sh" style="margin-top:24px;">
-      <span class="sub-sh-title">Pronósticos</span>
-      <a href="pronosticos.html" class="sub-sh-link">Ver más →</a>
+    <div class="sh" style="margin-top:24px;margin-bottom:12px;">
+      <span style="font-size:15px;font-weight:900;color:#fff;">Pronósticos</span>
+      <a href="pronosticos.html" class="sh-link">Ver todos</a>
     </div>
     <div class="pgrid">
       <a class="pcard" href="pronosticos.html">
-        <div class="pcard-img-ph" style="background:#001208;">⚽</div>
+        <div class="pcard-ph" style="background:#001208;">
+          <svg fill="white" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><path d="M12 8v4l3 3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
         <div class="pcard-name">Betplay</div>
       </a>
       <a class="pcard" href="pronosticos.html">
-        <div class="pcard-img-ph" style="background:#001208;">🎯</div>
+        <div class="pcard-ph" style="background:#100010;">
+          <svg fill="white" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><path d="M12 8v4l3 3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
         <div class="pcard-name">1xBet</div>
       </a>
       <a class="pcard" href="pronosticos.html">
-        <div class="pcard-img-ph" style="background:#001208;">🏆</div>
+        <div class="pcard-ph" style="background:#001018;">
+          <svg fill="white" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><path d="M12 8v4l3 3" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
         <div class="pcard-name">Bet365</div>
       </a>
     </div>
-    <a href="pronosticos.html" class="ver-btn">Ver todas las casas de apuestas →</a>
 
     <!-- Servicios Digitales -->
-    <div class="sub-sh" style="margin-top:24px;">
-      <span class="sub-sh-title">Servicios Digitales</span>
-      <a href="compras.html" class="sub-sh-link">Ver más →</a>
+    <div class="sh" style="margin-top:24px;margin-bottom:12px;">
+      <span style="font-size:15px;font-weight:900;color:#fff;">Servicios Digitales</span>
+      <a href="compras.html" class="sh-link">Ver todos</a>
     </div>
     <div class="pgrid">
       <a class="pcard" href="compras.html">
-        <div class="pcard-img-ph" style="background:#1a0010;">🎬</div>
+        <div class="pcard-ph" style="background:#1a0010;">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8"/><path d="M12 3v4"/></svg>
+        </div>
         <div class="pcard-name">Netflix</div>
       </a>
       <a class="pcard" href="compras.html">
-        <div class="pcard-img-ph" style="background:#001a08;">🎵</div>
+        <div class="pcard-ph" style="background:#001a08;">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
         <div class="pcard-name">Spotify</div>
       </a>
       <a class="pcard" href="compras.html">
-        <div class="pcard-img-ph" style="background:#00081a;">📺</div>
+        <div class="pcard-ph" style="background:#00061a;">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
         <div class="pcard-name">Disney+</div>
       </a>
     </div>
-    <a href="compras.html" class="ver-btn">Ver todos los servicios →</a>
 
-    <!-- AFILIADOS -->
+    <!-- AFILIADOS BANNER -->
     <a href="afiliadopro.html" class="afil">
-      <div class="afil-ico">💸</div>
+      <div class="afil-ico">
+        <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
       <div class="afil-body">
         <span class="afil-tag">Nuevo · Programa afiliados</span>
         <div class="afil-title">Gana comisiones por cada venta</div>
@@ -499,20 +542,54 @@ img { display: block; }
     <div class="sh" style="margin-top:28px;">
       <span class="sh-title">¿Por qué elegirnos?</span>
     </div>
-    <div class="feats">
-      <div class="feat"><div class="feat-ico">🛡️</div><div class="feat-title">Atención personalizada</div><div class="feat-desc">Respondemos cada pedido directamente contigo</div></div>
-      <div class="feat"><div class="feat-ico">⚡</div><div class="feat-title">Entrega inmediata</div><div class="feat-desc">Tu recarga aplicada en minutos</div></div>
-      <div class="feat"><div class="feat-ico">🔒</div><div class="feat-title">Pago seguro</div><div class="feat-desc">Confirmación vía WhatsApp antes de procesar</div></div>
-      <div class="feat"><div class="feat-ico">💰</div><div class="feat-title">Mejores precios</div><div class="feat-desc">Las tarifas más competitivas del mercado</div></div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-ico">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="why-title">Atención personalizada</div>
+          <div class="why-desc">Respondemos cada pedido directamente contigo por WhatsApp</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-ico">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <div class="why-title">Entrega inmediata</div>
+          <div class="why-desc">Tu recarga o crédito de juego aplicado en minutos</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-ico">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div>
+          <div class="why-title">Pago seguro</div>
+          <div class="why-desc">Confirmación vía WhatsApp antes de procesar tu pedido</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-ico">
+          <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <div class="why-title">Mejores precios</div>
+          <div class="why-desc">Las tarifas más competitivas del mercado ecuatoriano</div>
+        </div>
+      </div>
     </div>
 
     <!-- COMUNIDAD -->
     <div class="comunidad">
-      <div class="comunidad-ico">📢</div>
-      <div class="comunidad-title">¡Únete a nuestra comunidad!</div>
-      <div class="comunidad-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos y dinámicas con premios para nuestra comunidad gamer.</div>
-      <a class="comunidad-btn" href="https://whatsapp.com/channel/0029Vb8DjsKHQbS2yeezJu1C" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="com-ico">
+        <svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </div>
+      <div class="com-title">¡Únete a nuestra comunidad!</div>
+      <div class="com-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos y dinámicas con premios para nuestra comunidad gamer.</div>
+      <a class="com-btn" href="https://whatsapp.com/channel/0029Vb8DjsKHQbS2yeezJu1C" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Unirse al canal
       </a>
     </div>
@@ -529,73 +606,69 @@ img { display: block; }
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-inner">
+  <div class="ft-main" style="text-align:left;">
     <img src="logo.png" alt="Rexpres Play" style="height:34px;display:block;margin-bottom:14px;">
     <p style="font-size:13px;color:#e2e8f0;line-height:1.6;margin-bottom:16px;">Tu tienda de confianza en Ecuador para recargas móviles y videojuegos. Rápido, seguro y al mejor precio.</p>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <span style="font-size:17px;">🕐</span>
+      <div style="width:34px;height:34px;border-radius:9px;background:#0f0f1e;border:1px solid #16162a;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+      </div>
       <div>
         <div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Horario de atención</div>
-        <div style="font-size:13px;color:#e2e8f0;font-weight:500;">Lunes a Domingo · 8:00 a.m – 10:30 p.m</div>
+        <div style="font-size:13px;color:#e2e8f0;">Lunes a Domingo · 8:00 a.m – 10:30 p.m</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px;">
-      <span style="font-size:17px;">📞</span>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:#0f0f1e;border:1px solid #16162a;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012.12 1.18 2 2 0 014.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round"/></svg>
+      </div>
       <div>
         <div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Contacto WhatsApp</div>
-        <a href="https://wa.me/593992225484" target="_blank" rel="noopener" style="font-size:13px;color:#e2e8f0;">+593 99 222 5484</a>
+        <a href="https://wa.me/593992225484" style="font-size:13px;color:#e2e8f0;">+593 99 222 5484</a>
       </div>
     </div>
-    <div class="div-line"></div>
+    <div class="ft-divider"></div>
     <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;">Políticas</p>
-    <div style="display:flex;flex-direction:column;gap:13px;margin-bottom:22px;">
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
       <a href="terminos.html" style="font-size:13px;color:#e2e8f0;">Términos y condiciones</a>
       <a href="privacidad.html" style="font-size:13px;color:#e2e8f0;">Política de privacidad</a>
       <a href="proteccion.html" style="font-size:13px;color:#e2e8f0;">Política de protección de datos</a>
     </div>
-    <div class="div-line"></div>
+    <div class="ft-divider"></div>
     <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;">Síguenos</p>
     <div style="display:flex;gap:12px;margin-bottom:28px;">
-      <a href="#" target="_blank" rel="noopener" style="width:44px;height:44px;border-radius:50%;background:#0f0f1a;border:1.5px solid #2a2a3e;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#2a2a3e'">
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:#0f0f1e;border:1.5px solid #22223a;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#22223a'">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
       </a>
-      <a href="#" target="_blank" rel="noopener" style="width:44px;height:44px;border-radius:50%;background:#0f0f1a;border:1.5px solid #2a2a3e;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#2a2a3e'">
-        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:#0f0f1e;border:1.5px solid #22223a;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#22223a'">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
-      <a href="#" target="_blank" rel="noopener" style="width:44px;height:44px;border-radius:50%;background:#0f0f1a;border:1.5px solid #2a2a3e;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#2a2a3e'">
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:#0f0f1e;border:1.5px solid #22223a;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#22223a'">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
       </a>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div class="ft-bottom">
     <img src="logo.png" alt="Rexpres Play" style="height:20px;opacity:.3;display:block;margin:0 auto 6px;">
-    <p style="font-size:9px;color:#2a2a3e;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+    <p style="font-size:9px;color:#22223a;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
   </div>
 </footer>
 
 <script>
 // Slider
-let cur = 0;
-const heroBase  = document.getElementById('hero-base');
-const heroExtra = document.getElementById('hero-extra');
-const dots = [document.getElementById('dot-0'), document.getElementById('dot-1')];
-
-function goSlide(n) {
-  dots[cur].classList.remove('on');
-  cur = n;
-  dots[cur].classList.add('on');
-  heroExtra.classList.toggle('on', n === 1);
-}
-setInterval(() => goSlide((cur + 1) % 2), 4500);
-
-// Login
-function abrirLogin()  { document.getElementById('modal-login').classList.add('open'); }
-function cerrarLogin() { document.getElementById('modal-login').classList.remove('open'); }
-document.getElementById('modal-login').addEventListener('click', e => { if(e.target === document.getElementById('modal-login')) cerrarLogin(); });
-
+let cur=0;
+const hBase=document.getElementById('hero-base');
+const hExtra=document.getElementById('hero-extra');
+const dots=[document.getElementById('dot-0'),document.getElementById('dot-1')];
+function goSlide(n){dots[cur].classList.remove('on');cur=n;dots[cur].classList.add('on');hExtra.classList.toggle('on',n===1);}
+setInterval(()=>goSlide((cur+1)%2),4500);
+// Modal
+function abrirLogin(){document.getElementById('modal-login').classList.add('open');}
+function cerrarLogin(){document.getElementById('modal-login').classList.remove('open');}
+document.getElementById('modal-login').addEventListener('click',e=>{if(e.target===document.getElementById('modal-login'))cerrarLogin();});
 // Drawer
-function openDrawer()  { document.getElementById('drawer').classList.add('open'); document.getElementById('dr-ov').classList.add('open'); }
-function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('dr-ov').classList.remove('open'); }
+function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('dr-ov').classList.add('open');}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('dr-ov').classList.remove('open');}
 </script>
 </body>
 </html>
