@@ -6,160 +6,330 @@
 <title>Rexpres Play · Ecuador</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{background:#08080f;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100%;overflow-x:hidden;}
+html,body{background:#04050d;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100%;overflow-x:hidden;}
 body{display:flex;flex-direction:column;}
 main{flex:1;}
 a{text-decoration:none;color:inherit;}
 img{display:block;max-width:100%;}
 
-/* HEADER */
-.hdr{background:#08080f;border-bottom:1px solid #16162a;position:sticky;top:0;z-index:100;height:62px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;}
+/* ── GRID BACKGROUND ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(247,148,29,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(247,148,29,.035) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.8)}}
+@keyframes shine{0%{left:-100%}100%{left:220%}}
+@keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(500%)}}
+@keyframes border-run{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes glow-o{0%,100%{box-shadow:0 0 16px rgba(247,148,29,.3)}50%{box-shadow:0 0 36px rgba(247,148,29,.7),0 0 70px rgba(247,148,29,.2)}}
+@keyframes glow-g{0%,100%{box-shadow:0 0 16px rgba(37,211,102,.3)}50%{box-shadow:0 0 36px rgba(37,211,102,.7),0 0 70px rgba(37,211,102,.2)}}
+
+/* ── HEADER ── */
+.hdr{
+  background:rgba(4,5,13,.96);
+  backdrop-filter:blur(24px);
+  position:sticky;top:0;z-index:100;
+  height:56px;padding:0 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(247,148,29,.12);
+  position:relative;
+}
+.hdr::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);
+  background-size:200% 100%;
+  animation:border-run 3s linear infinite;
+}
 .hdr-left{display:flex;align-items:center;gap:10px;}
 .hdr-right{display:flex;align-items:center;gap:8px;}
-.burger-btn{background:none;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;}
-.acct-btn{background:#13131f;border:1.5px solid #22223a;border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;}
-.acct-btn:hover{border-color:#f7941d;}
+.burger-btn{background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;}
+.burger-btn span{display:block;border-radius:2px;}
+.burger-btn span{display:block;border-radius:2px;transition:all .2s;}
 
-/* HERO */
-.hero-wrap{position:relative;width:100%;overflow:hidden;line-height:0;}
-.hero-wrap img.hero-base{width:100%;height:auto;display:block;object-fit:cover;}
+.acct-btn{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,#180a00,#2a1400);
+  border:1.5px solid rgba(247,148,29,.45);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .22s;
+  position:relative;overflow:hidden;
+}
+.acct-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(247,148,29,.15),transparent);opacity:0;transition:opacity .22s;}
+.acct-btn:hover::before{opacity:1;}
+.acct-btn:hover{box-shadow:0 0 18px rgba(247,148,29,.55);}
+
+/* ── HERO ── */
+.hero-wrap{position:relative;width:100%;overflow:hidden;line-height:0;z-index:1;}
+.hero-wrap img.hero-base{width:100%;height:auto;display:block;}
 .hero-extra{position:absolute;inset:0;opacity:0;transition:opacity 1.1s;}
 .hero-extra.on{opacity:1;}
 .hero-extra img{width:100%;height:100%;object-fit:cover;}
-.hero-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5;}
-.hero-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s;}
-.hero-dot.on{width:18px;background:#f7941d;}
+/* HUD corners */
+.hc{position:absolute;width:22px;height:22px;z-index:4;pointer-events:none;}
+.hc.tl{top:8px;left:8px;border-top:2px solid #f7941d;border-left:2px solid #f7941d;box-shadow:-1px -1px 10px rgba(247,148,29,.6);}
+.hc.tr{top:8px;right:8px;border-top:2px solid #f7941d;border-right:2px solid #f7941d;box-shadow:1px -1px 10px rgba(247,148,29,.6);}
+.hc.bl{bottom:22px;left:8px;border-bottom:2px solid #f7941d;border-left:2px solid #f7941d;box-shadow:-1px 1px 10px rgba(247,148,29,.6);}
+.hc.br{bottom:22px;right:8px;border-bottom:2px solid #f7941d;border-right:2px solid #f7941d;box-shadow:1px 1px 10px rgba(247,148,29,.6);}
+.hero-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5;}
+.hero-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.2);cursor:pointer;transition:all .32s;}
+.hero-dot.on{width:22px;background:linear-gradient(90deg,#f7941d,#ffd700);box-shadow:0 0 10px #f7941d,0 0 20px rgba(247,148,29,.4);}
 
-/* TICKER */
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ticker-wrap{background:#0f0f1e;border-bottom:1px solid #16162a;overflow:hidden;}
-.ticker-inner{display:flex;animation:ticker 24s linear infinite;width:max-content;will-change:transform;}
-.ticker-item{display:flex;align-items:center;gap:11px;padding:13px 24px;border-right:1px solid #22223a;white-space:nowrap;flex-shrink:0;}
-.ticker-item svg{flex-shrink:0;}
-.ticker-title{font-size:13px;font-weight:900;color:#fff;line-height:1.25;}
-.ticker-sub{font-size:10px;color:#555577;font-weight:600;margin-top:1px;}
+/* ── TICKER ── */
+.ticker-wrap{position:relative;overflow:hidden;background:#060810;z-index:1;}
+.tline{height:2px;background:linear-gradient(90deg,transparent,#f7941d 20%,#ffd700 50%,#f7941d 80%,transparent);background-size:200% 100%;animation:border-run 2.5s linear infinite;box-shadow:0 0 8px rgba(247,148,29,.5);}
+.ticker-inner{display:flex;animation:ticker 22s linear infinite;width:max-content;will-change:transform;padding:10px 0;}
+.t-item{display:flex;align-items:center;gap:10px;padding:0 22px;border-right:1px solid rgba(247,148,29,.1);white-space:nowrap;flex-shrink:0;}
+.t-item svg{filter:drop-shadow(0 0 5px rgba(247,148,29,.8));}
+.t-title{font-size:13px;font-weight:900;color:#fff;line-height:1.2;}
+.t-sub{font-size:10px;color:#4a5880;font-weight:600;margin-top:1px;}
 
-/* WRAP */
-.wrap{max-width:100%;margin:0 auto;padding:0 13px;}
-@media(min-width:700px){.wrap{max-width:900px;padding:0 20px;}}
-
-/* NOVEDAD */
-.nov{display:flex;align-items:center;gap:11px;background:#0f0f1e;border:1.5px solid #f7941d;border-radius:12px;padding:13px;margin:16px 0 0;cursor:pointer;transition:box-shadow .2s;}
-.nov:hover{box-shadow:0 4px 20px rgba(247,148,29,.2);}
-.nov-bar{width:4px;min-height:42px;background:#f7941d;border-radius:4px;flex-shrink:0;}
-.nov-body{flex:1;min-width:0;}
-.nov-top{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.nov-badge{background:#f7941d;color:#000;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:20px;white-space:nowrap;}
-.nov-cat{font-size:9px;font-weight:700;color:#444466;text-transform:uppercase;letter-spacing:1px;}
+/* ── NOVEDAD ── */
+.nov-wrap{padding:14px 14px 0;position:relative;z-index:1;}
+.nov{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:14px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(247,148,29,.07),rgba(255,92,0,.03));
+  border:1.5px solid rgba(247,148,29,.4);
+  animation:glow-o 3s ease-in-out infinite;
+  cursor:pointer;transition:transform .2s;
+}
+.nov:hover{transform:translateY(-2px);}
+/* top shine sweep */
+.nov::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:shine 4s ease-in-out infinite;}
+/* scan line */
+.nov::after{content:'';position:absolute;left:0;right:0;height:60px;background:linear-gradient(180deg,rgba(247,148,29,.04),transparent);animation:scan 5s ease-in-out infinite;pointer-events:none;}
+.nov-bar{width:3px;min-height:44px;background:linear-gradient(180deg,#ffd700,#f7941d,#ff5c00);border-radius:3px;flex-shrink:0;box-shadow:0 0 10px #f7941d,0 0 20px rgba(247,148,29,.4);}
+.nov-body{flex:1;min-width:0;position:relative;z-index:1;}
+.nov-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.nov-badge{background:linear-gradient(90deg,#ffd700,#f7941d,#ff5c00);color:#000;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;padding:2px 9px;border-radius:4px;box-shadow:0 0 10px rgba(247,148,29,.6);white-space:nowrap;}
+.nov-cat{font-size:9px;font-weight:700;color:#6878a0;text-transform:uppercase;letter-spacing:1px;}
 .nov-title{font-size:13px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:2px;}
-.nov-sub{font-size:10px;color:#555577;}
-.nov-arr{font-size:20px;color:#f7941d;flex-shrink:0;}
+.nov-sub{font-size:10px;color:#5060a0;}
+.nov-arr{font-size:24px;color:#f7941d;flex-shrink:0;z-index:1;filter:drop-shadow(0 0 6px rgba(247,148,29,.8));animation:float 3s ease-in-out infinite;}
 
-/* SECTION HEADERS */
-.sh{display:flex;align-items:center;justify-content:space-between;margin:24px 0 11px;}
-.sh-title{font-size:17px;font-weight:900;color:#fff;}
-.sh-link{font-size:12px;font-weight:900;color:#f7941d;}
+/* ── WRAP ── */
+.wrap{padding:0 14px;position:relative;z-index:1;}
 
-.sub-sh{display:flex;align-items:center;justify-content:space-between;margin:20px 0 10px;}
-.sub-sh-title{font-size:14px;font-weight:900;color:#fff;}
-.sub-sh-link{font-size:12px;font-weight:900;color:#f7941d;}
+/* ── SECTION HEADERS ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin:26px 0 14px;}
+.sh-title{font-size:20px;font-weight:900;color:#fff;position:relative;padding-left:13px;}
+.sh-title::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:110%;background:linear-gradient(180deg,#ffd700,#f7941d,#ff5c00);border-radius:3px;box-shadow:0 0 10px #f7941d,0 0 20px rgba(247,148,29,.4);}
 
-/* PRODUCT GRID — 3 columnas en móvil */
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
-@media(min-width:600px){.pgrid{grid-template-columns:repeat(4,1fr);gap:12px;}}
+.sub-sh{display:flex;align-items:center;justify-content:space-between;margin:18px 0 11px;}
+.sub-sh-title{font-size:14px;font-weight:900;color:#ccd;}
+.sub-sh-link{
+  font-size:11px;font-weight:900;color:#000;
+  background:linear-gradient(90deg,#f7941d,#ff5c00);
+  padding:5px 14px;border-radius:5px;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 12px rgba(247,148,29,.5);
+  transition:box-shadow .22s;
+}
+.sub-sh-link::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shine 2.5s ease-in-out infinite;}
+.sub-sh-link:hover{box-shadow:0 0 22px rgba(247,148,29,.8);}
 
-.pcard{background:#0f0f1e;border:1px solid #1e1e30;border-radius:11px;overflow:hidden;text-decoration:none;transition:transform .18s,border-color .18s;display:block;}
-.pcard:hover{transform:translateY(-3px);border-color:#f7941d;}
-.pcard:active{transform:scale(.97);}
-.pcard-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
-.pcard-ph{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
-.pcard-ph svg{width:40px;height:40px;}
-.pcard-name{padding:7px 5px 9px;font-size:11px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:.4px;line-height:1.25;}
+/* ── PRODUCT GRID ── */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(min-width:480px){.pgrid{grid-template-columns:repeat(4,1fr);}}
 
-/* AFIL */
-.afil{display:flex;align-items:center;gap:11px;background:#0f0f1e;border:1.5px solid #f7941d;border-radius:12px;padding:14px;margin-top:24px;transition:box-shadow .2s;}
-.afil:hover{box-shadow:0 4px 20px rgba(247,148,29,.2);}
-.afil-ico{width:46px;height:46px;border-radius:11px;background:#1c1c2e;border:1px solid #f7941d;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pcard{
+  border-radius:12px;overflow:hidden;
+  text-decoration:none;display:block;
+  position:relative;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s;
+}
+.pcard:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 16px 40px rgba(0,0,0,.7);}
+.pcard:hover .pcard-inner{border-color:var(--c,rgba(247,148,29,.6));}
+.pcard:hover .pcard-glow{opacity:1;}
+.pcard:active{transform:scale(.96);}
+
+.pcard-glow{
+  position:absolute;inset:-4px;border-radius:14px;z-index:-1;
+  background:radial-gradient(circle at 50% 50%,var(--c,rgba(247,148,29,.5)),transparent 70%);
+  opacity:0;transition:opacity .3s;filter:blur(6px);
+}
+.pcard-inner{
+  background:linear-gradient(170deg,#0c0f1e,#080a16);
+  border:1px solid rgba(255,255,255,.07);
+  border-top:1px solid var(--c,rgba(247,148,29,.3));
+  border-radius:12px;overflow:hidden;
+  position:relative;transition:border-color .22s;
+}
+.pcard-inner::after{content:'';position:absolute;left:0;right:0;height:50px;background:linear-gradient(180deg,rgba(255,255,255,.035),transparent);animation:scan 4s ease-in-out infinite;z-index:2;pointer-events:none;}
+
+.pcard-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;position:relative;z-index:1;}
+.pcard-ph{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.pcard-ph svg{width:38px;height:38px;}
+.pcard-name{padding:9px 6px 11px;font-size:10px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:1px;background:rgba(6,8,18,.95);position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.04);}
+
+/* ── AFILIADOS ── */
+.afil{
+  display:flex;align-items:center;gap:13px;
+  padding:18px 16px;margin-top:24px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(247,148,29,.07),rgba(255,92,0,.03));
+  border:1.5px solid rgba(247,148,29,.4);
+  position:relative;overflow:hidden;
+  animation:glow-o 3s ease-in-out infinite;
+  transition:transform .22s;text-decoration:none;
+}
+.afil:hover{transform:translateY(-3px);}
+.afil::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);animation:shine 5s ease-in-out infinite;}
+.afil-ico{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(247,148,29,.2),rgba(255,92,0,.08));
+  border:1.5px solid rgba(247,148,29,.5);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 0 18px rgba(247,148,29,.25);
+  animation:float 4s ease-in-out infinite;
+}
+.afil-ico svg{width:25px;height:25px;filter:drop-shadow(0 0 7px rgba(247,148,29,.9));}
 .afil-body{flex:1;min-width:0;}
-.afil-tag{display:inline-block;background:#f7941d;color:#000;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1px;padding:2px 7px;border-radius:20px;margin-bottom:4px;}
-.afil-title{font-size:13px;font-weight:900;color:#fff;margin-bottom:2px;}
-.afil-sub{font-size:10px;color:#555577;}
-.afil-arr{font-size:20px;color:#f7941d;flex-shrink:0;}
+.afil-tag{display:inline-block;background:linear-gradient(90deg,#ffd700,#f7941d,#ff5c00);color:#000;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;padding:2px 9px;border-radius:4px;margin-bottom:5px;box-shadow:0 0 8px rgba(247,148,29,.4);}
+.afil-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:2px;}
+.afil-sub{font-size:11px;color:#6070a0;}
+.afil-arr{font-size:26px;color:#f7941d;flex-shrink:0;filter:drop-shadow(0 0 7px rgba(247,148,29,.8));animation:float 3s ease-in-out infinite;}
 
-/* WHY */
-.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px;}
-.why-card{background:#0f0f1e;border:1px solid #1e1e30;border-radius:11px;padding:14px 12px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s;}
-.why-card:hover{border-color:#f7941d;}
-.why-ico{width:38px;height:38px;border-radius:9px;background:#1c1c2e;display:flex;align-items:center;justify-content:center;}
-.why-ico svg{width:18px;height:18px;}
-.why-title{font-size:12px;font-weight:900;color:#fff;line-height:1.3;}
-.why-desc{font-size:10px;color:#555577;line-height:1.5;}
+/* ── WHY ── */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.why-card{
+  padding:18px 13px;border-radius:14px;
+  display:flex;flex-direction:column;gap:13px;
+  background:linear-gradient(145deg,#0c0f1e,#090c18);
+  border:1px solid rgba(247,148,29,.14);
+  position:relative;overflow:hidden;
+  transition:transform .22s,border-color .22s,box-shadow .22s;
+  cursor:default;
+}
+/* top accent line */
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(247,148,29,.6),transparent);opacity:.5;transition:opacity .22s;}
+.why-card:hover{transform:translateY(-5px);border-color:rgba(247,148,29,.4);box-shadow:0 10px 30px rgba(247,148,29,.1);}
+.why-card:hover::before{opacity:1;}
 
-/* COMUNIDAD */
-.comunidad{background:#050f08;border:1.5px solid #25d366;border-radius:12px;padding:20px 14px;text-align:center;margin-top:24px;}
-.com-ico{width:50px;height:50px;border-radius:50%;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 11px;}
-.com-ico svg{width:24px;height:24px;}
-.com-title{font-size:16px;font-weight:900;color:#fff;margin-bottom:7px;}
-.com-desc{font-size:12px;color:#555577;line-height:1.6;margin-bottom:14px;}
-.com-btn{display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;font-size:13px;font-weight:900;padding:11px 20px;border-radius:50px;transition:background .2s;}
-.com-btn:hover{background:#1db954;}
-.com-btn svg{width:17px;height:17px;fill:white;}
+.why-ico{
+  width:46px;height:46px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(247,148,29,.16),rgba(255,92,0,.06));
+  border:1.5px solid rgba(247,148,29,.38);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 14px rgba(247,148,29,.18);
+}
+.why-ico svg{width:22px;height:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));}
+.why-title{font-size:13px;font-weight:900;color:#fff;line-height:1.3;}
+.why-desc{font-size:11px;color:#5060a0;line-height:1.55;}
 
-/* WA FLOAT */
-.wa-float{position:fixed;bottom:18px;right:13px;width:50px;height:50px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.5);z-index:500;transition:transform .2s;}
-.wa-float:hover{transform:scale(1.08);}
-.wa-float svg{width:24px;height:24px;fill:white;}
+/* ── COMUNIDAD ── */
+.comunidad{
+  padding:28px 18px;border-radius:18px;
+  text-align:center;margin-top:24px;
+  background:linear-gradient(145deg,#030f07,#050e0a);
+  border:1.5px solid rgba(37,211,102,.4);
+  position:relative;overflow:hidden;
+  animation:glow-g 3s ease-in-out infinite;
+}
+.comunidad::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(37,211,102,.04),transparent);animation:shine 5s ease-in-out 1s infinite;}
+.c-b1{position:absolute;top:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,211,102,.13) 0%,transparent 70%);pointer-events:none;}
+.c-b2{position:absolute;bottom:-50px;right:-50px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(37,211,102,.09) 0%,transparent 70%);pointer-events:none;}
 
-/* MODAL */
-.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;align-items:center;justify-content:center;padding:16px;}
+.com-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.4);border-radius:6px;padding:5px 14px;margin-bottom:16px;position:relative;z-index:1;}
+.com-dot{width:8px;height:8px;border-radius:50%;background:#25d366;animation:pulse-dot 1.8s ease-in-out infinite;box-shadow:0 0 10px #25d366,0 0 20px rgba(37,211,102,.4);}
+.com-badge-text{font-size:10px;font-weight:900;color:#25d366;text-transform:uppercase;letter-spacing:2px;}
+
+.com-ico{
+  width:68px;height:68px;border-radius:50%;
+  background:rgba(37,211,102,.1);
+  border:2px solid rgba(37,211,102,.5);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+  box-shadow:0 0 28px rgba(37,211,102,.35),0 0 56px rgba(37,211,102,.15);
+  position:relative;z-index:1;
+  animation:float 4s ease-in-out infinite;
+}
+.com-ico svg{width:30px;height:30px;filter:drop-shadow(0 0 8px rgba(37,211,102,.9));}
+.com-title{font-size:20px;font-weight:900;color:#fff;margin-bottom:10px;position:relative;z-index:1;}
+.com-desc{font-size:12px;color:#6a8070;line-height:1.65;margin-bottom:20px;position:relative;z-index:1;}
+.com-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:linear-gradient(135deg,#25d366,#1db954);
+  color:#fff;font-size:15px;font-weight:900;
+  padding:14px 30px;border-radius:8px;
+  box-shadow:0 4px 24px rgba(37,211,102,.5),0 0 50px rgba(37,211,102,.15),inset 0 1px 0 rgba(255,255,255,.2);
+  transition:transform .22s,box-shadow .22s;
+  position:relative;z-index:1;overflow:hidden;
+}
+.com-btn::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shine 2.5s ease-in-out infinite;}
+.com-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 36px rgba(37,211,102,.7),0 0 70px rgba(37,211,102,.25);}
+.com-btn svg{width:19px;height:19px;fill:white;}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:20px;right:14px;width:52px;height:52px;background:linear-gradient(135deg,#25d366,#1db954);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.65),0 0 40px rgba(37,211,102,.2);z-index:500;transition:transform .22s,box-shadow .22s;}
+.wa-float:hover{transform:scale(1.14);box-shadow:0 6px 32px rgba(37,211,102,.85),0 0 70px rgba(37,211,102,.3);}
+.wa-float svg{width:25px;height:25px;fill:white;}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:400;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(14px);}
 .modal-ov.open{display:flex;}
-.modal-box{background:#0f0f1e;border:1.5px solid #22223a;border-radius:16px;padding:22px;width:100%;max-width:300px;}
-.mopt{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#13131f;border:1px solid #22223a;border-radius:9px;margin-bottom:9px;text-decoration:none;transition:border-color .2s;}
-.mopt:hover{border-color:#f7941d;}
+.modal-box{background:linear-gradient(145deg,#080a18,#060810);border:1.5px solid rgba(247,148,29,.35);border-radius:18px;padding:24px;width:100%;max-width:308px;box-shadow:0 0 40px rgba(247,148,29,.15);}
+.mopt{display:flex;align-items:center;justify-content:space-between;padding:13px;background:rgba(255,255,255,.03);border:1px solid rgba(247,148,29,.15);border-radius:10px;margin-bottom:9px;text-decoration:none;transition:all .2s;}
+.mopt:hover{border-color:#f7941d;background:rgba(247,148,29,.06);box-shadow:0 0 14px rgba(247,148,29,.2);}
 
-/* DRAWER */
-.dr-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:199;}
+/* ── DRAWER ── */
+.dr-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:199;backdrop-filter:blur(8px);}
 .dr-ov.open{display:block;}
-.drawer{position:fixed;top:0;left:-260px;width:248px;height:100%;z-index:200;background:#08080f;border-right:1px solid #16162a;transition:left .28s ease;display:flex;flex-direction:column;}
+.drawer{position:fixed;top:0;left:-265px;width:252px;height:100%;z-index:200;background:rgba(4,5,13,.97);border-right:2px solid transparent;transition:left .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;position:fixed;}
+.drawer::after{content:'';position:absolute;top:0;right:-2px;bottom:0;width:2px;background:linear-gradient(180deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);box-shadow:0 0 12px rgba(247,148,29,.6);animation:border-run 3s linear infinite;}
 .drawer.open{left:0;}
-.dr-head{display:flex;align-items:center;justify-content:space-between;padding:13px;border-bottom:1px solid #16162a;}
-.dr-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
+.dr-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid rgba(247,148,29,.1);}
+.dr-close{background:none;border:none;color:#f7941d;font-size:18px;cursor:pointer;filter:drop-shadow(0 0 4px rgba(247,148,29,.5));}
 .dr-nav{flex:1;overflow-y:auto;}
-.dr-item{display:flex;align-items:center;gap:10px;padding:12px 14px;color:#9ca3af;border-bottom:1px solid #16162a;text-decoration:none;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;cursor:pointer;font-family:Arial,sans-serif;font-size:13px;font-weight:700;transition:color .15s,background .15s;}
-.dr-item:hover{color:#fff;background:#13131f;}
-.dr-item-ico{width:30px;height:30px;border-radius:8px;background:#13131f;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.dr-item-ico svg{width:15px;height:15px;}
-.dr-foot{padding:11px 14px;border-top:1px solid #16162a;}
+.dr-item{display:flex;align-items:center;gap:11px;padding:13px 14px;color:#7080a0;border-bottom:1px solid rgba(255,255,255,.03);text-decoration:none;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;cursor:pointer;font-family:Arial,sans-serif;font-size:13px;font-weight:700;transition:all .22s;position:relative;overflow:hidden;}
+.dr-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#f7941d,#ff5c00);transform:scaleY(0);transition:transform .22s;box-shadow:0 0 8px rgba(247,148,29,.6);}
+.dr-item:hover::before{transform:scaleY(1);}
+.dr-item:hover{color:#fff;background:rgba(247,148,29,.05);padding-left:18px;}
+.dr-item-ico{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.05));border:1px solid rgba(247,148,29,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dr-item-ico svg{width:15px;height:15px;filter:drop-shadow(0 0 3px rgba(247,148,29,.5));}
+.dr-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.03);}
 
-/* FOOTER */
-.footer{background:#040409;border-top:1px solid #16162a;margin-top:28px;}
-.ft-main{padding:24px 13px 0;text-align:left;}
-.ft-div{height:1px;background:#16162a;margin:18px 0;}
-.ft-bottom{border-top:1px solid #16162a;padding:13px;text-align:center;}
+/* ── FOOTER ── */
+.footer{background:#02030a;margin-top:32px;position:relative;z-index:1;}
+.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);background-size:200% 100%;animation:border-run 3s linear infinite;box-shadow:0 0 8px rgba(247,148,29,.5);}
+.ft-in{padding:26px 14px 0;}
+.ft-div{height:1px;background:linear-gradient(90deg,transparent,rgba(247,148,29,.2),transparent);margin:18px 0;}
+.ft-bot{border-top:1px solid rgba(247,148,29,.06);padding:14px;text-align:center;}
 </style>
 </head>
 <body>
 
-<!-- MODAL LOGIN -->
+<!-- MODAL -->
 <div class="modal-ov" id="modal-login">
   <div class="modal-box">
-    <p style="font-size:16px;font-weight:900;color:#fff;margin-bottom:4px;">Iniciar sesión</p>
-    <p style="font-size:11px;color:#555577;margin-bottom:16px;">Selecciona cómo deseas acceder</p>
+    <p style="font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#6070a0;margin-bottom:16px;">Selecciona cómo deseas acceder</p>
     <a class="mopt" href="admin.html">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:8px;background:#1c1c2e;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div><div style="font-size:13px;font-weight:900;color:#fff;">Administrador</div><div style="font-size:10px;color:#555577;">Panel de control</div></div>
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(247,148,29,.15);">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Administrador</div><div style="font-size:10px;color:#6070a0;">Panel de control</div></div>
       </div>
-      <span style="color:#f7941d;font-size:18px;">›</span>
+      <span style="color:#f7941d;font-size:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));">›</span>
     </a>
     <a class="mopt" href="afiliado.html">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:8px;background:#1c1c2e;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <div><div style="font-size:13px;font-weight:900;color:#fff;">Afiliado</div><div style="font-size:10px;color:#555577;">Ver comisiones y pedidos</div></div>
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(247,148,29,.15);">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Afiliado</div><div style="font-size:10px;color:#6070a0;">Ver comisiones y pedidos</div></div>
       </div>
-      <span style="color:#f7941d;font-size:18px;">›</span>
+      <span style="color:#f7941d;font-size:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));">›</span>
     </a>
-    <button style="width:100%;background:none;border:1px solid #22223a;border-radius:8px;padding:10px;color:#555577;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;font-family:Arial,sans-serif;" onclick="cerrarLogin()">Cancelar</button>
+    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid rgba(247,148,29,.2);border-radius:8px;padding:11px;color:#6070a0;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;font-family:Arial,sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='rgba(247,148,29,.5)';this.style.color='#f7941d'" onmouseout="this.style.borderColor='rgba(247,148,29,.2)';this.style.color='#6070a0'">Cancelar</button>
   </div>
 </div>
 
@@ -167,167 +337,234 @@ img{display:block;max-width:100%;}
 <div class="dr-ov" id="dr-ov" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="dr-head">
-    <img src="logo.png" alt="Rexpres Play" style="height:28px;">
+    <img src="logo.png" alt="Rexpres Play" style="height:30px;filter:drop-shadow(0 0 10px rgba(247,148,29,.45));">
     <button class="dr-close" onclick="closeDrawer()">✕</button>
   </div>
   <div class="dr-nav">
-    <a class="dr-item" href="index.html"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Inicio</a>
-    <a class="dr-item" href="recargas.html"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>Recargas Móviles</a>
-    <a class="dr-item" href="juegos.html"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01M7 12h.01M17 10v4M15 12h4"/></svg></div>Videojuegos</a>
-    <a class="dr-item" href="pronosticos.html"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>Pronósticos</a>
-    <a class="dr-item" href="compras.html"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>Servicios Digitales</a>
-    <a class="dr-item" href="afiliadopro.html"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>Programa de Afiliados</a>
-    <button class="dr-item" onclick="abrirLogin()"><div class="dr-item-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Iniciar sesión</button>
+    <a class="dr-item" href="index.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Inicio</a>
+    <a class="dr-item" href="recargas.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>Recargas Móviles</a>
+    <a class="dr-item" href="juegos.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01M7 12h.01M17 10v4M15 12h4"/></svg></div>Videojuegos</a>
+    <a class="dr-item" href="pronosticos.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>Pronósticos</a>
+    <a class="dr-item" href="compras.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>Servicios Digitales</a>
+    <a class="dr-item" href="afiliadopro.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>Programa de Afiliados</a>
+    <button class="dr-item" onclick="abrirLogin()"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Iniciar sesión</button>
   </div>
-  <div class="dr-foot"><p style="font-size:9px;color:#22223a;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p></div>
+  <div class="dr-foot"><p style="font-size:9px;color:#1e2238;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p></div>
 </div>
 
 <!-- HEADER -->
 <header class="hdr">
   <div class="hdr-left">
-    <button class="burger-btn" onclick="openDrawer()">
-      <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    <button class="burger-btn" onclick="openDrawer()" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+      <span style="width:22px;height:3px;background:#ffffff !important;border-radius:2px;display:block;opacity:1;"></span>
+      <span style="width:22px;height:3px;background:#ffffff !important;border-radius:2px;display:block;opacity:1;"></span>
+      <span style="width:14px;height:3px;background:#f7941d !important;border-radius:2px;display:block;box-shadow:0 0 8px rgba(247,148,29,.9);opacity:1;"></span>
     </button>
-    <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:34px;"></a>
+    <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:34px;filter:drop-shadow(0 0 10px rgba(247,148,29,.35));"></a>
   </div>
   <div class="hdr-right">
     <div class="acct-btn" onclick="abrirLogin()">
-      <svg width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <svg width="18" height="18" fill="none" stroke="#f7941d" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" style="position:relative;z-index:1;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
-    <span style="font-size:12px;color:#2a2a40;">🇪🇨</span>
+    <span style="font-size:13px;">🇪🇨</span>
   </div>
 </header>
 
 <main>
 
-  <!-- HERO -->
-  <div class="hero-wrap">
-    <img class="hero-base" id="hero-base" src="banner1.webp" alt="Rexpres Play">
-    <div class="hero-extra" id="hero-extra"><img src="banner2.webp" alt="Banner 2"></div>
-    <div class="hero-dots">
-      <div class="hero-dot on" onclick="goSlide(0)" id="dot-0"></div>
-      <div class="hero-dot"    onclick="goSlide(1)" id="dot-1"></div>
-    </div>
+<!-- HERO -->
+<div class="hero-wrap">
+  <img class="hero-base" id="hero-base" src="banner1.webp" alt="Rexpres Play">
+  <div class="hero-extra" id="hero-extra"><img src="banner2.webp" alt="Banner 2"></div>
+  <div class="hc tl"></div><div class="hc tr"></div><div class="hc bl"></div><div class="hc br"></div>
+  <div class="hero-dots">
+    <div class="hero-dot on" onclick="goSlide(0)" id="dot-0"></div>
+    <div class="hero-dot" onclick="goSlide(1)" id="dot-1"></div>
   </div>
+</div>
 
-  <!-- TICKER — solo aquí, una sola vez -->
-  <div class="ticker-wrap">
-    <div class="ticker-inner">
-      <div class="ticker-item">
-        <svg width="24" height="24" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div><div class="ticker-title">Compra 100% segura</div><div class="ticker-sub">Garantizado en cada pedido</div></div>
-      </div>
-      <div class="ticker-item">
-        <svg width="24" height="24" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
-        <div><div class="ticker-title">Atención Lun – Dom</div><div class="ticker-sub">8:00 a.m – 10:30 p.m</div></div>
-      </div>
-      <div class="ticker-item">
-        <svg width="24" height="24" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        <div><div class="ticker-title">+2.000 transacciones</div><div class="ticker-sub">Realizadas con éxito</div></div>
-      </div>
-      <!-- copia para loop -->
-      <div class="ticker-item">
-        <svg width="24" height="24" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div><div class="ticker-title">Compra 100% segura</div><div class="ticker-sub">Garantizado en cada pedido</div></div>
-      </div>
-      <div class="ticker-item">
-        <svg width="24" height="24" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
-        <div><div class="ticker-title">Atención Lun – Dom</div><div class="ticker-sub">8:00 a.m – 10:30 p.m</div></div>
-      </div>
-      <div class="ticker-item">
-        <svg width="24" height="24" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        <div><div class="ticker-title">+2.000 transacciones</div><div class="ticker-sub">Realizadas con éxito</div></div>
-      </div>
-    </div>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="tline"></div>
+  <div class="ticker-inner">
+    <div class="t-item"><svg width="20" height="20" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><div class="t-title">Compra 100% segura</div><div class="t-sub">Garantizado en cada pedido</div></div></div>
+    <div class="t-item"><svg width="20" height="20" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg><div><div class="t-title">Atención Lun – Dom</div><div class="t-sub">8:00 a.m – 10:30 p.m</div></div></div>
+    <div class="t-item"><svg width="20" height="20" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><div><div class="t-title">+2.000 transacciones</div><div class="t-sub">Realizadas con éxito</div></div></div>
+    <div class="t-item"><svg width="20" height="20" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><div class="t-title">Compra 100% segura</div><div class="t-sub">Garantizado en cada pedido</div></div></div>
+    <div class="t-item"><svg width="20" height="20" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg><div><div class="t-title">Atención Lun – Dom</div><div class="t-sub">8:00 a.m – 10:30 p.m</div></div></div>
+    <div class="t-item"><svg width="20" height="20" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><div><div class="t-title">+2.000 transacciones</div><div class="t-sub">Realizadas con éxito</div></div></div>
   </div>
+  <div class="tline"></div>
+</div>
 
-  <div class="wrap">
+<!-- NOVEDAD -->
+<div class="nov-wrap">
+  <a href="afiliadopro.html" class="nov">
+    <div class="nov-bar"></div>
+    <div class="nov-body">
+      <div class="nov-top"><span class="nov-badge">Nuevo</span><span class="nov-cat">Programa de afiliados</span></div>
+      <div class="nov-title">Gana comisiones por cada venta que generes</div>
+      <div class="nov-sub">Hasta 10% · Pagos cada viernes · Sin límites</div>
+    </div>
+    <div class="nov-arr">›</div>
+  </a>
+</div>
 
-    <!-- NOVEDAD -->
-    <a href="afiliadopro.html" class="nov">
-      <div class="nov-bar"></div>
-      <div class="nov-body">
-        <div class="nov-top"><span class="nov-badge">Nuevo</span><span class="nov-cat">Programa de afiliados</span></div>
-        <div class="nov-title">Gana comisiones por cada venta que generes</div>
-        <div class="nov-sub">Hasta 10% · Pagos cada viernes · Sin límites</div>
-      </div>
-      <div class="nov-arr">›</div>
-    </a>
+<!-- TIENDA -->
+<div class="wrap">
+  <div class="sh"><span class="sh-title">Tienda de productos</span></div>
 
-    <!-- TIENDA -->
-    <div class="sh"><span class="sh-title">Tienda de productos</span></div>
-
-    <!-- Videojuegos -->
-    <div class="sub-sh"><span class="sub-sh-title">Videojuegos</span><a href="juegos.html" class="sub-sh-link">Ver todos</a></div>
-    <div class="pgrid">
-      <a class="pcard" href="juegos.html">
+  <!-- VIDEOJUEGOS -->
+  <div class="sub-sh"><span class="sub-sh-title">Videojuegos</span><a href="juegos.html" class="sub-sh-link">Ver todos</a></div>
+  <div class="pgrid">
+    <a class="pcard" href="juegos.html" style="--c:#ff8c00">
+      <div class="pcard-glow"></div>
+      <div class="pcard-inner">
         <img class="pcard-img" src="freefire.webp" alt="Free Fire" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="pcard-ph" style="display:none;background:#1a0800;"><svg fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <div class="pcard-ph" style="display:none;background:linear-gradient(145deg,#1c0800,#360e00)"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #ff8c00)"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
         <div class="pcard-name">Free Fire</div>
-      </a>
-      <a class="pcard" href="juegos.html">
-        <div class="pcard-ph" style="background:#12001f;"><svg fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-        <div class="pcard-name">Mobile Legends</div>
-      </a>
-      <a class="pcard" href="juegos.html">
-        <div class="pcard-ph" style="background:#1a0000;"><svg fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-        <div class="pcard-name">Blood Strike</div>
-      </a>
-    </div>
-
-    <!-- Recargas -->
-    <div class="sub-sh"><span class="sub-sh-title">Recargas Móviles</span><a href="recargas.html" class="sub-sh-link">Ver todos</a></div>
-    <div class="pgrid">
-      <a class="pcard" href="recargas.html"><div class="pcard-ph" style="background:#0d0014;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="pcard-name">Claro</div></a>
-      <a class="pcard" href="recargas.html"><div class="pcard-ph" style="background:#001a0d;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="pcard-name">Movistar</div></a>
-      <a class="pcard" href="recargas.html"><div class="pcard-ph" style="background:#001020;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div class="pcard-name">CNT</div></a>
-    </div>
-
-    <!-- Pronósticos -->
-    <div class="sub-sh"><span class="sub-sh-title">Pronósticos</span><a href="pronosticos.html" class="sub-sh-link">Ver todos</a></div>
-    <div class="pgrid">
-      <a class="pcard" href="pronosticos.html"><div class="pcard-ph" style="background:#001208;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div><div class="pcard-name">Betplay</div></a>
-      <a class="pcard" href="pronosticos.html"><div class="pcard-ph" style="background:#100010;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div><div class="pcard-name">1xBet</div></a>
-      <a class="pcard" href="pronosticos.html"><div class="pcard-ph" style="background:#001018;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div><div class="pcard-name">Bet365</div></a>
-    </div>
-
-    <!-- Servicios Digitales -->
-    <div class="sub-sh"><span class="sub-sh-title">Servicios Digitales</span><a href="compras.html" class="sub-sh-link">Ver todos</a></div>
-    <div class="pgrid">
-      <a class="pcard" href="compras.html"><div class="pcard-ph" style="background:#1a0010;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8M12 3v4"/></svg></div><div class="pcard-name">Netflix</div></a>
-      <a class="pcard" href="compras.html"><div class="pcard-ph" style="background:#001a08;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="pcard-name">Spotify</div></a>
-      <a class="pcard" href="compras.html"><div class="pcard-ph" style="background:#00061a;"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div class="pcard-name">Disney+</div></a>
-    </div>
-
-    <!-- AFILIADOS -->
-    <a href="afiliadopro.html" class="afil">
-      <div class="afil-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-      <div class="afil-body"><span class="afil-tag">Nuevo · Programa afiliados</span><div class="afil-title">Gana comisiones por cada venta</div><div class="afil-sub">Hasta 10% · Pagos cada viernes · Sin límites</div></div>
-      <div class="afil-arr">›</div>
+      </div>
     </a>
-
-    <!-- POR QUÉ -->
-    <div class="sh"><span class="sh-title">¿Por qué elegirnos?</span></div>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="why-title">Atención personalizada</div><div class="why-desc">Respondemos cada pedido directamente por WhatsApp</div></div></div>
-      <div class="why-card"><div class="why-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><div class="why-title">Entrega inmediata</div><div class="why-desc">Tu recarga o crédito aplicado en minutos</div></div></div>
-      <div class="why-card"><div class="why-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div><div class="why-title">Pago seguro</div><div class="why-desc">Confirmación vía WhatsApp antes de procesar</div></div></div>
-      <div class="why-card"><div class="why-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div><div class="why-title">Mejores precios</div><div class="why-desc">Las tarifas más competitivas del mercado</div></div></div>
-    </div>
-
-    <!-- COMUNIDAD -->
-    <div class="comunidad">
-      <div class="com-ico"><svg fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-      <div class="com-title">¡Únete a nuestra comunidad!</div>
-      <div class="com-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos y dinámicas con premios para nuestra comunidad gamer.</div>
-      <a class="com-btn" href="https://whatsapp.com/channel/0029Vb8DjsKHQbS2yeezJu1C" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Unirse al canal
-      </a>
-    </div>
-    <div style="height:22px;"></div>
+    <a class="pcard" href="juegos.html" style="--c:#a855f7">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(168,85,247,.5),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(168,85,247,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#0e0020,#1e0045)"><svg viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #a855f7)"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="pcard-name">Mobile Legends</div>
+      </div>
+    </a>
+    <a class="pcard" href="juegos.html" style="--c:#ef4444">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(239,68,68,.5),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(239,68,68,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#1a0000,#340006)"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #ef4444)"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+        <div class="pcard-name">Blood Strike</div>
+      </div>
+    </a>
   </div>
 
+  <!-- RECARGAS -->
+  <div class="sub-sh"><span class="sub-sh-title">Recargas Móviles</span><a href="recargas.html" class="sub-sh-link">Ver todos</a></div>
+  <div class="pgrid">
+    <a class="pcard" href="recargas.html" style="--c:#c084fc">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(192,132,252,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(192,132,252,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#180030,#320068)"><svg viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #c084fc)"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round"/></svg></div>
+        <div class="pcard-name">Claro</div>
+      </div>
+    </a>
+    <a class="pcard" href="recargas.html" style="--c:#4ade80">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(74,222,128,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(74,222,128,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#002010,#004020)"><svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #4ade80)"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round"/></svg></div>
+        <div class="pcard-name">Movistar</div>
+      </div>
+    </a>
+    <a class="pcard" href="recargas.html" style="--c:#60a5fa">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(96,165,250,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(96,165,250,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#001020,#002248)"><svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #60a5fa)"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round"/></svg></div>
+        <div class="pcard-name">CNT</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- PRONÓSTICOS -->
+  <div class="sub-sh"><span class="sub-sh-title">Pronósticos</span><a href="pronosticos.html" class="sub-sh-link">Ver todos</a></div>
+  <div class="pgrid">
+    <a class="pcard" href="pronosticos.html" style="--c:#4ade80">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(74,222,128,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(74,222,128,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#001808,#003415)"><svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #4ade80)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div>
+        <div class="pcard-name">Betplay</div>
+      </div>
+    </a>
+    <a class="pcard" href="pronosticos.html" style="--c:#fbbf24">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(251,191,36,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(251,191,36,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#1a1000,#321e00)"><svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #fbbf24)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div>
+        <div class="pcard-name">1xBet</div>
+      </div>
+    </a>
+    <a class="pcard" href="pronosticos.html" style="--c:#38bdf8">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(56,189,248,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(56,189,248,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#001825,#003050)"><svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #38bdf8)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round"/></svg></div>
+        <div class="pcard-name">Bet365</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- SERVICIOS DIGITALES -->
+  <div class="sub-sh"><span class="sub-sh-title">Servicios Digitales</span><a href="compras.html" class="sub-sh-link">Ver todos</a></div>
+  <div class="pgrid">
+    <a class="pcard" href="compras.html" style="--c:#f87171">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(248,113,113,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(248,113,113,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#1a0010,#340025)"><svg viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #f87171)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8M12 3v4"/></svg></div>
+        <div class="pcard-name">Netflix</div>
+      </div>
+    </a>
+    <a class="pcard" href="compras.html" style="--c:#4ade80">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(74,222,128,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(74,222,128,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#001a08,#003015)"><svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #4ade80)"><circle cx="12" cy="12" r="10"/><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <div class="pcard-name">Spotify</div>
+      </div>
+    </a>
+    <a class="pcard" href="compras.html" style="--c:#818cf8">
+      <div class="pcard-glow" style="background:radial-gradient(circle,rgba(129,140,248,.45),transparent 70%);"></div>
+      <div class="pcard-inner" style="border-top-color:rgba(129,140,248,.4)">
+        <div class="pcard-ph" style="background:linear-gradient(145deg,#00082a,#001050)"><svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1.5" style="filter:drop-shadow(0 0 10px #818cf8)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="pcard-name">Disney+</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- AFILIADOS -->
+  <a href="afiliadopro.html" class="afil">
+    <div class="afil-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+    <div class="afil-body">
+      <span class="afil-tag">Nuevo · Programa afiliados</span>
+      <div class="afil-title">Gana comisiones por cada venta</div>
+      <div class="afil-sub">Hasta 10% · Pagos cada viernes · Sin límites</div>
+    </div>
+    <div class="afil-arr">›</div>
+  </a>
+
+  <!-- POR QUÉ ELEGIRNOS -->
+  <div class="sh"><span class="sh-title">¿Por qué elegirnos?</span></div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div><div class="why-title">Atención personalizada</div><div class="why-desc">Respondemos cada pedido directamente por WhatsApp</div></div>
+    </div>
+    <div class="why-card">
+      <div class="why-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div><div class="why-title">Entrega inmediata</div><div class="why-desc">Tu recarga aplicada en minutos, sin esperas</div></div>
+    </div>
+    <div class="why-card">
+      <div class="why-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div><div class="why-title">Pago seguro</div><div class="why-desc">Confirmación vía WhatsApp antes de procesar</div></div>
+    </div>
+    <div class="why-card">
+      <div class="why-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div><div class="why-title">Mejores precios</div><div class="why-desc">Las tarifas más competitivas del mercado</div></div>
+    </div>
+  </div>
+
+  <!-- COMUNIDAD -->
+  <div class="comunidad">
+    <div class="c-b1"></div><div class="c-b2"></div>
+    <div class="com-badge"><span class="com-dot"></span><span class="com-badge-text">Canal activo</span></div>
+    <div class="com-ico"><svg fill="none" stroke="#25d366" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+    <div class="com-title">¡Únete a nuestra comunidad!</div>
+    <div class="com-desc">Sé parte de nuestro canal de WhatsApp y participa en promociones exclusivas, descuentos especiales y dinámicas con premios para nuestra comunidad gamer.</div>
+    <a class="com-btn" href="https://whatsapp.com/channel/0029Vb8DjsKHQbS2yeezJu1C" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Unirse al canal
+    </a>
+  </div>
+  <div style="height:26px;"></div>
+</div>
 </main>
 
 <!-- WA FLOAT -->
@@ -337,51 +574,51 @@ img{display:block;max-width:100%;}
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="ft-main">
-    <img src="logo.png" alt="Rexpres Play" style="height:32px;display:block;margin-bottom:13px;">
-    <p style="font-size:13px;color:#e2e8f0;line-height:1.6;margin-bottom:14px;">Tu tienda de confianza en Ecuador para recargas móviles y videojuegos. Rápido, seguro y al mejor precio.</p>
+  <div class="ft-in">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;display:block;margin-bottom:13px;filter:drop-shadow(0 0 10px rgba(247,148,29,.4));">
+    <p style="font-size:13px;color:#7080a0;line-height:1.65;margin-bottom:14px;">Tu tienda de confianza en Ecuador para recargas móviles y videojuegos. Rápido, seguro y al mejor precio.</p>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px;">
-      <div style="width:32px;height:32px;border-radius:8px;background:#0f0f1e;border:1px solid #16162a;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg></div>
-      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:1px;">Horario de atención</div><div style="font-size:13px;color:#e2e8f0;">Lunes a Domingo · 8:00 a.m – 10:30 p.m</div></div>
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(247,148,29,.15);">
+        <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+      </div>
+      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Horario de atención</div><div style="font-size:13px;color:#7080a0;">Lunes a Domingo · 8:00 a.m – 10:30 p.m</div></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-      <div style="width:32px;height:32px;border-radius:8px;background:#0f0f1e;border:1px solid #16162a;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012.12 1.18 2 2 0 014.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round"/></svg></div>
-      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:1px;">Contacto WhatsApp</div><a href="https://wa.me/593992225484" style="font-size:13px;color:#e2e8f0;">+593 99 222 5484</a></div>
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(247,148,29,.15);">
+        <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012.12 1.18 2 2 0 014.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round"/></svg>
+      </div>
+      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Contacto WhatsApp</div><a href="https://wa.me/593992225484" style="font-size:13px;color:#7080a0;">+593 99 222 5484</a></div>
     </div>
     <div class="ft-div"></div>
     <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Políticas</p>
     <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:20px;">
-      <a href="terminos.html" style="font-size:13px;color:#e2e8f0;">Términos y condiciones</a>
-      <a href="privacidad.html" style="font-size:13px;color:#e2e8f0;">Política de privacidad</a>
-      <a href="proteccion.html" style="font-size:13px;color:#e2e8f0;">Política de protección de datos</a>
+      <a href="terminos.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Términos y condiciones</a>
+      <a href="privacidad.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Política de privacidad</a>
+      <a href="proteccion.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Política de protección de datos</a>
     </div>
     <div class="ft-div"></div>
     <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Síguenos</p>
-    <div style="display:flex;gap:11px;margin-bottom:26px;">
-      <a href="#" style="width:42px;height:42px;border-radius:50%;background:#0f0f1e;border:1.5px solid #22223a;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#22223a'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
-      <a href="#" style="width:42px;height:42px;border-radius:50%;background:#0f0f1e;border:1.5px solid #22223a;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#22223a'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-      <a href="#" style="width:42px;height:42px;border-radius:50%;background:#0f0f1e;border:1.5px solid #22223a;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.borderColor='#f7941d'" onmouseout="this.style.borderColor='#22223a'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></a>
+    <div style="display:flex;gap:10px;margin-bottom:26px;">
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0f0020,#200050);border:1.5px solid rgba(168,85,247,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(168,85,247,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(168,85,247,.4)';this.style.boxShadow='0 0 10px rgba(168,85,247,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;filter:drop-shadow(0 0 4px rgba(168,85,247,.7));"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1a000a,#380020);border:1.5px solid rgba(244,114,182,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(244,114,182,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(244,114,182,.4)';this.style.boxShadow='0 0 10px rgba(244,114,182,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(244,114,182,.7));"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#000a1a,#001840);border:1.5px solid rgba(96,165,250,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(96,165,250,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(96,165,250,.4)';this.style.boxShadow='0 0 10px rgba(96,165,250,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;filter:drop-shadow(0 0 4px rgba(96,165,250,.7));"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></a>
     </div>
   </div>
-  <div class="ft-bottom">
-    <img src="logo.png" alt="Rexpres Play" style="height:18px;opacity:.3;display:block;margin:0 auto 5px;">
-    <p style="font-size:9px;color:#22223a;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+  <div class="ft-bot">
+    <img src="logo.png" alt="Rexpres Play" style="height:18px;opacity:.15;display:block;margin:0 auto 6px;filter:drop-shadow(0 0 5px rgba(247,148,29,.3));">
+    <p style="font-size:9px;color:#1e2238;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
   </div>
 </footer>
 
 <script>
-// Slider
 let cur=0;
-const hBase=document.getElementById('hero-base');
-const hExtra=document.getElementById('hero-extra');
+const hBase=document.getElementById('hero-base'),hExtra=document.getElementById('hero-extra');
 const dots=[document.getElementById('dot-0'),document.getElementById('dot-1')];
 function goSlide(n){dots[cur].classList.remove('on');cur=n;dots[cur].classList.add('on');hExtra.classList.toggle('on',n===1);}
-setInterval(()=>goSlide((cur+1)%2),4500);
-// Modal
+setInterval(()=>goSlide((cur+1)%2),5000);
 function abrirLogin(){document.getElementById('modal-login').classList.add('open');}
 function cerrarLogin(){document.getElementById('modal-login').classList.remove('open');}
 document.getElementById('modal-login').addEventListener('click',e=>{if(e.target===document.getElementById('modal-login'))cerrarLogin();});
-// Drawer
 function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('dr-ov').classList.add('open');}
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('dr-ov').classList.remove('open');}
 </script>
