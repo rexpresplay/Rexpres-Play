@@ -1096,25 +1096,48 @@ function aplicarCodigo() {
 }
 
 // ═══════════════════════════════════════════
+// CONFIGURACIÓN CLOUDINARY (hosting de imágenes)
+// ═══════════════════════════════════════════
+// ⚠️ REEMPLAZA estos dos valores con los tuyos de cloudinary.com
+// (Dashboard → Cloud name / Settings → Upload → Upload presets → Unsigned)
+const CLOUDINARY_CLOUD_NAME    = 'wgp1dbjg';
+const CLOUDINARY_UPLOAD_PRESET = 'rexpres';
+
+// ═══════════════════════════════════════════
 // SUBIR COMPROBANTE Y OBTENER UN ENLACE DIRECTO
 // ═══════════════════════════════════════════
 // wa.me solo puede prellenar TEXTO, nunca adjuntar un archivo. Para que el
 // comprobante quede visible como imagen (y no solo como nombre de archivo),
-// lo subimos a un hosting de imágenes y mandamos el ENLACE dentro del texto
-// del pedido. Así, al tocar el link en WhatsApp, se abre la foto directamente
-// — sin tener que elegir manualmente el chat, y funcionando con el número
+// lo subimos a Cloudinary y mandamos el ENLACE dentro del texto del pedido.
+// Así, al tocar el link en WhatsApp, se abre la foto directamente — sin
+// tener que elegir manualmente el chat, y funcionando con el número
 // automático de la tienda.
+//
+// Si por cualquier motivo la subida falla (sin config, sin internet, etc.),
+// NUNCA se pierde el comprobante: se descarga automáticamente al
+// dispositivo del cliente para que lo adjunte a mano — así siempre llega.
 async function subirComprobante() {
   if (!comprobanteFile) return '';
+  if (CLOUDINARY_CLOUD_NAME === 'TU_CLOUD_NAME') return ''; // aún sin configurar
   try {
     const fd = new FormData();
-    fd.append('reqtype', 'fileupload');
-    fd.append('fileToUpload', comprobanteFile, comprobanteNombre || 'comprobante.jpg');
-    const resp = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: fd });
-    const url  = (await resp.text()).trim();
-    if (url.startsWith('http')) return url;
-  } catch (e) { /* sigue al fallback */ }
+    fd.append('file', comprobanteFile);
+    fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    const resp = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, { method: 'POST', body: fd });
+    const data = await resp.json();
+    if (data && data.secure_url) return data.secure_url;
+  } catch (e) { /* sigue al fallback de descarga */ }
   return '';
+}
+
+function descargarComprobante() {
+  if (!comprobanteFile) return;
+  const url = URL.createObjectURL(comprobanteFile);
+  const a = document.createElement('a');
+  a.href = url; a.download = comprobanteNombre || 'comprobante';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
 // ═══════════════════════════════════════════
@@ -1172,14 +1195,15 @@ async function enviar() {
       '• *Total a pagar: $' + formatComa(tot) + '*\n' +
       (comprobanteUrl
         ? '• 📎 Comprobante: ' + comprobanteUrl + '\n'
-        : '• 📎 Comprobante: ' + comprobanteNombre + ' (adjunto solo el nombre, no se pudo subir la imagen)\n') +
+        : '• 📎 Comprobante: te lo adjunto manualmente a continuación (revisa la imagen que se descargó) 👇\n') +
       '\nQuedo a la espera de los datos para completar la promoción. 🙌';
 
+    if (!comprobanteUrl) descargarComprobante();
     btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
     window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
     mostrarExito(comprobanteUrl
       ? 'Tu comprobante quedó guardado y el enlace para verlo va incluido en tu mensaje de WhatsApp. 📎'
-      : 'No se pudo subir el comprobante, revisa tu conexión e inténtalo de nuevo si es necesario. ⚠️');
+      : 'Tu comprobante se descargó a tu dispositivo. Adjúntalo manualmente en el chat de WhatsApp que se abrió, así la tienda podrá verlo. 📎');
     return;
   }
 
@@ -1261,7 +1285,7 @@ async function enviar() {
   const linCli  = (necesitaId && id) ? `\n• ${campoLabel}: ${id}` : '';
   const linComp = comprobanteUrl
     ? `\n• 📎 Comprobante: ${comprobanteUrl}`
-    : `\n• 📎 Comprobante: ${comprobanteNombre} (adjunto solo el nombre, no se pudo subir la imagen)`;
+    : `\n• 📎 Comprobante: te lo adjunto manualmente a continuación (revisa la imagen que se descargó) 👇`;
 
   const msg =
     `¡Hola Rexpres Play! 🚀\n\n*Detalle del pedido:*\n` +
@@ -1269,11 +1293,12 @@ async function enviar() {
     `• Método de pago: ${metodoSel.charAt(0).toUpperCase()+metodoSel.slice(1)}\n• Banco: ${bancoSel}\n` +
     `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*${linComp}`;
 
+  if (!comprobanteUrl) descargarComprobante();
   btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
   mostrarExito(comprobanteUrl
     ? 'Tu comprobante quedó guardado y el enlace para verlo va incluido en tu mensaje de WhatsApp. 📎'
-    : 'No se pudo subir el comprobante, revisa tu conexión e inténtalo de nuevo si es necesario. ⚠️');
+    : 'Tu comprobante se descargó a tu dispositivo. Adjúntalo manualmente en el chat de WhatsApp que se abrió, así la tienda podrá verlo. 📎');
 }
 </script>
 </body>
