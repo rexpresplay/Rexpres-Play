@@ -76,19 +76,19 @@ body::before{
 .pg-title::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:100%;background:linear-gradient(180deg,#ffd700,#f7941d,#ff5c00);border-radius:3px;box-shadow:0 0 10px #f7941d,0 0 20px rgba(247,148,29,.4);}
 
 /* ── PACKS GRID ── */
-.packs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;}
-@media (min-width:500px){.packs-grid{grid-template-columns:repeat(3,1fr);gap:14px;}}
-@media (min-width:800px){.packs-grid{grid-template-columns:repeat(4,1fr);gap:16px;}}
-@media (min-width:1100px){.packs-grid{grid-template-columns:repeat(5,1fr);}}
+.packs-grid{display:grid;grid-template-columns:1fr;gap:12px;width:100%;}
+@media (min-width:560px){.packs-grid{grid-template-columns:repeat(2,1fr);gap:14px;}}
+@media (min-width:900px){.packs-grid{grid-template-columns:repeat(3,1fr);gap:16px;}}
+@media (min-width:1300px){.packs-grid{grid-template-columns:repeat(4,1fr);}}
 
 .pack{
   border-radius:14px;overflow:hidden;position:relative;
   display:block;transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s;
 }
-.pack:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 14px 34px rgba(0,0,0,.65);}
+.pack:hover{transform:translateY(-4px) scale(1.015);box-shadow:0 14px 34px rgba(0,0,0,.65);}
 .pack:hover .pack-glow{opacity:1;}
 .pack:hover .pack-inner{border-color:var(--c,rgba(247,148,29,.6));}
-.pack:active{transform:scale(.96);}
+.pack:active{transform:scale(.98);}
 
 .pack-glow{
   position:absolute;inset:-4px;border-radius:16px;z-index:-1;
@@ -99,15 +99,27 @@ body::before{
   background:linear-gradient(170deg,#0c0f1e,#080a16);
   border:1px solid rgba(255,255,255,.07);
   border-top:1px solid var(--c,rgba(247,148,29,.3));
-  border-radius:14px;padding:18px 12px;
-  display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;
+  border-radius:14px;padding:14px;
+  display:flex;align-items:stretch;gap:14px;
   position:relative;transition:border-color .22s;height:100%;
 }
-.pack-ico{font-size:26px;margin-bottom:2px;filter:drop-shadow(0 0 6px rgba(247,148,29,.35));}
-.pack-name{font-size:12px;font-weight:900;color:#fff;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;}
-.pack-desc{font-size:10px;color:#6070a0;line-height:1.45;}
-.pack-old{font-size:10px;color:#3a4060;text-decoration:line-through;font-weight:700;margin-top:2px;}
-.pack-price{font-size:18px;font-weight:900;color:#f7941d;margin-top:2px;text-shadow:0 0 12px rgba(247,148,29,.4);}
+
+/* Cuadro de precio — a la izquierda */
+.pack-price-box{
+  flex-shrink:0;width:78px;border-radius:12px;
+  background:linear-gradient(160deg,rgba(247,148,29,.14),rgba(247,148,29,.03));
+  border:1px solid var(--c,rgba(247,148,29,.35));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 6px;text-align:center;gap:2px;
+}
+.pack-old{font-size:9px;color:#4a5580;text-decoration:line-through;font-weight:700;}
+.pack-price{font-size:17px;font-weight:900;color:#f7941d;line-height:1.15;text-shadow:0 0 12px rgba(247,148,29,.4);}
+.pack-currency{font-size:9px;font-weight:800;color:#6070a0;text-transform:uppercase;letter-spacing:1px;margin-top:1px;}
+
+/* Info — título arriba, descripción abajo */
+.pack-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;text-align:left;gap:4px;}
+.pack-name{font-size:13px;font-weight:900;color:#fff;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;}
+.pack-desc{font-size:11px;color:#6070a0;line-height:1.5;}
 
 /* Tarjeta especial "Personalizado" */
 .pack-personalizado{
@@ -123,6 +135,7 @@ body::before{
 .pack-personalizado .pack-name{color:#f7941d;}
 .pack-personalizado .pack-desc{color:#8090b0;}
 .pack-personalizado .pack-tag{font-size:9px;color:#6070a0;font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+.pack-personalizado .pack-ico{font-size:26px;margin-bottom:2px;filter:drop-shadow(0 0 6px rgba(247,148,29,.35));}
 
 /* Spinner */
 .spinner-full{
@@ -368,19 +381,6 @@ if (esTikTok) {
 // Colores cíclicos para los glows de las cards
 const coloresPack = ['#f7941d','#a855f7','#ef4444','#38bdf8','#4ade80','#fbbf24','#f472b6','#60a5fa'];
 
-// Icono dinámico según juego
-function getIcono(marcaNom, subTipo) {
-  const m = marcaNom.toLowerCase();
-  if (m.includes('blood'))   return '🪙';
-  if (m.includes('mobile'))  return '💠';
-  if (m.includes('tiktok'))  return '🎵';
-  if (m.includes('firma'))   return '✍️';
-  if (m.includes('kaspersky')) return '🛡️';
-  if (subTipo === 'Diamantes') return '💎';
-  if (subTipo === 'Paquete')   return '📦';
-  if (subTipo === 'Recarga')   return '💳';
-  return '🎮';
-}
 
 function renderPaquetes(productos) {
   const grid  = document.getElementById('grid');
@@ -396,8 +396,7 @@ function renderPaquetes(productos) {
   grid.innerHTML = '';
   prods.forEach((p, i) => {
     const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
-    const ico  = getIcono(marca, p.subTipo);
-    const desc = p.descripcion.length > 60 ? p.descripcion.substring(0,60)+'...' : p.descripcion;
+    const desc = p.descripcion.length > 90 ? p.descripcion.substring(0,90)+'...' : p.descripcion;
     const c    = coloresPack[i % coloresPack.length];
 
     const url  = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}&paq=${encodeURIComponent(p.nombre)}&precio=${p.precioDesc}&detalle=${encodeURIComponent(p.descripcion)}`;
@@ -409,11 +408,15 @@ function renderPaquetes(productos) {
     a.innerHTML = `
       <div class="pack-glow" style="background:radial-gradient(circle,${c}80,transparent 70%);"></div>
       <div class="pack-inner" style="border-top-color:${c}66">
-        <div class="pack-ico">${ico}</div>
-        <div class="pack-name">${p.nombre}</div>
-        <div class="pack-desc">${desc}</div>
-        ${tieneDesc ? `<div class="pack-old">$${parseFloat(p.precioNormal).toFixed(2)}</div>` : ''}
-        <div class="pack-price">$${parseFloat(p.precioDesc).toFixed(2)}</div>
+        <div class="pack-price-box">
+          ${tieneDesc ? `<div class="pack-old">$${parseFloat(p.precioNormal).toFixed(2)}</div>` : ''}
+          <div class="pack-price">$${parseFloat(p.precioDesc).toFixed(2)}</div>
+          <div class="pack-currency">USD</div>
+        </div>
+        <div class="pack-info">
+          <div class="pack-name">${p.nombre}</div>
+          <div class="pack-desc">${desc}</div>
+        </div>
       </div>`;
     grid.appendChild(a);
   });
