@@ -4,149 +4,395 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Confirmar pedido — Rexpres Play</title>
-<link rel="stylesheet" href="rexpres.css">
 <style>
-html, body { height: 100%; margin: 0; }
-body { display: flex; flex-direction: column; background: #09090f; }
-main { flex: 1; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#04050d;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden;}
+body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;}
+main{flex:1;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
 
-.service-card {
-  background: #131320; border: 1px solid #21213a; border-radius: 20px;
-  padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+/* ── GRID BG ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(247,148,29,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(247,148,29,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  will-change:auto;
 }
-.service-img {
-  width: 72px; height: 72px; min-width: 72px; border-radius: 14px;
-  background: #1a1a28; display: flex; align-items: center; justify-content: center;
-  overflow: hidden; border: 1px solid #21213a;
+
+/* ── ANIMATIONS ── */
+@keyframes shine{0%{left:-100%}100%{left:220%}}
+@keyframes border-run{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+/* ── HEADER ── */
+.hdr{
+  background:rgba(4,5,13,.96);
+  backdrop-filter:blur(24px);
+  position:sticky;top:0;z-index:100;
+  height:56px;padding:0 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(247,148,29,.12);
+  position:relative;
 }
-.service-img img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
-.service-name { font-size: 20px; font-weight: 900; color: white; line-height: 1.1; }
-.service-paq  { font-size: 11px; color: #60a5fa; font-weight: 600; margin-top: 4px; line-height: 1.4; }
-.service-cat  { display: inline-block; background: rgba(247,148,29,.15); border: 1px solid rgba(247,148,29,.3); padding: 3px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; color: #f7941d; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
-
-.tiktok-info-box {
-  background: rgba(20,184,166,.08); border: 1px solid rgba(20,184,166,.3);
-  border-radius: 14px; padding: 16px 18px; margin-bottom: 14px;
-  display: flex; align-items: flex-start; gap: 12px;
+.hdr::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);
+  background-size:200% 100%;
+  animation:border-run 3s linear infinite;
 }
-.tiktok-info-box .tiktok-ico { font-size: 26px; flex-shrink: 0; }
-.tiktok-info-box p { font-size: 12px; color: #5eead4; font-weight: 700; line-height: 1.6; margin: 0; }
+.hdr-left{display:flex;align-items:center;gap:10px;}
+.hdr-right{display:flex;align-items:center;gap:8px;}
 
-.step-box { background: #131320; border: 1px solid #21213a; border-radius: 18px; margin-bottom: 14px; overflow: hidden; }
-.step-head { padding: 16px 18px; display: flex; align-items: center; gap: 14px; }
-.step-num  { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; }
-.step-num.orange { background: #f7941d; color: #000; }
-.step-num.blue   { background: #3b82f6; color: white; }
-.step-num.green  { background: #22c55e; color: white; }
-.step-title    { font-size: 15px; font-weight: 800; color: white; }
-.step-subtitle { font-size: 10px; font-weight: 700; margin-top: 2px; }
-.step-body { padding: 0 18px 20px; }
+.acct-btn{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,#180a00,#2a1400);
+  border:1.5px solid rgba(247,148,29,.45);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .22s;
+  position:relative;overflow:hidden;
+}
+.acct-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(247,148,29,.15),transparent);opacity:0;transition:opacity .22s;}
+.acct-btn:hover::before{opacity:1;}
+.acct-btn:hover{box-shadow:0 0 18px rgba(247,148,29,.55);}
 
-.field { margin-bottom: 14px; }
-.field:last-child { margin-bottom: 0; }
-.field-label { display: block; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
-.field-input { width: 100%; background: #0e0e1a; border: 1px solid #21213a; border-radius: 12px; padding: 14px 16px; color: white; font-size: 15px; outline: none; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; box-sizing: border-box; }
-.field-input:focus { border-color: #f7941d; box-shadow: 0 0 0 3px rgba(247,148,29,.1); }
-.field-hint { font-size: 10px; color: #475569; margin-top: 6px; font-weight: 600; }
+/* ── WRAP / PAGE HEAD ── */
+.wrap{padding:20px 14px 8px;position:relative;z-index:1;max-width:480px;margin:0 auto;width:100%;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:800;color:#f7941d;
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:16px;
+  filter:drop-shadow(0 0 4px rgba(247,148,29,.4));
+}
 
-.tiktok-calc { background: #0e0e1a; border: 1px solid #21213a; border-radius: 12px; padding: 14px 16px; margin-top: 10px; }
-.tiktok-calc-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #21213a; }
-.tiktok-calc-row:last-child { border: none; padding-top: 8px; }
-.tiktok-calc-lbl { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-.tiktok-calc-val { font-size: 13px; font-weight: 800; color: #94a3b8; }
+/* ── SERVICE CARD ── */
+.service-card{
+  background:linear-gradient(170deg,#0c0f1e,#080a16);
+  border:1px solid rgba(255,255,255,.07);
+  border-top:1.5px solid rgba(247,148,29,.4);
+  border-radius:18px;padding:18px;
+  display:flex;align-items:center;gap:16px;margin-bottom:18px;
+  box-shadow:0 0 24px rgba(247,148,29,.08);
+  position:relative;overflow:hidden;
+}
+.service-img{
+  width:70px;height:70px;min-width:70px;border-radius:14px;
+  background:linear-gradient(145deg,#12142a,#0a0c18);
+  border:1px solid rgba(247,148,29,.25);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  box-shadow:0 0 14px rgba(247,148,29,.15);
+}
+.service-img img{width:100%;height:100%;object-fit:contain;padding:8px;}
+.service-name{font-size:19px;font-weight:900;color:#fff;line-height:1.15;}
+.service-paq{font-size:11px;color:#60a5fa;font-weight:700;margin-top:5px;line-height:1.4;}
+.service-cat{
+  display:inline-block;background:rgba(247,148,29,.12);border:1px solid rgba(247,148,29,.35);
+  padding:3px 11px;border-radius:20px;font-size:9px;font-weight:900;color:#f7941d;
+  text-transform:uppercase;letter-spacing:1px;margin-top:9px;
+  box-shadow:0 0 10px rgba(247,148,29,.15);
+}
 
-.metodos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.metodo-btn { background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px; padding: 16px 12px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.metodo-btn:hover { border-color: rgba(247,148,29,.4); }
-.metodo-btn.selected { border-color: #f7941d; background: rgba(247,148,29,.08); }
-.metodo-ico  { font-size: 26px; }
-.metodo-name { font-size: 12px; font-weight: 800; color: white; }
-.metodo-desc { font-size: 10px; color: #64748b; }
+/* ── TIKTOK / PROMO INFO BOX ── */
+.tiktok-info-box{
+  background:linear-gradient(135deg,rgba(20,184,166,.08),rgba(20,184,166,.02));
+  border:1.5px solid rgba(20,184,166,.35);border-radius:14px;
+  padding:15px 17px;margin-bottom:14px;
+  display:flex;align-items:flex-start;gap:12px;
+  box-shadow:0 0 18px rgba(20,184,166,.12);
+}
+.tiktok-info-box .tiktok-ico{font-size:24px;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(20,184,166,.6));}
+.tiktok-info-box p{font-size:12px;color:#5eead4;font-weight:700;line-height:1.6;margin:0;}
 
-.bancos-wrap { display: none; }
-.bancos-wrap.show { display: block; }
-.bancos-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-.banco-btn { background: #0e0e1a; border: 2px solid #21213a; border-radius: 14px; padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: border-color .2s, background .2s; }
-.banco-btn:hover { border-color: rgba(247,148,29,.4); }
-.banco-btn.selected { border-color: #f7941d; background: rgba(247,148,29,.06); }
-.banco-name  { font-size: 14px; font-weight: 800; color: white; }
-.banco-check { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #21213a; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all .2s; }
-.banco-btn.selected .banco-check { background: #f7941d; border-color: #f7941d; color: #000; }
+/* ── STEP BOX ── */
+.step-box{
+  background:linear-gradient(170deg,#0c0f1e,#080a16);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;margin-bottom:14px;overflow:hidden;
+  position:relative;
+}
+.step-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(247,148,29,.5),transparent);opacity:.6;}
+.step-head{padding:16px 18px;display:flex;align-items:center;gap:14px;}
+.step-num{width:34px;height:34px;min-width:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;}
+.step-num.orange{background:linear-gradient(135deg,#ffd700,#f7941d);color:#000;box-shadow:0 0 14px rgba(247,148,29,.5);}
+.step-num.blue{background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff;box-shadow:0 0 14px rgba(59,130,246,.5);}
+.step-num.green{background:linear-gradient(135deg,#4ade80,#22c55e);color:#fff;box-shadow:0 0 14px rgba(34,197,94,.5);}
+.step-title{font-size:15px;font-weight:900;color:#fff;}
+.step-subtitle{font-size:10px;font-weight:800;margin-top:2px;text-transform:uppercase;letter-spacing:1px;}
+.step-body{padding:0 18px 20px;}
 
-.cupon-box { background: rgba(247,148,29,.05); border: 1px solid rgba(247,148,29,.2); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
-.cupon-label { font-size: 10px; font-weight: 800; color: #f7941d; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-.cupon-row { display: flex; gap: 8px; }
-.cupon-input { flex: 1; background: #0e0e1a; border: 1px solid #21213a; border-radius: 10px; padding: 12px 14px; color: white; font-size: 13px; outline: none; text-transform: uppercase; transition: border-color .2s; }
-.cupon-input:focus { border-color: #f7941d; }
-.cupon-btn-apply { background: #f7941d; color: #000; font-weight: 900; font-size: 11px; text-transform: uppercase; padding: 0 18px; border-radius: 10px; border: none; cursor: pointer; letter-spacing: 1px; white-space: nowrap; }
-.cupon-ok  { font-size: 11px; font-weight: 800; color: #4ade80; margin-top: 8px; display: none; }
-.cupon-err { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #f87171; margin-top: 8px; display: none; }
+.field{margin-bottom:14px;}
+.field:last-child{margin-bottom:0;}
+.field-label{display:block;font-size:10px;font-weight:800;color:#6070a0;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
+.field-input{
+  width:100%;background:#0a0c18;border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  padding:14px 16px;color:#fff;font-size:15px;outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;box-sizing:border-box;
+}
+.field-input:focus{border-color:#f7941d;box-shadow:0 0 0 3px rgba(247,148,29,.12),0 0 16px rgba(247,148,29,.15);}
+.field-hint{font-size:10px;color:#4a5580;margin-top:6px;font-weight:600;}
 
-.summary { background: #0e0e1a; border: 1px solid #21213a; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
-.sum-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #21213a; }
-.sum-row:last-child { border: none; padding-top: 12px; }
-.sum-label { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-.sum-val   { font-size: 13px; font-weight: 800; color: #94a3b8; }
-.sum-total .sum-label { font-size: 14px; color: white; font-weight: 900; }
-.sum-total .sum-val   { font-size: 26px; color: #f7941d; font-weight: 900; }
-.sum-desc  .sum-label { color: #4ade80; }
-.sum-desc  .sum-val   { color: #4ade80; }
+.tiktok-calc{background:#0a0c18;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px;margin-top:10px;}
+.tiktok-calc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.tiktok-calc-row:last-child{border:none;padding-top:8px;}
+.tiktok-calc-lbl{font-size:10px;color:#6070a0;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.tiktok-calc-val{font-size:13px;font-weight:800;color:#9aa5c8;}
 
-.aviso-verificar { background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.2); border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 10px; }
-.aviso-verificar span { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.aviso-verificar p { font-size: 11px; color: #fbbf24; font-weight: 700; line-height: 1.5; margin: 0; }
+/* ── MÉTODOS DE PAGO ── */
+.metodos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.metodo-btn{
+  background:#0a0c18;border:2px solid rgba(255,255,255,.08);border-radius:14px;
+  padding:16px 12px;text-align:center;cursor:pointer;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.metodo-btn:hover{border-color:rgba(247,148,29,.4);}
+.metodo-btn.selected{border-color:#f7941d;background:rgba(247,148,29,.08);box-shadow:0 0 18px rgba(247,148,29,.2);}
+.metodo-ico{font-size:26px;filter:drop-shadow(0 0 6px rgba(247,148,29,.3));}
+.metodo-name{font-size:12px;font-weight:900;color:#fff;}
+.metodo-desc{font-size:10px;color:#6070a0;}
 
-.btn-ok { width: 100%; background: linear-gradient(135deg,#16a34a,#22c55e); color: white; font-weight: 900; padding: 17px; border-radius: 14px; font-size: 15px; text-transform: uppercase; letter-spacing: 2px; border: none; cursor: pointer; transition: opacity .2s, transform .2s; }
-.btn-ok:hover  { opacity: .9; }
-.btn-ok:active { transform: scale(.98); }
-.btn-ok:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.secure-note { text-align: center; font-size: 10px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 12px; }
+.bancos-wrap{display:none;}
+.bancos-wrap.show{display:block;}
+.bancos-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+.banco-btn{
+  background:#0a0c18;border:2px solid rgba(255,255,255,.08);border-radius:14px;
+  padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.banco-btn:hover{border-color:rgba(247,148,29,.4);}
+.banco-btn.selected{border-color:#f7941d;background:rgba(247,148,29,.06);box-shadow:0 0 16px rgba(247,148,29,.18);}
+.banco-name{font-size:14px;font-weight:800;color:#fff;}
+.banco-check{
+  margin-left:auto;width:22px;height:22px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;
+  font-size:12px;transition:all .2s;color:transparent;
+}
+.banco-btn.selected .banco-check{background:linear-gradient(135deg,#ffd700,#f7941d);border-color:#f7941d;color:#000;}
 
-.di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
-.di-clean:last-child { border-bottom: none; }
-.di-clean:hover { background: rgba(255,255,255,.04); color: white; }
-.login-opt { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #1a1a28; border: 1px solid #21213a; border-radius: 14px; margin-bottom: 10px; text-decoration: none; transition: border-color .2s; }
-.login-opt:hover { border-color: #f7941d; }
-.login-opt:last-of-type { margin-bottom: 0; }
+/* ── INFO DE CUENTA BANCARIA (aparece al elegir banco) ── */
+.cuenta-info{
+  display:none;margin-top:12px;
+  background:linear-gradient(145deg,#0d1a10,#0a140c);
+  border:1.5px solid rgba(74,222,128,.35);border-radius:14px;
+  padding:16px 18px;position:relative;overflow:hidden;
+  box-shadow:0 0 20px rgba(74,222,128,.12);
+}
+.cuenta-info.show{display:block;animation:ci-in .3s ease;}
+@keyframes ci-in{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.cuenta-info-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.cuenta-info-head .ci-ico{font-size:16px;filter:drop-shadow(0 0 6px rgba(74,222,128,.6));}
+.cuenta-info-head .ci-title{font-size:11px;font-weight:900;color:#4ade80;text-transform:uppercase;letter-spacing:1.5px;}
+.ci-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);gap:10px;}
+.ci-row:last-child{border-bottom:none;padding-bottom:0;}
+.ci-lbl{font-size:10px;color:#6a8070;font-weight:700;text-transform:uppercase;letter-spacing:1px;flex-shrink:0;}
+.ci-val{font-size:13px;color:#fff;font-weight:900;text-align:right;word-break:break-word;}
+.ci-copy{
+  background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.4);color:#4ade80;
+  font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;
+  padding:5px 9px;border-radius:7px;cursor:pointer;flex-shrink:0;transition:all .18s;white-space:nowrap;
+}
+.ci-copy:hover{background:rgba(74,222,128,.22);box-shadow:0 0 10px rgba(74,222,128,.25);}
+.ci-copy.copied{background:#4ade80;color:#04140a;border-color:#4ade80;}
+
+.metodo-instruccion{
+  display:none;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.25);
+  border-radius:12px;padding:12px 16px;margin-top:12px;gap:10px;align-items:flex-start;
+}
+.metodo-instruccion.show{display:flex;}
+.metodo-instruccion span{font-size:16px;flex-shrink:0;margin-top:1px;}
+.metodo-instruccion p{font-size:11px;color:#7dd3fc;font-weight:700;line-height:1.55;margin:0;}
+
+/* ── COMPROBANTE (subir imagen) ── */
+.comprobante-wrap{display:none;margin-top:16px;}
+.comprobante-wrap.show{display:block;}
+.comprobante-box{
+  background:#0a0c18;border:2px dashed rgba(247,148,29,.35);border-radius:14px;
+  padding:20px 16px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;
+  position:relative;
+}
+.comprobante-box:hover{border-color:#f7941d;background:rgba(247,148,29,.04);}
+.comprobante-box.has-file{border-style:solid;border-color:rgba(74,222,128,.45);background:rgba(74,222,128,.04);}
+.comprobante-ico{font-size:26px;margin-bottom:8px;filter:drop-shadow(0 0 6px rgba(247,148,29,.35));}
+.comprobante-txt{font-size:12px;font-weight:800;color:#fff;margin-bottom:3px;}
+.comprobante-hint{font-size:10px;color:#5a6590;font-weight:600;}
+.comprobante-preview{
+  display:none;margin-top:12px;border-radius:12px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.1);position:relative;
+}
+.comprobante-preview.show{display:block;}
+.comprobante-preview img{width:100%;max-height:220px;object-fit:contain;background:#050610;display:block;}
+.comprobante-remove{
+  position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;
+  background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.2);color:#fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;
+  transition:background .2s;
+}
+.comprobante-remove:hover{background:#ef4444;}
+.comprobante-filename{font-size:10px;color:#4ade80;font-weight:700;margin-top:8px;word-break:break-all;}
+
+/* ── CUPÓN ── */
+.cupon-box{
+  background:linear-gradient(135deg,rgba(247,148,29,.07),rgba(255,92,0,.02));
+  border:1.5px solid rgba(247,148,29,.3);border-radius:14px;
+  padding:16px;margin-bottom:14px;position:relative;overflow:hidden;
+}
+.cupon-box::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);animation:shine 5s ease-in-out infinite;}
+.cupon-label{font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;position:relative;z-index:1;}
+.cupon-row{display:flex;gap:8px;position:relative;z-index:1;}
+.cupon-input{
+  flex:1;background:#0a0c18;border:1px solid rgba(255,255,255,.08);border-radius:10px;
+  padding:12px 14px;color:#fff;font-size:13px;outline:none;text-transform:uppercase;
+  transition:border-color .2s;
+}
+.cupon-input:focus{border-color:#f7941d;}
+.cupon-btn-apply{
+  background:linear-gradient(90deg,#f7941d,#ff5c00);color:#000;font-weight:900;font-size:11px;
+  text-transform:uppercase;padding:0 18px;border-radius:10px;border:none;cursor:pointer;
+  letter-spacing:1px;white-space:nowrap;box-shadow:0 0 14px rgba(247,148,29,.35);
+  transition:box-shadow .2s;
+}
+.cupon-btn-apply:hover{box-shadow:0 0 22px rgba(247,148,29,.6);}
+.cupon-ok{font-size:11px;font-weight:800;color:#4ade80;margin-top:8px;display:none;position:relative;z-index:1;}
+.cupon-err{font-size:11px;font-weight:800;text-transform:uppercase;color:#f87171;margin-top:8px;display:none;position:relative;z-index:1;}
+
+/* ── RESUMEN ── */
+.summary{background:#0a0c18;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px;margin-bottom:12px;}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.sum-row:last-child{border:none;padding-top:12px;}
+.sum-label{font-size:11px;color:#6070a0;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.sum-val{font-size:13px;font-weight:800;color:#9aa5c8;}
+.sum-total .sum-label{font-size:14px;color:#fff;font-weight:900;}
+.sum-total .sum-val{font-size:26px;color:#f7941d;font-weight:900;text-shadow:0 0 16px rgba(247,148,29,.4);}
+.sum-desc .sum-label{color:#4ade80;}
+.sum-desc .sum-val{color:#4ade80;}
+
+.aviso-verificar{
+  background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);border-radius:12px;
+  padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px;
+}
+.aviso-verificar span{font-size:16px;flex-shrink:0;margin-top:1px;}
+.aviso-verificar p{font-size:11px;color:#fbbf24;font-weight:700;line-height:1.5;margin:0;}
+
+/* ── BOTÓN CONFIRMAR ── */
+.btn-ok{
+  width:100%;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;font-weight:900;
+  padding:17px;border-radius:14px;font-size:15px;text-transform:uppercase;letter-spacing:2px;
+  border:none;cursor:pointer;transition:opacity .2s,transform .2s,box-shadow .2s;
+  box-shadow:0 4px 22px rgba(34,197,94,.35),inset 0 1px 0 rgba(255,255,255,.15);
+  position:relative;overflow:hidden;
+}
+.btn-ok::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 3s ease-in-out infinite;}
+.btn-ok:hover{box-shadow:0 6px 30px rgba(34,197,94,.5);}
+.btn-ok:active{transform:scale(.98);}
+.btn-ok:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.secure-note{text-align:center;font-size:10px;color:#3a4060;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:12px;}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:20px;right:14px;width:52px;height:52px;background:linear-gradient(135deg,#25d366,#1db954);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.65),0 0 40px rgba(37,211,102,.2);z-index:500;transition:transform .22s,box-shadow .22s;}
+.wa-float:hover{transform:scale(1.14);box-shadow:0 6px 32px rgba(37,211,102,.85),0 0 70px rgba(37,211,102,.3);}
+.wa-float svg{width:25px;height:25px;fill:white;}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:400;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(14px);}
+.modal-ov.open{display:flex;}
+.modal-box{background:linear-gradient(145deg,#080a18,#060810);border:1.5px solid rgba(247,148,29,.35);border-radius:18px;padding:24px;width:100%;max-width:308px;box-shadow:0 0 40px rgba(247,148,29,.15);}
+.mopt{display:flex;align-items:center;justify-content:space-between;padding:13px;background:rgba(255,255,255,.03);border:1px solid rgba(247,148,29,.15);border-radius:10px;margin-bottom:9px;text-decoration:none;transition:all .2s;}
+.mopt:hover{border-color:#f7941d;background:rgba(247,148,29,.06);box-shadow:0 0 14px rgba(247,148,29,.2);}
+
+/* ── DRAWER ── */
+.dr-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:199;backdrop-filter:blur(8px);}
+.dr-ov.open{display:block;}
+.drawer{position:fixed;top:0;left:-265px;width:252px;height:100%;z-index:200;background:rgba(4,5,13,.97);border-right:2px solid rgba(247,148,29,.3);transition:left .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.drawer.open{left:0;}
+.dr-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid rgba(247,148,29,.1);}
+.dr-close{background:none;border:none;color:#f7941d;font-size:18px;cursor:pointer;filter:drop-shadow(0 0 4px rgba(247,148,29,.5));}
+.dr-nav{flex:1;overflow-y:auto;}
+.dr-item{display:flex;align-items:center;gap:11px;padding:13px 14px;color:#7080a0;border-bottom:1px solid rgba(255,255,255,.03);text-decoration:none;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;cursor:pointer;font-family:Arial,sans-serif;font-size:13px;font-weight:700;transition:all .22s;position:relative;overflow:hidden;}
+.dr-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#f7941d,#ff5c00);transform:scaleY(0);transition:transform .22s;box-shadow:0 0 8px rgba(247,148,29,.6);}
+.dr-item:hover::before{transform:scaleY(1);}
+.dr-item:hover{color:#fff;background:rgba(247,148,29,.05);padding-left:18px;}
+.dr-item-ico{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.05));border:1px solid rgba(247,148,29,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dr-item-ico svg{width:15px;height:15px;filter:drop-shadow(0 0 3px rgba(247,148,29,.5));}
+.dr-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.03);}
+
+/* ── FOOTER ── */
+.footer{background:#02030a;margin-top:32px;position:relative;z-index:1;}
+.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);background-size:200% 100%;animation:border-run 3s linear infinite;box-shadow:0 0 8px rgba(247,148,29,.5);}
+.ft-in{padding:26px 14px 0;}
+.ft-div{height:1px;background:linear-gradient(90deg,transparent,rgba(247,148,29,.2),transparent);margin:18px 0;}
+.ft-bot{border-top:1px solid rgba(247,148,29,.06);padding:14px;text-align:center;}
 </style>
 </head>
 <body>
 
-<!-- MODAL LOGIN -->
-<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
-  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
-    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
-    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
-    <a class="login-opt" href="admin.html"><div style="display:flex;align-items:center;gap:12px;"><div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div><div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div></div><span style="color:#64748b;font-size:20px;">›</span></a>
-    <a class="login-opt" href="afiliado.html"><div style="display:flex;align-items:center;gap:12px;"><div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div><div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div></div><span style="color:#64748b;font-size:20px;">›</span></a>
-    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+<!-- MODAL -->
+<div class="modal-ov" id="modal-login">
+  <div class="modal-box">
+    <p style="font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#6070a0;margin-bottom:16px;">Selecciona cómo deseas acceder</p>
+    <a class="mopt" href="admin.html">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(247,148,29,.15);">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Administrador</div><div style="font-size:10px;color:#6070a0;">Panel de control</div></div>
+      </div>
+      <span style="color:#f7941d;font-size:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));">›</span>
+    </a>
+    <a class="mopt" href="afiliado.html">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(247,148,29,.15);">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Afiliado</div><div style="font-size:10px;color:#6070a0;">Ver comisiones y pedidos</div></div>
+      </div>
+      <span style="color:#f7941d;font-size:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));">›</span>
+    </a>
+    <button type="button" id="modalCancelBtn" style="width:100%;background:none;border:1px solid rgba(247,148,29,.2);border-radius:8px;padding:11px;color:#6070a0;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;font-family:Arial,sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='rgba(247,148,29,.5)';this.style.color='#f7941d'" onmouseout="this.style.borderColor='rgba(247,148,29,.2)';this.style.color='#6070a0'">Cancelar</button>
   </div>
 </div>
 
 <!-- DRAWER -->
-<div class="drawer-overlay" id="overlay"></div>
+<div class="dr-ov" id="dr-ov"></div>
 <div class="drawer" id="drawer">
-  <div class="drawer-head"><img src="logo.png" style="height:32px;"><button class="drawer-close" onclick="closeDrawer()">✕</button></div>
-  <div class="drawer-nav">
-    <a class="di-clean" href="index.html">Tienda</a>
-    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
+  <div class="dr-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:30px;filter:drop-shadow(0 0 10px rgba(247,148,29,.45));">
+    <button class="dr-close" id="drCloseBtn" type="button">✕</button>
   </div>
-  <div class="drawer-foot"><p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p></div>
+  <div class="dr-nav">
+    <a class="dr-item" href="index.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Inicio</a>
+    <a class="dr-item" href="recargas.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>Recargas Móviles</a>
+    <a class="dr-item" href="juegos.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01M7 12h.01M17 10v4M15 12h4"/></svg></div>Videojuegos</a>
+    <a class="dr-item" href="pronosticos.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>Pronósticos</a>
+    <a class="dr-item" href="compras.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>Servicios Digitales</a>
+    <a class="dr-item" href="afiliadopro.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>Programa de Afiliados</a>
+    <button class="dr-item" id="drLoginBtn" type="button"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Iniciar sesión</button>
+  </div>
+  <div class="dr-foot"><p style="font-size:9px;color:#1e2238;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p></div>
 </div>
 
 <!-- HEADER -->
 <header class="hdr">
-  <div class="hdr-in">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <button class="burger" onclick="openDrawer()"><svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
-      <a href="index.html"><img src="logo.png" style="height:36px;display:block;"></a>
+  <div class="hdr-left">
+    <button id="burgerBtn" type="button" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+      <span style="width:22px;height:3px;background-color:#f7941d;border-radius:2px;display:block;"></span>
+      <span style="width:22px;height:3px;background-color:#f7941d;border-radius:2px;display:block;"></span>
+      <span style="width:14px;height:3px;background-color:#f7941d;border-radius:2px;display:block;box-shadow:0 0 6px rgba(247,148,29,.9);"></span>
+    </button>
+    <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:34px;filter:drop-shadow(0 0 10px rgba(247,148,29,.35));"></a>
+  </div>
+  <div class="hdr-right">
+    <div class="acct-btn" id="acctBtn">
+      <svg width="18" height="18" fill="none" stroke="#f7941d" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" style="position:relative;z-index:1;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
-    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+    <span style="font-size:13px;">🇪🇨</span>
   </div>
 </header>
 
-<main style="padding:20px 16px 40px;">
-<div style="max-width:480px;margin:0 auto;">
+<main>
+<div class="wrap">
 
   <a class="back-btn" id="back-link" href="index.html">← Regresar</a>
 
@@ -203,7 +449,7 @@ main { flex: 1; }
             <span class="tiktok-calc-lbl">Monedas solicitadas</span>
             <span class="tiktok-calc-val" id="tc-monedas-lbl">—</span>
           </div>
-          <div class="tiktok-calc-row" style="border-top:1px solid #21213a;margin-top:4px;padding-top:10px;">
+          <div class="tiktok-calc-row" style="border-top:1px solid rgba(255,255,255,.08);margin-top:4px;padding-top:10px;">
             <span class="tiktok-calc-lbl" style="color:#f7941d;font-size:12px;">Valor calculado</span>
             <span class="tiktok-calc-val" style="color:#f7941d;font-size:20px;font-weight:900;" id="tc-total-lbl">—</span>
           </div>
@@ -236,11 +482,58 @@ main { flex: 1; }
         </div>
       </div>
       <div class="bancos-wrap" id="bancos-wrap">
-        <p style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Selecciona el banco</p>
+        <p style="font-size:10px;font-weight:800;color:#6070a0;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Selecciona el banco</p>
         <div class="bancos-grid">
           <div class="banco-btn" id="banco-pichincha"  onclick="selBanco('Banco Pichincha')"><div class="banco-name">Banco Pichincha</div><div class="banco-check">✓</div></div>
           <div class="banco-btn" id="banco-produbanco" onclick="selBanco('Produbanco')"><div class="banco-name">Produbanco</div><div class="banco-check">✓</div></div>
           <div class="banco-btn" id="banco-guayaquil"  onclick="selBanco('Banco Guayaquil')"><div class="banco-name">Banco Guayaquil</div><div class="banco-check">✓</div></div>
+        </div>
+
+        <!-- Instrucción según método -->
+        <div class="metodo-instruccion" id="mi-transferencia">
+          <span>🏦</span>
+          <p>Realiza la <strong>transferencia</strong> a la cuenta seleccionada y adjunta el comprobante abajo.</p>
+        </div>
+        <div class="metodo-instruccion" id="mi-deposito">
+          <span>💵</span>
+          <p>Realiza el <strong>depósito</strong> en ventanilla o cajero a la cuenta seleccionada y adjunta el comprobante abajo.</p>
+        </div>
+
+        <!-- Datos de cuenta del banco seleccionado -->
+        <div class="cuenta-info" id="cuenta-info">
+          <div class="cuenta-info-head"><span class="ci-ico">🔐</span><span class="ci-title" id="ci-banco-nombre">Datos de la cuenta</span></div>
+          <div class="ci-row">
+            <span class="ci-lbl">N° de cuenta</span>
+            <span class="ci-val" id="ci-cuenta">—</span>
+          </div>
+          <div class="ci-row" id="ci-tipo-row">
+            <span class="ci-lbl">Tipo de cuenta</span>
+            <span class="ci-val" id="ci-tipo">—</span>
+          </div>
+          <div class="ci-row">
+            <span class="ci-lbl">Titular</span>
+            <span class="ci-val" id="ci-nombre">—</span>
+          </div>
+          <div class="ci-row">
+            <span></span>
+            <button type="button" class="ci-copy" id="ci-copy-btn" onclick="copiarCuenta()">📋 Copiar cuenta</button>
+          </div>
+        </div>
+
+        <!-- Subir comprobante -->
+        <div class="comprobante-wrap" id="comprobante-wrap">
+          <p style="font-size:10px;font-weight:800;color:#6070a0;text-transform:uppercase;letter-spacing:2px;margin:16px 0 10px;">Adjuntar comprobante de pago</p>
+          <div class="comprobante-box" id="comprobante-box">
+            <div class="comprobante-ico">📎</div>
+            <div class="comprobante-txt">Toca para subir tu comprobante</div>
+            <div class="comprobante-hint">JPG, PNG o PDF · Máx. 5MB</div>
+            <input type="file" id="f-comprobante" accept="image/*,.pdf" style="display:none;">
+          </div>
+          <div class="comprobante-preview" id="comprobante-preview">
+            <button type="button" class="comprobante-remove" id="comprobante-remove">✕</button>
+            <img id="comprobante-img" src="" alt="Comprobante">
+          </div>
+          <p class="comprobante-filename" id="comprobante-filename"></p>
         </div>
       </div>
     </div>
@@ -293,12 +586,84 @@ main { flex: 1; }
 </div>
 </main>
 
-<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
-  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/593992225484?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20y%20necesito%20ayuda" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="ft-in">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;display:block;margin-bottom:13px;filter:drop-shadow(0 0 10px rgba(247,148,29,.4));">
+    <p style="font-size:13px;color:#7080a0;line-height:1.65;margin-bottom:14px;">Tu tienda de confianza en Ecuador para recargas móviles y videojuegos. Rápido, seguro y al mejor precio.</p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(247,148,29,.15);">
+        <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+      </div>
+      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Horario de atención</div><div style="font-size:13px;color:#7080a0;">Lunes a Domingo · 8:00 a.m – 10:30 p.m</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(247,148,29,.15);">
+        <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012.12 1.18 2 2 0 014.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round"/></svg>
+      </div>
+      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Contacto WhatsApp</div><a href="https://wa.me/593992225484" style="font-size:13px;color:#7080a0;">+593 99 222 5484</a></div>
+    </div>
+    <div class="ft-div"></div>
+    <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Políticas</p>
+    <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:20px;">
+      <a href="terminos.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Términos y condiciones</a>
+      <a href="privacidad.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Política de privacidad</a>
+      <a href="proteccion.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Política de protección de datos</a>
+    </div>
+    <div class="ft-div"></div>
+    <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Síguenos</p>
+    <div style="display:flex;gap:10px;margin-bottom:26px;">
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0f0020,#200050);border:1.5px solid rgba(168,85,247,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(168,85,247,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(168,85,247,.4)';this.style.boxShadow='0 0 10px rgba(168,85,247,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;filter:drop-shadow(0 0 4px rgba(168,85,247,.7));"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1a000a,#380020);border:1.5px solid rgba(244,114,182,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(244,114,182,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(244,114,182,.4)';this.style.boxShadow='0 0 10px rgba(244,114,182,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(244,114,182,.7));"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#000a1a,#001840);border:1.5px solid rgba(96,165,250,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(96,165,250,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(96,165,250,.4)';this.style.boxShadow='0 0 10px rgba(96,165,250,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;filter:drop-shadow(0 0 4px rgba(96,165,250,.7));"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <img src="logo.png" alt="Rexpres Play" style="height:18px;opacity:.15;display:block;margin:0 auto 6px;filter:drop-shadow(0 0 5px rgba(247,148,29,.3));">
+    <p style="font-size:9px;color:#1e2238;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+  </div>
 </footer>
 
 <script src="rexpres.js"></script>
 <script>
+// ═══════════════════════════════════════════
+// MENÚ / DRAWER / MODAL (robusto, sin conflictos con rexpres.js)
+// ═══════════════════════════════════════════
+(function(){
+  const drawer   = document.getElementById('drawer');
+  const drOv     = document.getElementById('dr-ov');
+  const burger   = document.getElementById('burgerBtn');
+  const drClose  = document.getElementById('drCloseBtn');
+  const acctBtn  = document.getElementById('acctBtn');
+  const drLogin  = document.getElementById('drLoginBtn');
+  const modal    = document.getElementById('modal-login');
+  const modalCancel = document.getElementById('modalCancelBtn');
+
+  function openDrawer(e){ if(e){e.preventDefault();e.stopPropagation();} drawer.classList.add('open'); drOv.classList.add('open'); }
+  function closeDrawer(e){ if(e){e.stopPropagation();} drawer.classList.remove('open'); drOv.classList.remove('open'); }
+  function abrirLogin(e){ if(e){e.preventDefault();e.stopPropagation();} closeDrawer(); modal.classList.add('open'); }
+  function cerrarLogin(e){ if(e){e.stopPropagation();} modal.classList.remove('open'); }
+
+  window.openDrawer = openDrawer;
+  window.closeDrawer = closeDrawer;
+  window.abrirLogin = abrirLogin;
+  window.cerrarLogin = cerrarLogin;
+
+  burger.addEventListener('click', openDrawer);
+  drClose.addEventListener('click', closeDrawer);
+  drOv.addEventListener('click', closeDrawer);
+  acctBtn.addEventListener('click', abrirLogin);
+  drLogin.addEventListener('click', abrirLogin);
+  modalCancel.addEventListener('click', cerrarLogin);
+  modal.addEventListener('click', function(e){ if(e.target === modal) cerrarLogin(); });
+  drawer.addEventListener('click', function(e){ e.stopPropagation(); });
+})();
+
 // ═══════════════════════════════════════════
 // PARÁMETROS
 // ═══════════════════════════════════════════
@@ -399,10 +764,7 @@ if (esTikTok) document.getElementById('tiktok-aviso').style.display = 'flex';
   // Promoción exclusiva: ocultar campo ID, mostrar aviso informativo
   if (esPromo) {
     document.getElementById('field-id-wrap').style.display = 'none';
-    const step1box = document.getElementById('step1-box');
-    // Reemplazar subtítulo
     document.getElementById('step1-sub').innerText = 'Promoción exclusiva';
-    // Agregar aviso en el body del step1
     const avisoPromo = document.createElement('div');
     avisoPromo.style.cssText = 'background:rgba(247,148,29,.07);border:1px solid rgba(247,148,29,.25);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:4px;';
     avisoPromo.innerHTML = '<span style="font-size:20px;flex-shrink:0;">🎁</span><p style="font-size:12px;color:#f7941d;font-weight:700;line-height:1.6;margin:0;">Los datos para ejecutar esta promoción exclusiva serán solicitados directamente por WhatsApp al momento de confirmar tu pedido.</p>';
@@ -555,22 +917,116 @@ function actualizarResumen() {
 }
 
 // ═══════════════════════════════════════════
-// MÉTODOS DE PAGO
+// MÉTODOS DE PAGO + DATOS BANCARIOS
 // ═══════════════════════════════════════════
+const bancosInfo = {
+  'Banco Pichincha': { cuenta: '2100215429',  tipo: null,       nombre: 'Bemovil Ecuador S. A.' },
+  'Produbanco':       { cuenta: '20005251786', tipo: 'Ahorros',  nombre: 'Olga Pineida' },
+  'Banco Guayaquil':  { cuenta: '36999165',    tipo: 'Ahorros',  nombre: 'Holguer Farinango' }
+};
+const bancoIds = { 'Banco Pichincha':'banco-pichincha', 'Produbanco':'banco-produbanco', 'Banco Guayaquil':'banco-guayaquil' };
+
 function selMetodo(m) {
   metodoSel = m;
+  bancoSel  = '';
   document.getElementById('m-transferencia').classList.toggle('selected', m === 'transferencia');
   document.getElementById('m-deposito').classList.toggle('selected', m === 'deposito');
   document.getElementById('bancos-wrap').classList.add('show');
-  bancoSel = '';
   document.querySelectorAll('#bancos-wrap .banco-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('cuenta-info').classList.remove('show');
+  document.getElementById('comprobante-wrap').classList.remove('show');
+
+  // Banco Pichincha solo aparece para TRANSFERENCIA
+  const pich = document.getElementById('banco-pichincha');
+  pich.style.display = (m === 'transferencia') ? 'flex' : 'none';
+
+  // Instrucción según método
+  document.getElementById('mi-transferencia').classList.toggle('show', m === 'transferencia');
+  document.getElementById('mi-deposito').classList.toggle('show', m === 'deposito');
 }
+
 function selBanco(b) {
   bancoSel = b;
-  const ids = { 'Banco Pichincha':'banco-pichincha', 'Produbanco':'banco-produbanco', 'Banco Guayaquil':'banco-guayaquil' };
   document.querySelectorAll('#bancos-wrap .banco-btn').forEach(x => x.classList.remove('selected'));
-  if (ids[b]) document.getElementById(ids[b]).classList.add('selected');
+  if (bancoIds[b]) document.getElementById(bancoIds[b]).classList.add('selected');
+
+  const info = bancosInfo[b];
+  if (info) {
+    document.getElementById('ci-banco-nombre').innerText = b;
+    document.getElementById('ci-cuenta').innerText = info.cuenta;
+    document.getElementById('ci-nombre').innerText = info.nombre;
+    const tipoRow = document.getElementById('ci-tipo-row');
+    if (info.tipo) { tipoRow.style.display = 'flex'; document.getElementById('ci-tipo').innerText = info.tipo; }
+    else { tipoRow.style.display = 'none'; }
+    document.getElementById('cuenta-info').classList.add('show');
+  }
+  document.getElementById('comprobante-wrap').classList.add('show');
 }
+
+function copiarCuenta() {
+  const num = document.getElementById('ci-cuenta').innerText;
+  const btn = document.getElementById('ci-copy-btn');
+  const marcarCopiado = () => {
+    const original = '📋 Copiar cuenta';
+    btn.innerText = '✓ Copiado'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerText = original; btn.classList.remove('copied'); }, 1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(num).then(marcarCopiado).catch(marcarCopiado);
+  } else {
+    const t = document.createElement('textarea');
+    t.value = num; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(t);
+    marcarCopiado();
+  }
+}
+
+// ═══════════════════════════════════════════
+// COMPROBANTE DE PAGO
+// ═══════════════════════════════════════════
+let comprobanteBase64 = '';
+let comprobanteNombre  = '';
+
+const comprobanteBox   = document.getElementById('comprobante-box');
+const fComprobante     = document.getElementById('f-comprobante');
+const comprobantePrev  = document.getElementById('comprobante-preview');
+const comprobanteImg   = document.getElementById('comprobante-img');
+const comprobanteFname = document.getElementById('comprobante-filename');
+const comprobanteRemoveBtn = document.getElementById('comprobante-remove');
+
+comprobanteBox.addEventListener('click', () => fComprobante.click());
+fComprobante.addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('El archivo debe pesar máximo 5MB.'); this.value=''; return; }
+
+  comprobanteNombre = file.name;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    comprobanteBase64 = e.target.result;
+    comprobanteBox.classList.add('has-file');
+    document.querySelector('.comprobante-txt').innerText = 'Comprobante listo ✔';
+    document.querySelector('.comprobante-hint').innerText = 'Toca para cambiar el archivo';
+    comprobanteFname.innerText = '📄 ' + comprobanteNombre;
+    if (file.type.startsWith('image/')) {
+      comprobanteImg.src = comprobanteBase64;
+      comprobantePrev.classList.add('show');
+    } else {
+      comprobantePrev.classList.remove('show');
+    }
+  };
+  reader.readAsDataURL(file);
+});
+comprobanteRemoveBtn.addEventListener('click', function(e) {
+  e.stopPropagation();
+  comprobanteBase64 = ''; comprobanteNombre = '';
+  fComprobante.value = '';
+  comprobantePrev.classList.remove('show');
+  comprobanteBox.classList.remove('has-file');
+  document.querySelector('.comprobante-txt').innerText = 'Toca para subir tu comprobante';
+  document.querySelector('.comprobante-hint').innerText = 'JPG, PNG o PDF · Máx. 5MB';
+});
 
 // ═══════════════════════════════════════════
 // CÓDIGO DE CUPÓN
@@ -592,9 +1048,27 @@ function aplicarCodigo() {
 }
 
 // ═══════════════════════════════════════════
+// SUBIR COMPROBANTE AL BACKEND
+// ═══════════════════════════════════════════
+async function subirComprobante() {
+  if (!comprobanteBase64) return '';
+  try {
+    const resp = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ accion: 'subirComprobante', nombre: comprobanteNombre, archivo: comprobanteBase64 })
+    });
+    const data = await resp.json();
+    return data && data.url ? data.url : '';
+  } catch (e) {
+    return '';
+  }
+}
+
+// ═══════════════════════════════════════════
 // ENVIAR
 // ═══════════════════════════════════════════
-function enviar() {
+async function enviar() {
   const fi = document.getElementById('f-id');
   const fm = document.getElementById('f-monto');
   const id = fi ? fi.value.trim() : '';
@@ -603,20 +1077,24 @@ function enviar() {
   if (esPromo) {
     if (!metodoSel) { alert('Por favor selecciona un método de pago.'); return; }
     if (!bancoSel)  { alert('Por favor selecciona un banco.'); return; }
+    if (!comprobanteBase64) { alert('Por favor adjunta el comprobante de pago.'); document.getElementById('comprobante-box').scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
     const sub = precio;
     const tot = Math.max(sub - descuento, 0);
 
     const btn = document.getElementById('btn-ok');
-    btn.disabled = true; btn.innerText = '⏳ Procesando...';
-    setTimeout(() => { btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp'; }, 3000);
+    btn.disabled = true; btn.innerText = '⏳ Subiendo comprobante...';
+
+    const comprobanteUrl = await subirComprobante();
+    btn.innerText = '⏳ Procesando...';
 
     // Registrar en Sheets
     const datos = {
       fecha: new Date().toLocaleString(), cliente: 'Promoción',
       servicio: 'Promociones', marca,
       monto: formatComa(sub), codigo: codigoUsado,
-      descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE'
+      descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE',
+      comprobante: comprobanteUrl || comprobanteNombre
     };
     const ifr = document.createElement('iframe'); ifr.style.display = 'none';
     ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -632,9 +1110,11 @@ function enviar() {
       '• Banco: ' + bancoSel + '\n' +
       '• Subtotal: $' + formatComa(sub) + '\n' +
       (descuento > 0 ? '• Código aplicado: ' + codigoUsado + ' (-$' + formatComa(descuento) + ')\n' : '') +
-      '• *Total a pagar: $' + formatComa(tot) + '*\n\n' +
-      'Quedo a la espera de los datos para completar la promoción. 🙌';
+      '• *Total a pagar: $' + formatComa(tot) + '*\n' +
+      (comprobanteUrl ? '• 📎 Comprobante: ' + comprobanteUrl + '\n' : '• 📎 Comprobante adjuntado (' + comprobanteNombre + ')\n') +
+      '\nQuedo a la espera de los datos para completar la promoción. 🙌';
 
+    btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
     window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
     return;
   }
@@ -680,16 +1160,20 @@ function enviar() {
 
   if (!metodoSel) { alert('Por favor selecciona un método de pago.'); return; }
   if (!bancoSel)  { alert('Por favor selecciona un banco.'); return; }
+  if (!comprobanteBase64) { alert('Por favor adjunta el comprobante de pago.'); document.getElementById('comprobante-box').scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
   const btn = document.getElementById('btn-ok');
-  btn.disabled = true; btn.innerText = '⏳ Procesando...';
-  setTimeout(() => { btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp'; }, 3000);
+  btn.disabled = true; btn.innerText = '⏳ Subiendo comprobante...';
+
+  const comprobanteUrl = await subirComprobante();
+  btn.innerText = '⏳ Procesando...';
 
   // Guardar en Sheets
   const datos = {
     fecha: new Date().toLocaleString(), cliente: id || 'TikTok',
     servicio: cat, marca, monto: formatComa(sub),
-    codigo: codigoUsado, descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE'
+    codigo: codigoUsado, descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE',
+    metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteUrl || comprobanteNombre
   };
   const ifr = document.createElement('iframe'); ifr.style.display = 'none';
   ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -712,19 +1196,17 @@ function enviar() {
   const detPaq  = paq ? `\n• Paquete: ${paq}${detalle ? '\n• Detalle: '+detalle : ''}` : '';
   const linMon  = tiktokCustom ? `\n• Monedas: ${document.getElementById('f-monedas').value}` : '';
   const linCli  = (necesitaId && id) ? `\n• ${campoLabel}: ${id}` : '';
+  const linComp = comprobanteUrl ? `\n• 📎 Comprobante: ${comprobanteUrl}` : `\n• 📎 Comprobante adjuntado (${comprobanteNombre})`;
 
   const msg =
     `¡Hola Rexpres Play! 🚀\n\n*Detalle del pedido:*\n` +
     `• Servicio: ${cat}${detPaq}${linMon}\n• Marca: ${marca}${linCli}\n` +
     `• Método de pago: ${metodoSel.charAt(0).toUpperCase()+metodoSel.slice(1)}\n• Banco: ${bancoSel}\n` +
-    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*`;
+    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*${linComp}`;
 
+  btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
   window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
 }
-
-function abrirLogin()  { document.getElementById('modal-login').style.display = 'flex'; closeDrawer(); }
-function cerrarLogin() { document.getElementById('modal-login').style.display = 'none'; }
-document.getElementById('modal-login').addEventListener('click', function(e) { if (e.target === this) cerrarLogin(); });
 </script>
 </body>
 </html>
