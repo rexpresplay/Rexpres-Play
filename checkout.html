@@ -1096,41 +1096,25 @@ function aplicarCodigo() {
 }
 
 // ═══════════════════════════════════════════
-// COMPARTIR COMPROBANTE (Web Share API — adjunta la imagen real)
+// SUBIR COMPROBANTE Y OBTENER UN ENLACE DIRECTO
 // ═══════════════════════════════════════════
-// wa.me solo puede prellenar TEXTO, nunca un archivo. Para que la imagen
-// llegue de verdad a WhatsApp, usamos el selector nativo de compartir del
-// celular (funciona en Android/iOS con Chrome, Safari, etc). Si el
-// navegador no lo soporta (ej. computador de escritorio), descargamos el
-// comprobante automáticamente para que el usuario lo adjunte a mano en el
-// chat que se abre.
-async function compartirComprobante(msg) {
-  if (!comprobanteFile) return { compartido: false, soportado: false };
-
-  if (navigator.canShare && navigator.canShare({ files: [comprobanteFile] })) {
-    try {
-      await navigator.share({
-        files: [comprobanteFile],
-        title: 'Pedido Rexpres Play',
-        text: msg
-      });
-      return { compartido: true, soportado: true };
-    } catch (e) {
-      // Usuario cerró el selector o lo canceló
-      return { compartido: false, soportado: true, cancelado: true };
-    }
-  }
-  return { compartido: false, soportado: false };
-}
-
-function descargarComprobante() {
-  if (!comprobanteFile) return;
-  const url = URL.createObjectURL(comprobanteFile);
-  const a = document.createElement('a');
-  a.href = url; a.download = comprobanteNombre || 'comprobante';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 4000);
+// wa.me solo puede prellenar TEXTO, nunca adjuntar un archivo. Para que el
+// comprobante quede visible como imagen (y no solo como nombre de archivo),
+// lo subimos a un hosting de imágenes y mandamos el ENLACE dentro del texto
+// del pedido. Así, al tocar el link en WhatsApp, se abre la foto directamente
+// — sin tener que elegir manualmente el chat, y funcionando con el número
+// automático de la tienda.
+async function subirComprobante() {
+  if (!comprobanteFile) return '';
+  try {
+    const fd = new FormData();
+    fd.append('reqtype', 'fileupload');
+    fd.append('fileToUpload', comprobanteFile, comprobanteNombre || 'comprobante.jpg');
+    const resp = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: fd });
+    const url  = (await resp.text()).trim();
+    if (url.startsWith('http')) return url;
+  } catch (e) { /* sigue al fallback */ }
+  return '';
 }
 
 // ═══════════════════════════════════════════
@@ -1159,7 +1143,9 @@ async function enviar() {
     const tot = Math.max(sub - descuento, 0);
 
     const btn = document.getElementById('btn-ok');
-    btn.disabled = true; btn.innerText = '⏳ Procesando...';
+    btn.disabled = true; btn.innerText = '⏳ Subiendo comprobante...';
+    const comprobanteUrl = await subirComprobante();
+    btn.innerText = '⏳ Procesando...';
 
     // Registrar en Sheets
     const datos = {
@@ -1167,7 +1153,7 @@ async function enviar() {
       servicio: 'Promociones', marca,
       monto: formatComa(sub), codigo: codigoUsado,
       descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE',
-      metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteNombre
+      metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteUrl || comprobanteNombre
     };
     const ifr = document.createElement('iframe'); ifr.style.display = 'none';
     ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -1183,23 +1169,17 @@ async function enviar() {
       '• Banco: ' + bancoSel + '\n' +
       '• Subtotal: $' + formatComa(sub) + '\n' +
       (descuento > 0 ? '• Código aplicado: ' + codigoUsado + ' (-$' + formatComa(descuento) + ')\n' : '') +
-      '• *Total a pagar: $' + formatComa(tot) + '*\n\n' +
-      '📎 Te comparto el comprobante de pago junto a este mensaje.\n\n' +
-      'Quedo a la espera de los datos para completar la promoción. 🙌';
+      '• *Total a pagar: $' + formatComa(tot) + '*\n' +
+      (comprobanteUrl
+        ? '• 📎 Comprobante: ' + comprobanteUrl + '\n'
+        : '• 📎 Comprobante: ' + comprobanteNombre + ' (adjunto solo el nombre, no se pudo subir la imagen)\n') +
+      '\nQuedo a la espera de los datos para completar la promoción. 🙌';
 
-    const res = await compartirComprobante(msg);
     btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
-
-    if (res.compartido) {
-      mostrarExito('Tu comprobante se compartió directamente con la imagen adjunta. 📎');
-    } else if (res.soportado && res.cancelado) {
-      // El usuario cerró el selector de compartir — no forzamos nada más
-      return;
-    } else {
-      descargarComprobante();
-      window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
-      mostrarExito('Tu comprobante se descargó a tu dispositivo — adjúntalo manualmente en el chat de WhatsApp que se abrió. 📎');
-    }
+    window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+    mostrarExito(comprobanteUrl
+      ? 'Tu comprobante quedó guardado y el enlace para verlo va incluido en tu mensaje de WhatsApp. 📎'
+      : 'No se pudo subir el comprobante, revisa tu conexión e inténtalo de nuevo si es necesario. ⚠️');
     return;
   }
 
@@ -1247,14 +1227,16 @@ async function enviar() {
   if (!comprobanteBase64) { alert('Por favor adjunta el comprobante de pago.'); document.getElementById('comprobante-box').scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
   const btn = document.getElementById('btn-ok');
-  btn.disabled = true; btn.innerText = '⏳ Procesando...';
+  btn.disabled = true; btn.innerText = '⏳ Subiendo comprobante...';
+  const comprobanteUrl = await subirComprobante();
+  btn.innerText = '⏳ Procesando...';
 
   // Guardar en Sheets
   const datos = {
     fecha: new Date().toLocaleString(), cliente: id || 'TikTok',
     servicio: cat, marca, monto: formatComa(sub),
     codigo: codigoUsado, descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE',
-    metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteNombre
+    metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteUrl || comprobanteNombre
   };
   const ifr = document.createElement('iframe'); ifr.style.display = 'none';
   ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -1277,27 +1259,21 @@ async function enviar() {
   const detPaq  = paq ? `\n• Paquete: ${paq}${detalle ? '\n• Detalle: '+detalle : ''}` : '';
   const linMon  = tiktokCustom ? `\n• Monedas: ${document.getElementById('f-monedas').value}` : '';
   const linCli  = (necesitaId && id) ? `\n• ${campoLabel}: ${id}` : '';
+  const linComp = comprobanteUrl
+    ? `\n• 📎 Comprobante: ${comprobanteUrl}`
+    : `\n• 📎 Comprobante: ${comprobanteNombre} (adjunto solo el nombre, no se pudo subir la imagen)`;
 
   const msg =
     `¡Hola Rexpres Play! 🚀\n\n*Detalle del pedido:*\n` +
     `• Servicio: ${cat}${detPaq}${linMon}\n• Marca: ${marca}${linCli}\n` +
     `• Método de pago: ${metodoSel.charAt(0).toUpperCase()+metodoSel.slice(1)}\n• Banco: ${bancoSel}\n` +
-    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*\n\n` +
-    `📎 Te comparto el comprobante de pago junto a este mensaje.`;
+    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*${linComp}`;
 
-  const res = await compartirComprobante(msg);
   btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
-
-  if (res.compartido) {
-    mostrarExito('Tu comprobante se compartió directamente con la imagen adjunta. 📎');
-  } else if (res.soportado && res.cancelado) {
-    // El usuario cerró el selector de compartir — no forzamos nada más
-    return;
-  } else {
-    descargarComprobante();
-    window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
-    mostrarExito('Tu comprobante se descargó a tu dispositivo — adjúntalo manualmente en el chat de WhatsApp que se abrió. 📎');
-  }
+  window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+  mostrarExito(comprobanteUrl
+    ? 'Tu comprobante quedó guardado y el enlace para verlo va incluido en tu mensaje de WhatsApp. 📎'
+    : 'No se pudo subir el comprobante, revisa tu conexión e inténtalo de nuevo si es necesario. ⚠️');
 }
 </script>
 </body>
