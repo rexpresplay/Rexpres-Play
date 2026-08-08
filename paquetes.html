@@ -119,7 +119,7 @@ body::before{
 /* Info — título arriba, descripción abajo */
 .pack-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;text-align:left;gap:4px;}
 .pack-name{font-size:13px;font-weight:900;color:#fff;line-height:1.3;text-transform:uppercase;letter-spacing:.3px;}
-.pack-desc{font-size:11px;color:#6070a0;line-height:1.5;}
+.pack-desc{font-size:11px;color:#6070a0;line-height:1.6;white-space:pre-line;}
 
 /* Tarjeta especial "Personalizado" */
 .pack-personalizado{
@@ -396,7 +396,7 @@ function renderPaquetes(productos) {
   grid.innerHTML = '';
   prods.forEach((p, i) => {
     const tieneDesc = parseFloat(p.precioNormal) > parseFloat(p.precioDesc);
-    const desc = p.descripcion.length > 90 ? p.descripcion.substring(0,90)+'...' : p.descripcion;
+    const desc = p.descripcion;
     const c    = coloresPack[i % coloresPack.length];
 
     const url  = `checkout.html?cat=${encodeURIComponent(cat)}&marca=${encodeURIComponent(marca)}&paq=${encodeURIComponent(p.nombre)}&precio=${p.precioDesc}&detalle=${encodeURIComponent(p.descripcion)}`;
