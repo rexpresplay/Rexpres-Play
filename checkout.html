@@ -289,6 +289,38 @@ body::before{
 .btn-ok:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .secure-note{text-align:center;font-size:10px;color:#3a4060;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:12px;}
 
+/* ── PANTALLA DE ÉXITO ── */
+.success-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(16px);}
+.success-ov.open{display:flex;}
+.success-box{
+  background:linear-gradient(160deg,#0a1810,#060d09);
+  border:1.5px solid rgba(74,222,128,.4);border-radius:24px;
+  padding:38px 26px 30px;width:100%;max-width:340px;text-align:center;
+  box-shadow:0 0 50px rgba(74,222,128,.2);position:relative;overflow:hidden;
+}
+.success-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(74,222,128,.15) 0%,transparent 70%);pointer-events:none;}
+.success-check-wrap{
+  width:78px;height:78px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 8px rgba(34,197,94,.1),0 0 40px rgba(34,197,94,.4);
+  position:relative;z-index:1;animation:success-pop .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes success-pop{0%{transform:scale(0);opacity:0;}70%{transform:scale(1.15);}100%{transform:scale(1);opacity:1;}}
+.success-check-wrap svg{width:38px;height:38px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.success-title{font-size:20px;font-weight:900;color:#fff;margin-bottom:10px;position:relative;z-index:1;}
+.success-sub{font-size:13px;color:#8fbfa0;line-height:1.7;margin-bottom:6px;position:relative;z-index:1;}
+.success-nota{font-size:11px;color:#5eead4;font-weight:700;line-height:1.6;background:rgba(94,234,212,.08);border:1px solid rgba(94,234,212,.25);border-radius:10px;padding:10px 14px;margin:16px 0 20px;position:relative;z-index:1;}
+.success-nota:empty{display:none;margin:0;padding:0;border:none;}
+.success-btn{
+  display:inline-block;width:100%;background:linear-gradient(135deg,#f7941d,#ff5c00);color:#000;
+  font-weight:900;font-size:13px;text-transform:uppercase;letter-spacing:1.5px;
+  padding:14px;border-radius:12px;box-shadow:0 4px 20px rgba(247,148,29,.35);
+  position:relative;z-index:1;transition:transform .2s,box-shadow .2s;
+}
+.success-btn:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(247,148,29,.5);}
+.success-thanks{font-size:11px;color:#4a5f50;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:16px;position:relative;z-index:1;}
+
 /* ── WA FLOAT ── */
 .wa-float{position:fixed;bottom:20px;right:14px;width:52px;height:52px;background:linear-gradient(135deg,#25d366,#1db954);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.65),0 0 40px rgba(37,211,102,.2);z-index:500;transition:transform .22s,box-shadow .22s;}
 .wa-float:hover{transform:scale(1.14);box-shadow:0 6px 32px rgba(37,211,102,.85),0 0 70px rgba(37,211,102,.3);}
@@ -326,6 +358,20 @@ body::before{
 </style>
 </head>
 <body>
+
+<!-- ÉXITO -->
+<div class="success-ov" id="success-ov">
+  <div class="success-box">
+    <div class="success-check-wrap">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="success-title">¡Pedido enviado por WhatsApp! 🎉</div>
+    <p class="success-sub">Tu pedido será confirmado vía WhatsApp.<br>¡Muchas gracias por tu confianza! 💚</p>
+    <p class="success-nota" id="success-nota"></p>
+    <a class="success-btn" href="index.html">Volver al inicio</a>
+    <div class="success-thanks">Rexpres Play · Ecuador</div>
+  </div>
+</div>
 
 <!-- MODAL -->
 <div class="modal-ov" id="modal-login">
@@ -987,6 +1033,7 @@ function copiarCuenta() {
 // ═══════════════════════════════════════════
 let comprobanteBase64 = '';
 let comprobanteNombre  = '';
+let comprobanteFile    = null;
 
 const comprobanteBox   = document.getElementById('comprobante-box');
 const fComprobante     = document.getElementById('f-comprobante');
@@ -1001,6 +1048,7 @@ fComprobante.addEventListener('change', function() {
   if (!file) return;
   if (file.size > 5 * 1024 * 1024) { alert('El archivo debe pesar máximo 5MB.'); this.value=''; return; }
 
+  comprobanteFile   = file;
   comprobanteNombre = file.name;
   const reader = new FileReader();
   reader.onload = function(e) {
@@ -1020,7 +1068,7 @@ fComprobante.addEventListener('change', function() {
 });
 comprobanteRemoveBtn.addEventListener('click', function(e) {
   e.stopPropagation();
-  comprobanteBase64 = ''; comprobanteNombre = '';
+  comprobanteBase64 = ''; comprobanteNombre = ''; comprobanteFile = null;
   fComprobante.value = '';
   comprobantePrev.classList.remove('show');
   comprobanteBox.classList.remove('has-file');
@@ -1048,21 +1096,49 @@ function aplicarCodigo() {
 }
 
 // ═══════════════════════════════════════════
-// SUBIR COMPROBANTE AL BACKEND
+// COMPARTIR COMPROBANTE (Web Share API — adjunta la imagen real)
 // ═══════════════════════════════════════════
-async function subirComprobante() {
-  if (!comprobanteBase64) return '';
-  try {
-    const resp = await fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ accion: 'subirComprobante', nombre: comprobanteNombre, archivo: comprobanteBase64 })
-    });
-    const data = await resp.json();
-    return data && data.url ? data.url : '';
-  } catch (e) {
-    return '';
+// wa.me solo puede prellenar TEXTO, nunca un archivo. Para que la imagen
+// llegue de verdad a WhatsApp, usamos el selector nativo de compartir del
+// celular (funciona en Android/iOS con Chrome, Safari, etc). Si el
+// navegador no lo soporta (ej. computador de escritorio), descargamos el
+// comprobante automáticamente para que el usuario lo adjunte a mano en el
+// chat que se abre.
+async function compartirComprobante(msg) {
+  if (!comprobanteFile) return { compartido: false, soportado: false };
+
+  if (navigator.canShare && navigator.canShare({ files: [comprobanteFile] })) {
+    try {
+      await navigator.share({
+        files: [comprobanteFile],
+        title: 'Pedido Rexpres Play',
+        text: msg
+      });
+      return { compartido: true, soportado: true };
+    } catch (e) {
+      // Usuario cerró el selector o lo canceló
+      return { compartido: false, soportado: true, cancelado: true };
+    }
   }
+  return { compartido: false, soportado: false };
+}
+
+function descargarComprobante() {
+  if (!comprobanteFile) return;
+  const url = URL.createObjectURL(comprobanteFile);
+  const a = document.createElement('a');
+  a.href = url; a.download = comprobanteNombre || 'comprobante';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+// ═══════════════════════════════════════════
+// PANTALLA DE ÉXITO
+// ═══════════════════════════════════════════
+function mostrarExito(nota) {
+  document.getElementById('success-nota').innerHTML = nota || '';
+  document.getElementById('success-ov').classList.add('open');
 }
 
 // ═══════════════════════════════════════════
@@ -1083,10 +1159,7 @@ async function enviar() {
     const tot = Math.max(sub - descuento, 0);
 
     const btn = document.getElementById('btn-ok');
-    btn.disabled = true; btn.innerText = '⏳ Subiendo comprobante...';
-
-    const comprobanteUrl = await subirComprobante();
-    btn.innerText = '⏳ Procesando...';
+    btn.disabled = true; btn.innerText = '⏳ Procesando...';
 
     // Registrar en Sheets
     const datos = {
@@ -1094,7 +1167,7 @@ async function enviar() {
       servicio: 'Promociones', marca,
       monto: formatComa(sub), codigo: codigoUsado,
       descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE',
-      comprobante: comprobanteUrl || comprobanteNombre
+      metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteNombre
     };
     const ifr = document.createElement('iframe'); ifr.style.display = 'none';
     ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -1110,12 +1183,23 @@ async function enviar() {
       '• Banco: ' + bancoSel + '\n' +
       '• Subtotal: $' + formatComa(sub) + '\n' +
       (descuento > 0 ? '• Código aplicado: ' + codigoUsado + ' (-$' + formatComa(descuento) + ')\n' : '') +
-      '• *Total a pagar: $' + formatComa(tot) + '*\n' +
-      (comprobanteUrl ? '• 📎 Comprobante: ' + comprobanteUrl + '\n' : '• 📎 Comprobante adjuntado (' + comprobanteNombre + ')\n') +
-      '\nQuedo a la espera de los datos para completar la promoción. 🙌';
+      '• *Total a pagar: $' + formatComa(tot) + '*\n\n' +
+      '📎 Te comparto el comprobante de pago junto a este mensaje.\n\n' +
+      'Quedo a la espera de los datos para completar la promoción. 🙌';
 
+    const res = await compartirComprobante(msg);
     btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
-    window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+
+    if (res.compartido) {
+      mostrarExito('Tu comprobante se compartió directamente con la imagen adjunta. 📎');
+    } else if (res.soportado && res.cancelado) {
+      // El usuario cerró el selector de compartir — no forzamos nada más
+      return;
+    } else {
+      descargarComprobante();
+      window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+      mostrarExito('Tu comprobante se descargó a tu dispositivo — adjúntalo manualmente en el chat de WhatsApp que se abrió. 📎');
+    }
     return;
   }
 
@@ -1163,17 +1247,14 @@ async function enviar() {
   if (!comprobanteBase64) { alert('Por favor adjunta el comprobante de pago.'); document.getElementById('comprobante-box').scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
   const btn = document.getElementById('btn-ok');
-  btn.disabled = true; btn.innerText = '⏳ Subiendo comprobante...';
-
-  const comprobanteUrl = await subirComprobante();
-  btn.innerText = '⏳ Procesando...';
+  btn.disabled = true; btn.innerText = '⏳ Procesando...';
 
   // Guardar en Sheets
   const datos = {
     fecha: new Date().toLocaleString(), cliente: id || 'TikTok',
     servicio: cat, marca, monto: formatComa(sub),
     codigo: codigoUsado, descuento: formatComa(descuento), total: formatComa(tot), estado: 'PENDIENTE',
-    metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteUrl || comprobanteNombre
+    metodoPago: metodoSel, banco: bancoSel, comprobante: comprobanteNombre
   };
   const ifr = document.createElement('iframe'); ifr.style.display = 'none';
   ifr.src = API + '?datos=' + encodeURIComponent(JSON.stringify(datos));
@@ -1196,16 +1277,27 @@ async function enviar() {
   const detPaq  = paq ? `\n• Paquete: ${paq}${detalle ? '\n• Detalle: '+detalle : ''}` : '';
   const linMon  = tiktokCustom ? `\n• Monedas: ${document.getElementById('f-monedas').value}` : '';
   const linCli  = (necesitaId && id) ? `\n• ${campoLabel}: ${id}` : '';
-  const linComp = comprobanteUrl ? `\n• 📎 Comprobante: ${comprobanteUrl}` : `\n• 📎 Comprobante adjuntado (${comprobanteNombre})`;
 
   const msg =
     `¡Hola Rexpres Play! 🚀\n\n*Detalle del pedido:*\n` +
     `• Servicio: ${cat}${detPaq}${linMon}\n• Marca: ${marca}${linCli}\n` +
     `• Método de pago: ${metodoSel.charAt(0).toUpperCase()+metodoSel.slice(1)}\n• Banco: ${bancoSel}\n` +
-    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*${linComp}`;
+    `• Subtotal: $${formatComa(sub)}\n• Código: ${codigoUsado}\n• *Total Final: $${formatComa(tot)}*\n\n` +
+    `📎 Te comparto el comprobante de pago junto a este mensaje.`;
 
+  const res = await compartirComprobante(msg);
   btn.disabled = false; btn.innerText = '✅ Confirmar pedido por WhatsApp';
-  window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+
+  if (res.compartido) {
+    mostrarExito('Tu comprobante se compartió directamente con la imagen adjunta. 📎');
+  } else if (res.soportado && res.cancelado) {
+    // El usuario cerró el selector de compartir — no forzamos nada más
+    return;
+  } else {
+    descargarComprobante();
+    window.open('https://wa.me/593992225484?text=' + encodeURIComponent(msg));
+    mostrarExito('Tu comprobante se descargó a tu dispositivo — adjúntalo manualmente en el chat de WhatsApp que se abrió. 📎');
+  }
 }
 </script>
 </body>
