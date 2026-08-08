@@ -4,144 +4,324 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operadoras — Rexpres Play</title>
-<link rel="stylesheet" href="rexpres.css">
 <style>
-html, body { height: 100%; margin: 0; }
-body { display: flex; flex-direction: column; }
-main { flex: 1; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#04050d;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow-x:hidden;}
+body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;}
+main{flex:1;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
 
-/* Grid fijo — 2 columnas siempre en móvil */
-.ops-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  align-items: start; /* ✅ evita que las cards se estiren entre sí */
-}
-@media (min-width: 600px) { .ops-grid { grid-template-columns: repeat(3,1fr); } }
-@media (min-width: 900px) { .ops-grid { grid-template-columns: repeat(4,1fr); } }
-
-/* Card — SIN transform, SIN translateY, nada que mueva */
-.op-card {
-  background: #131320;
-  border: 2px solid #21213a;
-  border-radius: 16px;
-  overflow: hidden;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-  /* ✅ Solo cambia borde y sombra — NUNCA posición */
-  transition: border-color .2s, box-shadow .2s;
-  /* ✅ Altura fija igual para todas */
-  height: 100%;
-}
-.op-card:hover {
-  border-color: #f7941d;
-  box-shadow: 0 0 0 1px rgba(247,148,29,.3);
-}
-.op-card:active { opacity: .8; }
-
-/* Imagen — ancho completo, sin recorte */
-.op-card .op-img {
-  width: 100%;
-  aspect-ratio: 1 / 1; /* ✅ cuadrado fijo — todas igual */
-  display: block;
-  object-fit: contain;
-  background: #1a1a28;
-  padding: 18px;
+/* ── GRID BG ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(247,148,29,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(247,148,29,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  will-change:auto;
 }
 
-.op-card .op-name {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 10px 8px;
-  text-align: center;
-  border-top: 1px solid #21213a;
+/* ── ANIMATIONS ── */
+@keyframes shine{0%{left:-100%}100%{left:220%}}
+@keyframes border-run{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+
+/* ── HEADER ── */
+.hdr{
+  background:rgba(4,5,13,.96);
+  backdrop-filter:blur(24px);
+  position:sticky;top:0;z-index:100;
+  height:56px;padding:0 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(247,148,29,.12);
+  position:relative;
+}
+.hdr::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);
+  background-size:200% 100%;
+  animation:border-run 3s linear infinite;
+}
+.hdr-left{display:flex;align-items:center;gap:10px;}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+
+.acct-btn{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,#180a00,#2a1400);
+  border:1.5px solid rgba(247,148,29,.45);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .22s;
+  position:relative;overflow:hidden;
+}
+.acct-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(247,148,29,.15),transparent);opacity:0;transition:opacity .22s;}
+.acct-btn:hover::before{opacity:1;}
+.acct-btn:hover{box-shadow:0 0 18px rgba(247,148,29,.55);}
+
+/* ── WRAP / PAGE HEAD ── */
+.wrap{padding:0 14px;position:relative;z-index:1;max-width:960px;margin:0 auto;width:100%;}
+.pg-head{padding:18px 0 4px;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:800;color:#f7941d;
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:16px;
+  filter:drop-shadow(0 0 4px rgba(247,148,29,.4));
+}
+.pg-title{
+  font-size:22px;font-weight:900;color:#fff;
+  position:relative;padding-left:14px;margin-bottom:22px;
+}
+.pg-title::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:100%;background:linear-gradient(180deg,#ffd700,#f7941d,#ff5c00);border-radius:3px;box-shadow:0 0 10px #f7941d,0 0 20px rgba(247,148,29,.4);}
+
+/* ── OPERADORAS GRID ── */
+.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+@media (min-width:600px){.ops-grid{grid-template-columns:repeat(3,1fr);gap:16px;}}
+@media (min-width:900px){.ops-grid{grid-template-columns:repeat(4,1fr);}}
+
+.op-card{
+  border-radius:16px;overflow:hidden;position:relative;
+  display:block;height:100%;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s;
+}
+.op-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 16px 40px rgba(0,0,0,.7);}
+.op-card:hover .op-card-glow{opacity:1;}
+.op-card:hover .op-card-inner{border-color:var(--c,rgba(247,148,29,.6));}
+.op-card:active{transform:scale(.96);}
+
+.op-card-glow{
+  position:absolute;inset:-4px;border-radius:18px;z-index:-1;
+  background:radial-gradient(circle at 50% 50%,var(--c,rgba(247,148,29,.5)),transparent 70%);
+  opacity:0;transition:opacity .3s;filter:blur(6px);
+}
+.op-card-inner{
+  background:linear-gradient(170deg,#0c0f1e,#080a16);
+  border:1px solid rgba(255,255,255,.07);
+  border-top:1px solid var(--c,rgba(247,148,29,.3));
+  border-radius:16px;overflow:hidden;height:100%;
+  position:relative;transition:border-color .22s;
+  display:flex;flex-direction:column;align-items:center;
+}
+.op-img{
+  width:100%;aspect-ratio:1/1;object-fit:contain;
+  background:#0a0c18;padding:20px;position:relative;z-index:1;
+}
+.op-name{
+  display:block;padding:11px 8px 15px;font-size:11px;font-weight:900;color:#fff;
+  text-align:center;text-transform:uppercase;letter-spacing:1px;
+  background:rgba(6,8,18,.95);position:relative;z-index:1;
+  border-top:1px solid rgba(255,255,255,.04);width:100%;
 }
 
-/* Drawer/login */
-.di-clean { display: block; width: 100%; padding: 14px 20px; background: none; border: none; border-bottom: 1px solid #21213a; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background .15s, color .15s; text-align: left; text-decoration: none; }
-.di-clean:last-child { border-bottom: none; }
-.di-clean:hover { background: rgba(255,255,255,.04); color: white; }
-.login-opt { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #1a1a28; border: 1px solid #21213a; border-radius: 14px; margin-bottom: 10px; text-decoration: none; transition: border-color .2s; }
-.login-opt:hover { border-color: #f7941d; }
-.login-opt:last-of-type { margin-bottom: 0; }
+/* Spinner */
+.spinner-full{
+  grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:35vh;gap:18px;
+}
+.spinner-big{
+  width:52px;height:52px;border:4px solid rgba(247,148,29,.15);
+  border-top-color:#f7941d;border-radius:50%;
+  animation:spin .75s linear infinite;
+  box-shadow:0 0 16px rgba(247,148,29,.25);
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner-big-txt{font-size:11px;font-weight:800;color:#6070a0;text-transform:uppercase;letter-spacing:2px;}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:20px;right:14px;width:52px;height:52px;background:linear-gradient(135deg,#25d366,#1db954);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.65),0 0 40px rgba(37,211,102,.2);z-index:500;transition:transform .22s,box-shadow .22s;}
+.wa-float:hover{transform:scale(1.14);box-shadow:0 6px 32px rgba(37,211,102,.85),0 0 70px rgba(37,211,102,.3);}
+.wa-float svg{width:25px;height:25px;fill:white;}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:400;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(14px);}
+.modal-ov.open{display:flex;}
+.modal-box{background:linear-gradient(145deg,#080a18,#060810);border:1.5px solid rgba(247,148,29,.35);border-radius:18px;padding:24px;width:100%;max-width:308px;box-shadow:0 0 40px rgba(247,148,29,.15);}
+.mopt{display:flex;align-items:center;justify-content:space-between;padding:13px;background:rgba(255,255,255,.03);border:1px solid rgba(247,148,29,.15);border-radius:10px;margin-bottom:9px;text-decoration:none;transition:all .2s;}
+.mopt:hover{border-color:#f7941d;background:rgba(247,148,29,.06);box-shadow:0 0 14px rgba(247,148,29,.2);}
+
+/* ── DRAWER ── */
+.dr-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:199;backdrop-filter:blur(8px);}
+.dr-ov.open{display:block;}
+.drawer{position:fixed;top:0;left:-265px;width:252px;height:100%;z-index:200;background:rgba(4,5,13,.97);border-right:2px solid rgba(247,148,29,.3);transition:left .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.drawer.open{left:0;}
+.dr-head{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid rgba(247,148,29,.1);}
+.dr-close{background:none;border:none;color:#f7941d;font-size:18px;cursor:pointer;filter:drop-shadow(0 0 4px rgba(247,148,29,.5));}
+.dr-nav{flex:1;overflow-y:auto;}
+.dr-item{display:flex;align-items:center;gap:11px;padding:13px 14px;color:#7080a0;border-bottom:1px solid rgba(255,255,255,.03);text-decoration:none;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;cursor:pointer;font-family:Arial,sans-serif;font-size:13px;font-weight:700;transition:all .22s;position:relative;overflow:hidden;}
+.dr-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#f7941d,#ff5c00);transform:scaleY(0);transition:transform .22s;box-shadow:0 0 8px rgba(247,148,29,.6);}
+.dr-item:hover::before{transform:scaleY(1);}
+.dr-item:hover{color:#fff;background:rgba(247,148,29,.05);padding-left:18px;}
+.dr-item-ico{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.05));border:1px solid rgba(247,148,29,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dr-item-ico svg{width:15px;height:15px;filter:drop-shadow(0 0 3px rgba(247,148,29,.5));}
+.dr-foot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.03);}
+
+/* ── FOOTER ── */
+.footer{background:#02030a;margin-top:32px;position:relative;z-index:1;}
+.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f7941d 25%,#ffd700 50%,#f7941d 75%,transparent);background-size:200% 100%;animation:border-run 3s linear infinite;box-shadow:0 0 8px rgba(247,148,29,.5);}
+.ft-in{padding:26px 14px 0;}
+.ft-div{height:1px;background:linear-gradient(90deg,transparent,rgba(247,148,29,.2),transparent);margin:18px 0;}
+.ft-bot{border-top:1px solid rgba(247,148,29,.06);padding:14px;text-align:center;}
 </style>
 </head>
 <body>
 
-<!-- MODAL LOGIN -->
-<div id="modal-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;padding:16px;">
-  <div style="background:#131320;border:1px solid #21213a;border-radius:20px;padding:28px;width:100%;max-width:340px;">
-    <p style="font-size:16px;font-weight:800;color:white;margin-bottom:4px;">Iniciar sesión</p>
-    <p style="font-size:11px;color:#64748b;font-weight:600;margin-bottom:20px;">Selecciona cómo deseas acceder</p>
-    <a class="login-opt" href="admin.html">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,30,133,.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🛡️</div>
-        <div><div style="font-size:13px;font-weight:800;color:white;">Administrador</div><div style="font-size:10px;color:#64748b;">Panel de control completo</div></div>
+<!-- MODAL -->
+<div class="modal-ov" id="modal-login">
+  <div class="modal-box">
+    <p style="font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;">Iniciar sesión</p>
+    <p style="font-size:11px;color:#6070a0;margin-bottom:16px;">Selecciona cómo deseas acceder</p>
+    <a class="mopt" href="admin.html">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(247,148,29,.15);">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Administrador</div><div style="font-size:10px;color:#6070a0;">Panel de control</div></div>
       </div>
-      <span style="color:#64748b;font-size:20px;">›</span>
+      <span style="color:#f7941d;font-size:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));">›</span>
     </a>
-    <a class="login-opt" href="afiliado.html">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="width:36px;height:36px;border-radius:10px;background:rgba(247,148,29,.15);display:flex;align-items:center;justify-content:center;font-size:18px;">🤝</div>
-        <div><div style="font-size:13px;font-weight:800;color:white;">Afiliado</div><div style="font-size:10px;color:#64748b;">Ver mis comisiones y pedidos</div></div>
+    <a class="mopt" href="afiliado.html">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(247,148,29,.15);">
+          <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div><div style="font-size:13px;font-weight:900;color:#fff;">Afiliado</div><div style="font-size:10px;color:#6070a0;">Ver comisiones y pedidos</div></div>
       </div>
-      <span style="color:#64748b;font-size:20px;">›</span>
+      <span style="color:#f7941d;font-size:22px;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));">›</span>
     </a>
-    <button onclick="cerrarLogin()" style="width:100%;background:none;border:1px solid #21213a;border-radius:12px;padding:12px;color:#64748b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:14px;">Cancelar</button>
+    <button type="button" id="modalCancelBtn" style="width:100%;background:none;border:1px solid rgba(247,148,29,.2);border-radius:8px;padding:11px;color:#6070a0;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;font-family:Arial,sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='rgba(247,148,29,.5)';this.style.color='#f7941d'" onmouseout="this.style.borderColor='rgba(247,148,29,.2)';this.style.color='#6070a0'">Cancelar</button>
   </div>
 </div>
 
 <!-- DRAWER -->
-<div class="drawer-overlay" id="overlay"></div>
+<div class="dr-ov" id="dr-ov"></div>
 <div class="drawer" id="drawer">
-  <div class="drawer-head">
-    <img src="logo.png" alt="Rexpres Play" style="height:32px;">
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <div class="dr-head">
+    <img src="logo.png" alt="Rexpres Play" style="height:30px;filter:drop-shadow(0 0 10px rgba(247,148,29,.45));">
+    <button class="dr-close" id="drCloseBtn" type="button">✕</button>
   </div>
-  <div class="drawer-nav">
-    <a class="di-clean" href="index.html">Tienda</a>
-    <button class="di-clean" onclick="abrirLogin()">Iniciar sesión</button>
+  <div class="dr-nav">
+    <a class="dr-item" href="index.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>Inicio</a>
+    <a class="dr-item" href="recargas.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>Recargas Móviles</a>
+    <a class="dr-item" href="juegos.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01M7 12h.01M17 10v4M15 12h4"/></svg></div>Videojuegos</a>
+    <a class="dr-item" href="pronosticos.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>Pronósticos</a>
+    <a class="dr-item" href="compras.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>Servicios Digitales</a>
+    <a class="dr-item" href="afiliadopro.html"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>Programa de Afiliados</a>
+    <button class="dr-item" id="drLoginBtn" type="button"><div class="dr-item-ico"><svg fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>Iniciar sesión</button>
   </div>
-  <div class="drawer-foot">
-    <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p>
-  </div>
+  <div class="dr-foot"><p style="font-size:9px;color:#1e2238;font-weight:700;text-transform:uppercase;letter-spacing:1px;">© 2026 Rexpres Play · Ecuador</p></div>
 </div>
 
 <!-- HEADER -->
 <header class="hdr">
-  <div class="hdr-in">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <button class="burger" onclick="openDrawer()">
-        <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-      </button>
-      <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:36px;display:block;"></a>
+  <div class="hdr-left">
+    <button id="burgerBtn" type="button" style="background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;">
+      <span style="width:22px;height:3px;background-color:#f7941d;border-radius:2px;display:block;"></span>
+      <span style="width:22px;height:3px;background-color:#f7941d;border-radius:2px;display:block;"></span>
+      <span style="width:14px;height:3px;background-color:#f7941d;border-radius:2px;display:block;box-shadow:0 0 6px rgba(247,148,29,.9);"></span>
+    </button>
+    <a href="index.html"><img src="logo.png" alt="Rexpres Play" style="height:34px;filter:drop-shadow(0 0 10px rgba(247,148,29,.35));"></a>
+  </div>
+  <div class="hdr-right">
+    <div class="acct-btn" id="acctBtn">
+      <svg width="18" height="18" fill="none" stroke="#f7941d" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" style="position:relative;z-index:1;filter:drop-shadow(0 0 5px rgba(247,148,29,.7));"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
-    <span style="font-size:10px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:2px;">🇪🇨 Ecuador</span>
+    <span style="font-size:13px;">🇪🇨</span>
   </div>
 </header>
 
 <main>
-  <div style="max-width:960px;margin:0 auto;padding:20px 16px 32px;">
-    <a class="back-btn" href="recargas.html">← Recargas</a>
-    <h2 class="pg-title" id="pg-title">Elige tu operadora</h2>
-    <div id="grid" class="ops-grid"></div>
+  <div class="wrap">
+    <div class="pg-head">
+      <a class="back-btn" href="recargas.html">← Recargas</a>
+      <h2 class="pg-title" id="pg-title">Elige tu operadora</h2>
+    </div>
+
+    <div id="grid" class="ops-grid">
+      <div class="spinner-full">
+        <div class="spinner-big"></div>
+        <span class="spinner-big-txt">Cargando operadoras...</span>
+      </div>
+    </div>
   </div>
 </main>
 
-<footer style="text-align:center;padding:20px 16px;border-top:1px solid #21213a;margin-top:auto;">
-  <p style="font-size:10px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/593992225484?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20y%20necesito%20ayuda" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="ft-in">
+    <img src="logo.png" alt="Rexpres Play" style="height:32px;display:block;margin-bottom:13px;filter:drop-shadow(0 0 10px rgba(247,148,29,.4));">
+    <p style="font-size:13px;color:#7080a0;line-height:1.65;margin-bottom:14px;">Tu tienda de confianza en Ecuador para recargas móviles y videojuegos. Rápido, seguro y al mejor precio.</p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(247,148,29,.15);">
+        <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>
+      </div>
+      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Horario de atención</div><div style="font-size:13px;color:#7080a0;">Lunes a Domingo · 8:00 a.m – 10:30 p.m</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,rgba(247,148,29,.15),rgba(255,92,0,.06));border:1px solid rgba(247,148,29,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 10px rgba(247,148,29,.15);">
+        <svg width="15" height="15" fill="none" stroke="#f7941d" stroke-width="2" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(247,148,29,.7))"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012.12 1.18 2 2 0 014.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round"/></svg>
+      </div>
+      <div><div style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Contacto WhatsApp</div><a href="https://wa.me/593992225484" style="font-size:13px;color:#7080a0;">+593 99 222 5484</a></div>
+    </div>
+    <div class="ft-div"></div>
+    <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Políticas</p>
+    <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:20px;">
+      <a href="terminos.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Términos y condiciones</a>
+      <a href="privacidad.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Política de privacidad</a>
+      <a href="proteccion.html" style="font-size:13px;color:#7080a0;transition:color .2s;" onmouseover="this.style.color='#f7941d'" onmouseout="this.style.color='#7080a0'">Política de protección de datos</a>
+    </div>
+    <div class="ft-div"></div>
+    <p style="font-size:10px;font-weight:900;color:#f7941d;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Síguenos</p>
+    <div style="display:flex;gap:10px;margin-bottom:26px;">
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0f0020,#200050);border:1.5px solid rgba(168,85,247,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(168,85,247,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(168,85,247,.4)';this.style.boxShadow='0 0 10px rgba(168,85,247,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;filter:drop-shadow(0 0 4px rgba(168,85,247,.7));"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1a000a,#380020);border:1.5px solid rgba(244,114,182,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(244,114,182,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(244,114,182,.4)';this.style.boxShadow='0 0 10px rgba(244,114,182,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(244,114,182,.7));"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+      <a href="#" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#000a1a,#001840);border:1.5px solid rgba(96,165,250,.4);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 10px rgba(96,165,250,.2);" onmouseover="this.style.borderColor='#f7941d';this.style.boxShadow='0 0 20px rgba(247,148,29,.5)'" onmouseout="this.style.borderColor='rgba(96,165,250,.4)';this.style.boxShadow='0 0 10px rgba(96,165,250,.2)'"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:white;filter:drop-shadow(0 0 4px rgba(96,165,250,.7));"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg></a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <img src="logo.png" alt="Rexpres Play" style="height:18px;opacity:.15;display:block;margin:0 auto 6px;filter:drop-shadow(0 0 5px rgba(247,148,29,.3));">
+    <p style="font-size:9px;color:#1e2238;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">© 2026 Rexpres Play · Ecuador · Todos los derechos reservados</p>
+  </div>
 </footer>
 
 <script src="rexpres.js"></script>
 <script>
+(function(){
+  const drawer   = document.getElementById('drawer');
+  const drOv     = document.getElementById('dr-ov');
+  const burger   = document.getElementById('burgerBtn');
+  const drClose  = document.getElementById('drCloseBtn');
+  const acctBtn  = document.getElementById('acctBtn');
+  const drLogin  = document.getElementById('drLoginBtn');
+  const modal    = document.getElementById('modal-login');
+  const modalCancel = document.getElementById('modalCancelBtn');
+
+  function openDrawer(e){ if(e){e.preventDefault();e.stopPropagation();} drawer.classList.add('open'); drOv.classList.add('open'); }
+  function closeDrawer(e){ if(e){e.stopPropagation();} drawer.classList.remove('open'); drOv.classList.remove('open'); }
+  function abrirLogin(e){ if(e){e.preventDefault();e.stopPropagation();} closeDrawer(); modal.classList.add('open'); }
+  function cerrarLogin(e){ if(e){e.stopPropagation();} modal.classList.remove('open'); }
+
+  window.openDrawer = openDrawer;
+  window.closeDrawer = closeDrawer;
+  window.abrirLogin = abrirLogin;
+  window.cerrarLogin = cerrarLogin;
+
+  burger.addEventListener('click', openDrawer);
+  drClose.addEventListener('click', closeDrawer);
+  drOv.addEventListener('click', closeDrawer);
+  acctBtn.addEventListener('click', abrirLogin);
+  drLogin.addEventListener('click', abrirLogin);
+  modalCancel.addEventListener('click', cerrarLogin);
+  modal.addEventListener('click', function(e){ if(e.target === modal) cerrarLogin(); });
+  drawer.addEventListener('click', function(e){ e.stopPropagation(); });
+})();
+
 const params = new URLSearchParams(location.search);
 const tipo   = params.get('tipo') || 'Recargas';
-guardar('cat', tipo);
+if (typeof guardar === 'function') guardar('cat', tipo);
 
 if (tipo === 'Paquetes') document.getElementById('pg-title').innerText = 'Elige operadora — Paquetes';
 
@@ -155,18 +335,25 @@ const fallback = [
   {nombre:'Maxi Plus', icono:'maxiplus.webp'}
 ];
 
+const coloresOp = ['#f7941d','#a855f7','#ef4444','#38bdf8','#4ade80','#fbbf24','#f472b6','#60a5fa'];
+
 function renderMarcas(marcas) {
   const grid = document.getElementById('grid');
   const href = m => tipo === 'Recargas'
     ? `checkout.html?cat=Recargas&marca=${encodeURIComponent(m.nombre)}`
     : `paquetes.html?cat=Paquetes&marca=${encodeURIComponent(m.nombre)}`;
 
-  // ✅ Construir con innerHTML de una vez — sin reflows parciales
-  grid.innerHTML = marcas.map(m => `
-    <a class="op-card" href="${href(m)}">
-      <img class="op-img" src="${m.icono}" alt="${m.nombre}" onerror="this.style.opacity='.3'">
-      <span class="op-name">${m.nombre}</span>
-    </a>`).join('');
+  grid.innerHTML = marcas.map((m, i) => {
+    const c = coloresOp[i % coloresOp.length];
+    return `
+    <a class="op-card" href="${href(m)}" style="--c:${c}">
+      <div class="op-card-glow" style="background:radial-gradient(circle,${c}80,transparent 70%);"></div>
+      <div class="op-card-inner" style="border-top-color:${c}66">
+        <img class="op-img" src="${m.icono}" alt="${m.nombre}" onerror="this.style.opacity='.3'">
+        <span class="op-name">${m.nombre}</span>
+      </div>
+    </a>`;
+  }).join('');
 }
 
 // Mostrar fallback de inmediato
@@ -180,10 +367,6 @@ fetch(API + '?accion=getCategorias')
     if (cats.length) renderMarcas(cats.map(c => ({nombre:c.nombre, icono:c.icono})));
   })
   .catch(() => {});
-
-function abrirLogin()  { document.getElementById('modal-login').style.display='flex'; closeDrawer(); }
-function cerrarLogin() { document.getElementById('modal-login').style.display='none'; }
-document.getElementById('modal-login').addEventListener('click',function(e){if(e.target===this)cerrarLogin();});
 </script>
 </body>
 </html>
